@@ -7,8 +7,11 @@ package com.tony.DaoImpl;
 
 import com.tony.Dao.IUsuario_Externo;
 import com.tony.Dao.hibernateSession;
+import com.tony.models.Documento.Documento;
+import com.tony.models.Documento.Estado_documentos;
 import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import java.util.List;
+import org.hibernate.Session;
 
 /**
  *
@@ -16,15 +19,19 @@ import java.util.List;
  */
 public class UsuarioExternoImpl implements IUsuario_Externo {
 
-    private hibernateSession sesion;
+    private final hibernateSession sesion = hibernateSession.get_instancia_hibernate_session();
 
     public UsuarioExternoImpl() {
-        this.sesion = new hibernateSession();
     }
 
     @Override
-    public List<UsuarioExterno> all_usuarios_externo() {
-       return this.sesion.getSesion().createCriteria(UsuarioExterno.class).list();
+    public Estado_documentos get_last_state_find_by_document(int id_documento) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Documento> get_documentos_find_by_user_externo(UsuarioExterno user) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

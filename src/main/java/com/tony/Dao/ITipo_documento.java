@@ -6,20 +6,18 @@
 package com.tony.Dao;
 
 import com.tony.models.Documento.Documento;
-import com.tony.models.Documento.Estado_documentos;
-import com.tony.models.UsuarioExterrno.UsuarioExterno;
+import com.tony.models.Documento.Tipo_Documento;
 import java.util.List;
 
 /**
  *
  * @author antony
  */
-public interface IUsuario_Externo {
+public interface ITipo_documento {
 
-   
+    List<Tipo_Documento> all_tipo_documento();
 
-    Estado_documentos get_last_state_find_by_document(int id_documento);
+    Tipo_Documento get_tipo_documento_find_by_name(String name);
 
-    List<Documento> get_documentos_find_by_user_externo(UsuarioExterno user);
-    
+    List<Documento> all_documento_find_by_id_tipo_documento(int id_tipo_documento);
 }

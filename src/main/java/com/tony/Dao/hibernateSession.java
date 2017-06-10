@@ -9,21 +9,33 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-
 public class hibernateSession {
-    private Session sesion;
 
-    public hibernateSession() {
-        Configuration configuracion=new Configuration();
-        configuracion.configure();
-        SessionFactory sessionFactory=configuracion.buildSessionFactory();
-        this.sesion=sessionFactory.openSession();
-        this.sesion.beginTransaction();
+    private Session sesion;
+    private static hibernateSession instancia_sesion = null;
+
+    public static hibernateSession get_instancia_hibernate_session() {
+        if (instancia_sesion == null) {
+            instancia_sesion = new hibernateSession();
+        }
+        return instancia_sesion;
     }
 
-    public Session getSesion() {
+    private hibernateSession() {
+        Configuration configuracion = new Configuration();
+        configuracion.configure();
+        SessionFactory sessionFactory = configuracion.buildSessionFactory();
+        sesion = sessionFactory.openSession();
+    }
+
+    public Session AbrirSesion() {
+        sesion.beginTransaction();
         return sesion;
     }
-    
-    
+
+    protected void CerrarSesion() {
+        sesion.getTransaction().commit();
+
+    }
+
 }

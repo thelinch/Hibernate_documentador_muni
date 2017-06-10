@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,12 +20,14 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import com.tony.models.UsuarioExterrno.UsuarioExterno;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 
 @Entity
 @Table(name = "documento")
+@NamedQueries({@NamedQuery(name="Documento.find_by_usuario_externo",query = "SELECT a.usuario from Documento a where a.id_documento= :id_documento")})
 public class Documento implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,10 +48,9 @@ public class Documento implements Serializable {
     @Lob()
     @Basic(fetch = FetchType.LAZY)
     private byte[] copia;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     @JoinColumn(name = "id_tipoDocumento", nullable = false)
     private Tipo_Documento tipoDocumento;
-
     @Column(name = "isTupac", nullable = false)
     private boolean is_tupac;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -68,7 +68,7 @@ public class Documento implements Serializable {
 
     }
 
-    public Documento(String codigo, String asunto, String Contenido_documento, String Observaciones, int numero_folio_presentado, boolean is_disconforme, boolean istupac) {
+    public Documento(String codigo, String asunto,Tipo_Documento tipo_documento,String Contenido_documento, String Observaciones, int numero_folio_presentado, boolean is_disconforme, boolean istupac) {
         this.codigo = codigo;
         this.Observaciones = Observaciones;
         this.num_foleo = numero_folio_presentado;
@@ -76,6 +76,7 @@ public class Documento implements Serializable {
         this.asunto = asunto;
         this.Disconforme = is_disconforme;
         this.is_tupac = istupac;
+        this.tipoDocumento=tipo_documento;
     }
 //    public void AddTipo_peticions(Tipo_peticion peticion) {
 //        if (this.tipo_peticions.isEmpty() || !this.tipo_peticions.contains(peticion)) {
@@ -214,6 +215,10 @@ public class Documento implements Serializable {
 
     public void setOperacionEstados(List<Operacion_EstadosDocumentos> operacionEstados) {
         this.operacionEstados = operacionEstados;
+    }
+
+    public boolean isIs_tupac() {
+        return is_tupac;
     }
 
     @Override
