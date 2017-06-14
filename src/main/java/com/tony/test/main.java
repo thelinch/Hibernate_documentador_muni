@@ -5,11 +5,9 @@
  */
 package com.tony.test;
 
-import com.tony.Dao.hibernateSession;
+import com.tony.DaoImpl.DocumentImpl;
+import com.tony.DaoImpl.Tipo_documentoImpl;
 import com.tony.DaoImpl.UsuarioExternoImpl;
-import com.tony.models.Documento.Tipo_Documento;
-import com.tony.models.UsuarioInterno.Perfil;
-import org.hibernate.Session;
 
 /**
  *
@@ -17,19 +15,14 @@ import org.hibernate.Session;
  */
 public class main {
 
-    hibernateSession sesion = hibernateSession.get_instancia_hibernate_session();
-
     public static void main(String[] args) {
-        UsuarioExternoImpl user = new UsuarioExternoImpl();
-        main ma=new main();
-      Session sesionhi= ma.sesion.AbrirSesion();
-        sesionhi.createCriteria(Perfil.class).list().stream().forEach(System.out::println);
-        sesionhi.getTransaction().commit();
-        Session se2 = ma.sesion.AbrirSesion();
-        se2.createCriteria(Tipo_Documento.class).list().stream().forEach(System.out::println);
-        se2.getTransaction().commit();
-        //user.all_usuarios_externo().forEach(System.out::println);
-        //  inicio();
+        Tipo_documentoImpl tipo_documento = new Tipo_documentoImpl();
+        DocumentImpl doc = new DocumentImpl();
+        System.out.println(doc.get_tipo_document_find_by_documento(1));
+        //UsuarioExternoImpl user = new UsuarioExternoImpl();
+       // user.get_documentos_find_by_user_externo(1).stream().forEach(System.out::println);
+        //doc.get_flujograma_documento(1).stream().forEach(System.out::println);
+//  inicio();
     }
 
 //    private static void inicio() {

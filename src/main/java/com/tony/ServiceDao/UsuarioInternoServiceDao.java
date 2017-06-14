@@ -18,9 +18,9 @@ import javax.swing.table.DefaultTableModel;
  */
 public interface UsuarioInternoServiceDao {
 
-    boolean Registrar_usuarioExterno(UsuarioExterno usuario);
+    boolean Registrar_usuarioExterno(UsuarioExterno usuario,Usuario_interno user_interno);
 
-    boolean Registrar_documento(Usuario_interno usuarioInterno, int  tipoDocumento, Documento documento, UsuarioExterno usuarioExterno);
+    boolean Registrar_operacion_documento_usuario_interno(Usuario_interno usuarioInterno,Documento documento);
 
     boolean Enviar_area_documento(Documento documento);
 

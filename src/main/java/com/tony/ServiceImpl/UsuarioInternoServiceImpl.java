@@ -27,14 +27,14 @@ public class UsuarioInternoServiceImpl extends Verificacion implements UsuarioIn
     private UsuarioInternoImpl usuariImpl = new UsuarioInternoImpl();
     
     @Override
-    public boolean Registrar_usuarioExterno(UsuarioExterno usuario) {
+    public boolean Registrar_usuarioExterno(UsuarioExterno usuario,Usuario_interno user_interno) {
         
-        return this.usuariImpl.Registrar_usuario_Externo(usuario);
+        return this.usuariImpl.Registrar_usuario_Externo(usuario,user_interno);
     }
     
     @Override
-    public boolean Registrar_documento(Usuario_interno usuarioInterno, int tipoDocumento, Documento documento, UsuarioExterno usuarioExterno) {
-        return this.usuariImpl.Registrar_documento(usuarioInterno,documento, usuarioExterno);
+    public boolean Registrar_operacion_documento_usuario_interno(Usuario_interno usuarioInterno, Documento documento) {
+        return this.usuariImpl.add_operacion_documento_usuario_interno(usuarioInterno,documento);
     }
     
     @Override
@@ -89,5 +89,9 @@ public class UsuarioInternoServiceImpl extends Verificacion implements UsuarioIn
     public void limpiarDatosPanel(JPanel panel) {
         super.limpiarDatosPanel(panel);
     }
+
+   
+
+    
     
 }

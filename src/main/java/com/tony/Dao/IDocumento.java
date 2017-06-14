@@ -5,9 +5,9 @@
  */
 package com.tony.Dao;
 
+import com.tony.models.Documento.AuditoriaDocumento;
 import com.tony.models.Documento.Documento;
 import com.tony.models.Documento.Estado_documentos;
-import com.tony.models.Documento.Operacion_EstadosDocumentos;
 import com.tony.models.Documento.Tipo_Documento;
 import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import java.util.List;
@@ -20,7 +20,7 @@ public interface IDocumento {
 
     UsuarioExterno get_usuario_externo_find_by_documento(Documento documento);
 
-    List<Operacion_EstadosDocumentos> get_flujograma_documento(int id_documento);
+    List<AuditoriaDocumento> get_flujograma_documento(int id_documento);
 
     Estado_documentos get_last_state_find_by_document(int id_documento);
 
@@ -29,5 +29,6 @@ public interface IDocumento {
     Tipo_Documento get_tipo_document_find_by_documento(int id_documento);
 
     int get_id_documento();
+    
 
 }

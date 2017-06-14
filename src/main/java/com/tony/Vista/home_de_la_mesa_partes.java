@@ -1,7 +1,7 @@
 package com.tony.Vista;
 
 import com.mxrck.autocompleter.TextAutoCompleter;
-import com.tony.DaoImpl.Tipo_documentoImpl;
+import com.tony.ServiceImpl.AreaServiceImpl;
 import com.tony.ServiceImpl.Tipo_documentoServiceImpl;
 import com.tony.ServiceImpl.UsuarioInternoServiceImpl;
 import com.tony.models.Documento.Documento;
@@ -9,34 +9,32 @@ import com.tony.models.Documento.Tipo_Documento;
 import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import com.tony.models.UsuarioExterrno.UsuarioExternoJuridico;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.io.File;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 public class home_de_la_mesa_partes extends javax.swing.JFrame {
-
+    
     private File archivo;
     private byte[] bytesImg;
     private final UsuarioInternoServiceImpl userInternoService;
     private UsuarioExterno user = null;
     private UsuarioExternoJuridico usuarioExternoJuridico = null;
     private final Documento documentoEdicio = null;
-
-    private final List<Tipo_Documento> tipos_documento = null;
-    private final Tipo_documentoServiceImpl tipos_service = new Tipo_documentoServiceImpl();
-
+    private final Tipo_documentoServiceImpl tipo_documento = new Tipo_documentoServiceImpl();
+    private final List<Tipo_Documento> Lista_tipos_documento = null;
+    private final Tipo_documentoServiceImpl tipo_documento_service = new Tipo_documentoServiceImpl();
+    private final AreaServiceImpl area_service = new AreaServiceImpl();
+    
     public home_de_la_mesa_partes() {
         initComponents();
         this.userInternoService = new UsuarioInternoServiceImpl();
         this.setLocationRelativeTo(null);
         jPanelPersonaJuridica.setVisible(false);
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -64,7 +62,6 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jButton_SelecionarArchivo = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
-        jTextField_NombreDelAchivo = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea_Descripcion = new javax.swing.JTextArea();
         jLabel11 = new javax.swing.JLabel();
@@ -72,6 +69,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jTextFieldTipo_documento = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
+        jLabelNombre_archivo = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jPanel7 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -117,6 +115,8 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         jTextField_Ruc = new javax.swing.JTextField();
         jLabel_Organizacion = new javax.swing.JLabel();
         jTextField_Organizacion = new javax.swing.JTextField();
+        jTextField5 = new javax.swing.JTextField();
+        jLabel17 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
@@ -152,6 +152,11 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
                 jCheckBoxIsTupacActionPerformed(evt);
             }
         });
+        jCheckBoxIsTupac.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jCheckBoxIsTupacPropertyChange(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Asunto");
@@ -166,7 +171,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         jLabel5.setText("Area");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel6.setText("#Foleo");
+        jLabel6.setText("#Folio");
 
         jTextFieldNumeroFolioRequerido.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTextFieldNumeroFolioRequerido.addActionListener(new java.awt.event.ActionListener() {
@@ -184,6 +189,11 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         jLabel7.setText("Presentado");
 
         jTextFieldNumeroFolioPresentado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextFieldNumeroFolioPresentado.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldNumeroFolioPresentadoFocusLost(evt);
+            }
+        });
         jTextFieldNumeroFolioPresentado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldNumeroFolioPresentadoActionPerformed(evt);
@@ -200,6 +210,11 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
 
         jCheckBox_Conformidad.setText("Desconforme");
         jCheckBox_Conformidad.setEnabled(false);
+        jCheckBox_Conformidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox_ConformidadActionPerformed(evt);
+            }
+        });
 
         jTextAreaObservaciones.setColumns(20);
         jTextAreaObservaciones.setRows(5);
@@ -218,13 +233,6 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel9.setText("Copia");
-
-        jTextField_NombreDelAchivo.setEditable(false);
-        jTextField_NombreDelAchivo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField_NombreDelAchivoActionPerformed(evt);
-            }
-        });
 
         jTextArea_Descripcion.setColumns(20);
         jTextArea_Descripcion.setRows(5);
@@ -247,6 +255,12 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jTextFieldTipo_documento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldTipo_documentoActionPerformed(evt);
             }
         });
 
@@ -316,10 +330,10 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
                                 .addGroup(jPanelDocumentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanelDocumentoLayout.createSequentialGroup()
                                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
+                                        .addGap(26, 26, 26)
                                         .addComponent(jButton_SelecionarArchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jTextField_NombreDelAchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jLabelNombre_archivo, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 566, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 566, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 570, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -368,18 +382,22 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
-                .addGroup(jPanelDocumentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
-                    .addComponent(jButton_SelecionarArchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField_NombreDelAchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanelDocumentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanelDocumentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelDocumentoLayout.createSequentialGroup()
+                        .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanelDocumentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanelDocumentoLayout.createSequentialGroup()
+                        .addGroup(jPanelDocumentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelNombre_archivo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton_SelecionarArchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -396,8 +414,8 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         jDialogDocumentosLayout.setVerticalGroup(
             jDialogDocumentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDialogDocumentosLayout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 712, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 239, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 771, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 180, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -535,7 +553,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
                         .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(171, Short.MAX_VALUE))
+                        .addContainerGap(132, Short.MAX_VALUE))
                     .addGroup(jPanel_VISTALayout.createSequentialGroup()
                         .addGroup(jPanel_VISTALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(jPanel_VISTALayout.createSequentialGroup()
@@ -556,7 +574,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         );
         jPanel_Sub_ControlLayout.setVerticalGroup(
             jPanel_Sub_ControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 591, Short.MAX_VALUE)
+            .addGap(0, 552, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel_CONTROLLayout = new javax.swing.GroupLayout(jPanel_CONTROL);
@@ -578,12 +596,12 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Registro de usuario");
-        jPanelregistro.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 718, 40));
+        jPanelregistro.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-120, 0, 718, 40));
 
         jLabel_Nombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel_Nombre.setForeground(new java.awt.Color(153, 0, 0));
         jLabel_Nombre.setText("Nombre");
-        jPanelregistro.add(jLabel_Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 46, 77, 60));
+        jPanelregistro.add(jLabel_Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 77, 40));
 
         jTextField_Nombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTextField_Nombre.addActionListener(new java.awt.event.ActionListener() {
@@ -591,12 +609,12 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
                 jTextField_NombreActionPerformed(evt);
             }
         });
-        jPanelregistro.add(jTextField_Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(97, 46, 195, 60));
+        jPanelregistro.add(jTextField_Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 130, 195, 40));
 
         jLabel_Apellido.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel_Apellido.setForeground(new java.awt.Color(153, 0, 0));
         jLabel_Apellido.setText("Apellido");
-        jPanelregistro.add(jLabel_Apellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 112, 77, 35));
+        jPanelregistro.add(jLabel_Apellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 77, 35));
 
         jTextField_Apellido.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTextField_Apellido.addActionListener(new java.awt.event.ActionListener() {
@@ -604,21 +622,21 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
                 jTextField_ApellidoActionPerformed(evt);
             }
         });
-        jPanelregistro.add(jTextField_Apellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(97, 112, 195, 35));
+        jPanelregistro.add(jTextField_Apellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 180, 195, 35));
 
         jLabel_Correo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel_Correo.setForeground(new java.awt.Color(0, 153, 0));
         jLabel_Correo.setText("Correo");
-        jPanelregistro.add(jLabel_Correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 165, 77, 38));
+        jPanelregistro.add(jLabel_Correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 77, 38));
 
         jTextField_Correo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTextField_Correo.setName("noRequerido"); // NOI18N
-        jPanelregistro.add(jTextField_Correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(97, 165, 195, 38));
+        jPanelregistro.add(jTextField_Correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 230, 195, 38));
 
         jLabel_DNI.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel_DNI.setForeground(new java.awt.Color(153, 0, 0));
         jLabel_DNI.setText("DNI");
-        jPanelregistro.add(jLabel_DNI, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 112, 54, 35));
+        jPanelregistro.add(jLabel_DNI, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 180, 54, 35));
 
         jTextFieldDni.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTextFieldDni.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -626,22 +644,22 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
                 jTextFieldDniKeyPressed(evt);
             }
         });
-        jPanelregistro.add(jTextFieldDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 112, 167, 35));
+        jPanelregistro.add(jTextFieldDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 180, 167, 35));
 
         jLabel_Telefono.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel_Telefono.setForeground(new java.awt.Color(0, 153, 0));
         jLabel_Telefono.setText("Telefono");
-        jPanelregistro.add(jLabel_Telefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 166, 65, 34));
+        jPanelregistro.add(jLabel_Telefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 230, 65, 34));
 
         jLabel_Tipo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel_Tipo.setForeground(new java.awt.Color(153, 0, 0));
         jLabel_Tipo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel_Tipo.setText("Tipo Usuario:");
-        jPanelregistro.add(jLabel_Tipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 209, 103, 37));
+        jPanelregistro.add(jLabel_Tipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 103, 37));
 
         jTextField_Telefono.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTextField_Telefono.setName("noRequerido"); // NOI18N
-        jPanelregistro.add(jTextField_Telefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 166, 164, 35));
+        jPanelregistro.add(jTextField_Telefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 230, 164, 35));
 
         jComboBoxTipoPersona.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jComboBoxTipoPersona.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Natural", "Juridico" }));
@@ -650,7 +668,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
                 jComboBoxTipoPersonaActionPerformed(evt);
             }
         });
-        jPanelregistro.add(jComboBoxTipoPersona, new org.netbeans.lib.awtextra.AbsoluteConstraints(189, 209, -1, 37));
+        jPanelregistro.add(jComboBoxTipoPersona, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 270, -1, 37));
 
         jButton_Aceptar.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton_Aceptar.setText("ACEPTAR");
@@ -659,11 +677,11 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
                 jButton_AceptarActionPerformed(evt);
             }
         });
-        jPanelregistro.add(jButton_Aceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(34, 373, 171, 56));
+        jPanelregistro.add(jButton_Aceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 470, 171, 56));
 
         jButton_Cancelar.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton_Cancelar.setText("CANCELAR");
-        jPanelregistro.add(jButton_Cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(402, 374, 163, 55));
+        jPanelregistro.add(jButton_Cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 470, 163, 55));
 
         jPanelPersonaJuridica.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos Obligados", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12), new java.awt.Color(255, 0, 0))); // NOI18N
 
@@ -706,10 +724,17 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
                             .addGroup(jPanelPersonaJuridicaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jTextField_Ruc, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
                                 .addComponent(jLabel_Ruc, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(0, 5, Short.MAX_VALUE))))
         );
 
-        jPanelregistro.add(jPanelPersonaJuridica, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 260, 590, 80));
+        jPanelregistro.add(jPanelPersonaJuridica, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 590, 80));
+
+        jTextField5.setName("noRequerido"); // NOI18N
+        jPanelregistro.add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, 180, 30));
+
+        jLabel17.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel17.setText("Buscar usuario registrado:");
+        jPanelregistro.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 170, 30));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -721,8 +746,8 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanelregistro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addComponent(jPanelregistro, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("REGISTRO", jPanel3);
@@ -781,27 +806,30 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
                         .addGap(6, 6, 6)
                         .addComponent(jTextField4)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 622, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 583, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50))
         );
 
         jScrollPane4.setViewportView(jPanel7);
 
-        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1270, 890));
+        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1270, 790));
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jCheckBoxIsTupacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxIsTupacActionPerformed
-        if (jCheckBoxIsTupac.isSelected() == true) {
+        TextAutoCompleter texto_autocompletado_area = new TextAutoCompleter(this.jTextFieldArea);
+        TextAutoCompleter texto_autocompletado_asunto = new TextAutoCompleter(this.jTextFieldAsunto);
+        if (jCheckBoxIsTupac.isSelected()) {
             Calendar fecha = new GregorianCalendar();
             jLabelCodigo_Documento.setText(String.valueOf(fecha.get(Calendar.YEAR)) + String.valueOf(fecha.get(Calendar.MONTH)) + String.valueOf(fecha.get(Calendar.DAY_OF_MONTH)));
-
-        }
-        if (jCheckBoxIsTupac.isSelected() == false) {
-            jLabelCodigo_Documento.setText("");
-
+            this.area_service.LLenar_autcompleter(texto_autocompletado_area);
+            this.jTextFieldNumeroFolioRequerido.setEditable(false);
+        } else {
+            this.jTextFieldNumeroFolioRequerido.setEditable(true);
+            texto_autocompletado_area.removeAllItems();
+            texto_autocompletado_asunto.removeAllItems();
         }
     }//GEN-LAST:event_jCheckBoxIsTupacActionPerformed
 
@@ -850,10 +878,6 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
 //        }
     }//GEN-LAST:event_jButton_SelecionarArchivoActionPerformed
 
-    private void jTextField_NombreDelAchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField_NombreDelAchivoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField_NombreDelAchivoActionPerformed
-
     private void jButtonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistrarActionPerformed
 //        if (seleccionado.showDialog(null, "Guardar Archivo") == JFileChooser.APPROVE_OPTION) {
 //            archivo = seleccionado.getSelectedFile();
@@ -873,18 +897,16 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(jDialogDocumentos, "Faltan datos en el documento");
             return;
         } else if (JOptionPane.showConfirmDialog(jDialogDocumentos, "Los datos son correctos?") == 0) {
-//            Documento documento = new Documento(jLabelCodigo_Documento.getText(), jTextFieldAsunto.getText(), jTextArea_Descripcion.getText(), jTextAreaObservaciones.getText(), Integer.parseInt(jTextFieldNumeroFolioPresentado.getText()), jCheckBox_Conformidad.isSelected(), jCheckBoxIsTupac.isSelected());
-//            //Agregar el tipo del documento en 
-//            if (this.usuarioExternoJuridico != null) {
-//                this.usuarioExternoJuridico.addDocumento(documento);
-//            } else {
-//                this.user.addDocumento(documento);
-//                
-//            }
+            Documento documento = new Documento(jLabelCodigo_Documento.getText(), jTextFieldAsunto.getText(), this.tipo_documento.get_tipo_documento_find_by_name(jTextFieldTipo_documento.getText()), jTextArea_Descripcion.getText(), jTextAreaObservaciones.getText(), Integer.parseInt(jTextFieldNumeroFolioPresentado.getText()), jCheckBox_Conformidad.isSelected(), jCheckBoxIsTupac.isSelected());
+            if (this.usuarioExternoJuridico != null) {
+                this.usuarioExternoJuridico.addDocumento(documento);
+            } else {
+                this.user.addDocumento(documento);
+            }
 //            DesktopNotify.showDesktopMessage("Un nuevo Documento fue agregado", "Asunto:" + documento.getAsunto() + " ", DesktopNotify.SUCCESS, 5000);
 //            this.userInternoService.CrearIdDocumento(jLabelCodigo_Documento);
             this.userInternoService.limpiarDatosPanel(jPanelDocumento);
-
+            
         }
 
     }//GEN-LAST:event_jButtonRegistrarActionPerformed
@@ -911,9 +933,9 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
             }
 //            this.userInternoService.CrearIdDocumento(jLabelCodigo_Documento);
             jDialogDocumentos.setVisible(true);
-
+            
         }
-
+        
 
     }//GEN-LAST:event_jButton_AceptarActionPerformed
 
@@ -944,20 +966,25 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
             jTextFieldDni.setSelectedTextColor(Color.GREEN);
         } else {
             jTextFieldDni.setSelectedTextColor(Color.red);
-
+            
         }
     }//GEN-LAST:event_jTextFieldDniKeyPressed
 
     private void jDialogDocumentosWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogDocumentosWindowClosing
-//     if (this.usuarioExternoJuridico != null) {
-//         //Grre
-//            this.userInternoService.   (this.usuarioExternoJuridico);
+//        if (this.usuarioExternoJuridico != null) {
+//            this.usuarioExternoJuridico.setCodigo("antony");
+//            this.userInternoService.Registrar_usuarioExterno(this.usuarioExternoJuridico);
+//            for (Documento doc : this.usuarioExternoJuridico.getDocumentos()) {
+////                this.userInternoService.Registrar_operacion_documento_usuario_interno(usuarioInterno, doc);
+//            }
+//
 //        } else {
-//            this.user.Add_UsuarioExterno(this.user);
+//            this.user.setCodigo("ap");
+//            this.userInternoService.Registrar_usuarioExterno(this.user);
 //        }
-        this.userInternoService.limpiarDatosPanel(jPanelPersonaJuridica);
-        this.userInternoService.limpiarDatosPanel(jPanelregistro);
-        this.userInternoService.limpiarDatosPanel(jPanelDocumento);
+//        this.userInternoService.limpiarDatosPanel(jPanelPersonaJuridica);
+//        this.userInternoService.limpiarDatosPanel(jPanelregistro);
+//        this.userInternoService.limpiarDatosPanel(jPanelDocumento);
     }//GEN-LAST:event_jDialogDocumentosWindowClosing
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -965,19 +992,42 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jDialogDocumentosWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogDocumentosWindowOpened
-
-        TextAutoCompleter texto_autocompletado_tipo_documento = new TextAutoCompleter(jTextFieldTipo_documento);
-        TextAutoCompleter texto_autocompletado_area=new TextAutoCompleter(jTextFieldArea);
-        TextAutoCompleter texto_autocompletado_asunto=new TextAutoCompleter(jTextFieldAsunto);
-        this.tipos_service.LLenar_autcompleter(texto_autocompletado_tipo_documento);
         
-        if (jCheckBoxIsTupac.isSelected() && texto_autocompletado_area.getItems().length==0 && texto_autocompletado_asunto.getItems().length==0) {
-         
-        }else{
-            texto_autocompletado_area.removeAllItems();
-            texto_autocompletado_asunto.removeAllItems();
-        }
+        TextAutoCompleter texto_autocompletado_tipo_documento = new TextAutoCompleter(jTextFieldTipo_documento);
+        this.tipo_documento_service.LLenar_autcompleter(texto_autocompletado_tipo_documento);
+
     }//GEN-LAST:event_jDialogDocumentosWindowOpened
+
+    private void jTextFieldTipo_documentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTipo_documentoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldTipo_documentoActionPerformed
+
+    private void jCheckBox_ConformidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox_ConformidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBox_ConformidadActionPerformed
+
+    private void jTextFieldNumeroFolioPresentadoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldNumeroFolioPresentadoFocusLost
+        if (!jTextFieldNumeroFolioRequerido.getText().equals("") && !jTextFieldNumeroFolioPresentado.getText().equals("")) {
+            if (Integer.parseInt(jTextFieldNumeroFolioPresentado.getText()) < Integer.parseInt(this.jTextFieldNumeroFolioRequerido.getText())) {
+                jCheckBox_Conformidad.setSelected(true);
+                return;
+            } else if (Integer.parseInt(jTextFieldNumeroFolioPresentado.getText()) > Integer.parseInt(this.jTextFieldNumeroFolioRequerido.getText())) {
+                JOptionPane.showMessageDialog(jDialogDocumentos, "el numero de folios presentado debe ser igual o menor que los folios requerido");
+                return;
+            } else {
+                jCheckBox_Conformidad.setSelected(false);
+                
+            }
+        }
+        System.out.println("Entro al evento Lost");
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldNumeroFolioPresentadoFocusLost
+
+    private void jCheckBoxIsTupacPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jCheckBoxIsTupacPropertyChange
+        // TODO add your handling code here:
+        System.out.println("entro ne property change");
+    }//GEN-LAST:event_jCheckBoxIsTupacPropertyChange
 
     /**
      * @param args the command line arguments
@@ -1034,6 +1084,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1045,6 +1096,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelCodigo_Documento;
     private javax.swing.JLabel jLabelNombreCodigo_Documento;
+    private javax.swing.JLabel jLabelNombre_archivo;
     private javax.swing.JLabel jLabel_Apellido;
     private javax.swing.JLabel jLabel_Correo;
     private javax.swing.JLabel jLabel_DNI;
@@ -1082,6 +1134,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextFieldArea;
     private javax.swing.JTextField jTextFieldAsunto;
     private javax.swing.JTextField jTextFieldDni;
@@ -1092,7 +1145,6 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField_Apellido;
     private javax.swing.JTextField jTextField_Correo;
     private javax.swing.JTextField jTextField_Nombre;
-    private javax.swing.JTextField jTextField_NombreDelAchivo;
     private javax.swing.JTextField jTextField_Organizacion;
     private javax.swing.JTextField jTextField_Ruc;
     private javax.swing.JTextField jTextField_Telefono;

@@ -18,48 +18,47 @@ import javax.persistence.FlushModeType;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+
 public class UsuarioInternoImpl implements IUsuario_interno {
+
     private final hibernateSession hibernatesesion = hibernateSession.get_instancia_hibernate_session();
     private final Errores error = Errores.get_intancia_error();
+
+    //Probado y validado
     @Override
-    public boolean Registrar_usuario_Externo(UsuarioExterno usuario) {
+    public boolean Registrar_usuario_Externo(UsuarioExterno usuario, Usuario_interno usuario_interno) {
         boolean operacion = false;
         Session se = this.hibernatesesion.AbrirSesion();
         try {
-            se.persist(usuario);
+            if (this.get_usuario_externo_find_by_dni(usuario.getDni()) == null) {
+                se.persist(usuario);
+                se.setFlushMode(FlushModeType.COMMIT);
+
+                operacion = true;
+            } else {
+                se.update(usuario);
+                se.merge(usuario);
+
+            }
             se.getTransaction().commit();
-            operacion = true;
+            if (!usuario.getDocumentos().isEmpty()) {
+                for (Documento documento : usuario.getDocumentos()) {
+                    this.add_operacion_documento_usuario_interno(usuario_interno, documento);
+                    this.Enviar_area_documento(documento);
+                }
+            }
         } catch (Exception e) {
             this.error.Manejador_errores(se, "error en UsuarioInternoImpl:Resgistrar_usuario_externo" + e.getMessage());
         }
         return operacion;
     }
-    
-
-    @Override
-    public boolean Registrar_documento(Usuario_interno usuarioInterno, Documento documento, UsuarioExterno usuarioExterno) {
-        boolean proceso = false;
-
-//Falta ver el tipo de Documento como va a ser por id o por el nombre
-        Session sesionhi =this.hibernatesesion.AbrirSesion();
-        try {
-            OperacionDocumento operacion = new OperacionDocumento(usuarioInterno, documento);
-            usuarioInterno.AddOperacionDocumento(operacion);
-            sesionhi.persist(usuarioInterno);
-            sesionhi.persist(usuarioExterno);
-            sesionhi.setFlushMode(FlushModeType.COMMIT);
-            sesionhi.getTransaction().commit();
-        } catch (Exception e) {
-            this.error.Manejador_errores(sesionhi, "error en UsuarioInternoImpl:Registrar_documento" + e.getMessage());
-
-        }
-        return proceso;
-
-    }
 
     @Override
     public boolean Enviar_area_documento(Documento documento) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (!documento.isDisconforme()) {
+
+        }
+        return true;
     }
 
     @Override
@@ -76,7 +75,7 @@ public class UsuarioInternoImpl implements IUsuario_interno {
     }
 
     @Override
-    public List<Usuario_interno> All_usuarios_internos(Usuario_interno Usuario_gerente, int inicio, int Final) {
+    public List<Usuario_interno> All_usuarios_internos(Usuario_interno Usuario_gerente, int inicio) {
         Session sesionhi = this.hibernatesesion.AbrirSesion();
         List<Usuario_interno> user_internos = null;
         try {
@@ -86,7 +85,7 @@ public class UsuarioInternoImpl implements IUsuario_interno {
                 user_internos = (List<Usuario_interno>) sesionhi.createCriteria(Usuario_interno.class)
                         .add(Restrictions.not(Restrictions.idEq(Usuario_gerente.getId_persona()))).createAlias("area", "areatotal").setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
                         .add(Restrictions.eq("areatotal.tipoArea", UsergerenteEntity.getArea().getTipoArea())).createAlias("perfil", "perfiluser").setResultTransformer(Criteria.ROOT_ENTITY).add(Restrictions.eq("perfiluser.tipoPerfil", Tipo_Perfil_UsuarioInterno.Profesional))
-                        .setFirstResult(inicio).list();
+                        .setFirstResult(inicio).setMaxResults(inicio + 10).list();
             }
 
             sesionhi.getTransaction().commit();
@@ -112,14 +111,13 @@ public class UsuarioInternoImpl implements IUsuario_interno {
     }
 
     @Override
-    public boolean add_documentoUsuarioExterno(Documento documento, Usuario_interno usuario_interno, UsuarioExterno usuario_externo) {
+    public boolean add_documento_a_UsuarioExterno(Documento documento, Usuario_interno usuario_interno, UsuarioExterno usuario_externo) {
         Session sesionhi = this.hibernatesesion.AbrirSesion();
         try {
             UsuarioExterno userEntidad = sesionhi.find(UsuarioExterno.class, usuario_externo.getId_persona());
             userEntidad.addDocumento(documento);
-            OperacionDocumento oper = new OperacionDocumento(usuario_interno, documento);
-            usuario_interno.AddOperacionDocumento(oper);
             sesionhi.getTransaction().commit();
+            this.add_operacion_documento_usuario_interno(usuario_interno, documento);
         } catch (Exception e) {
             this.error.Manejador_errores(sesionhi, "error en UsuarioInternoImpl:add_documentoUsuarioExterno" + e.getMessage());
         }
@@ -130,6 +128,34 @@ public class UsuarioInternoImpl implements IUsuario_interno {
     public boolean Derivar_documento(Usuario_interno usuario_interno) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+//Probar este metodo
 
+    @Override
+    public boolean add_operacion_documento_usuario_interno(Usuario_interno usuario_interno, Documento documento) {
+        Session sesion = this.hibernatesesion.AbrirSesion();
+        try {
+            OperacionDocumento operacion_documento = new OperacionDocumento(usuario_interno, documento);
+            sesion.persist(operacion_documento);
+            sesion.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            this.error.Manejador_errores(sesion, "Mensaje de Error de UsuarioInternoImpl:add_operacion_documento_usuario_interno " + e.getMessage());
+        }
+        return false;
+    }
+//Probado y validad
+
+    @Override
+    public UsuarioExterno get_usuario_externo_find_by_dni(int dni) {
+        Session sesion = this.hibernatesesion.AbrirSesion();
+        UsuarioExterno usuario_externo = null;
+        try {
+            usuario_externo = (UsuarioExterno) sesion.createNamedQuery("UsuarioExterno.find_by_dni").setParameter("dni", dni).uniqueResult();
+            sesion.getTransaction().commit();
+        } catch (Exception e) {
+            this.error.Manejador_errores(sesion, "Error en UsuarioInternoImpl : get_usuario_externo_find_by_dni " + e.getMessage());
+        }
+        return usuario_externo;
+    }
 
 }

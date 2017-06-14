@@ -23,17 +23,17 @@ public class AuditoriaDocumento implements Serializable {
     private String EstadoActual;
     @Temporal(TemporalType.DATE)
     private Date fecha;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(nullable = false, name = "id_estadoOperacionDocumento")
     private Operacion_EstadosDocumentos Operacion_estadoDocumento;
 
     public AuditoriaDocumento() {
-        this.Operacion_estadoDocumento = new Operacion_EstadosDocumentos();
+
     }
 
-    public AuditoriaDocumento(String EstadoActual) {
+    public AuditoriaDocumento(String EstadoActual, String estado_anterior) {
         this.EstadoActual = EstadoActual;
-        this.Operacion_estadoDocumento = new Operacion_EstadosDocumentos();
+        this.EstadoAnterior = estado_anterior;
     }
 
     public int getId_auditoriaDocumento() {
@@ -100,6 +100,11 @@ public class AuditoriaDocumento implements Serializable {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "AuditoriaDocumento{" + "id_auditoriaDocumento=" + id_auditoriaDocumento + ", EstadoAnterior=" + EstadoAnterior + ", EstadoActual=" + EstadoActual + " fecha "+this.fecha+'}';
     }
 
 }

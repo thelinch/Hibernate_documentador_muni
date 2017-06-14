@@ -20,6 +20,6 @@ public interface IUsuario_Externo {
 
     Estado_documentos get_last_state_find_by_document(int id_documento);
 
-    List<Documento> get_documentos_find_by_user_externo(UsuarioExterno user);
+    List<Documento> get_documentos_find_by_user_externo(int  user_id);
     
 }

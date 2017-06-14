@@ -8,8 +8,12 @@ import javax.persistence.*;
 
 import com.tony.Estados.Tipos_Area;
 import com.tony.models.Tupa;
+
 @Entity
 @Table(name = "area")
+@NamedQueries(
+        {
+            @NamedQuery(name = "Area.all", query = "SELECT a from Area a")})
 public class Area implements Serializable {
 
     private static final long serialVersionUID = 1L;
