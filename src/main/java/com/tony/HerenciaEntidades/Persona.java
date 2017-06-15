@@ -110,6 +110,31 @@ public abstract class Persona implements Serializable {
     }
 
     @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 73 * hash + this.id_persona;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Persona other = (Persona) obj;
+        if (this.id_persona != other.id_persona) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public String toString() {
         return "Persona [id_persona=" + id_persona + ", nombre=" + nombre + ", apellido=" + apellido + ", dni=" + dni
                 + ", codigo=" + codigo + ", correo_electronico=" + correo_electronico

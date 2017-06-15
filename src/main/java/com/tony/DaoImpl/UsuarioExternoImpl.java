@@ -36,6 +36,7 @@ public class UsuarioExternoImpl implements IUsuario_Externo {
         Estado_documentos estado = null;
 //        List<Estado_documentos> lista = new ArrayList<>();
         try {
+            sesionhi.beginTransaction();
             Estado_documentos estadoalterna = (Estado_documentos) sesionhi.createCriteria(Operacion_EstadosDocumentos.class).createAlias("documento", "documentoBuscar")
                     .add(Restrictions.eq("documentoBuscar.id_documento", id_documento)).setProjection(Projections.max("estados")).uniqueResult();
 //                    .list();
@@ -58,6 +59,7 @@ public class UsuarioExternoImpl implements IUsuario_Externo {
         List<Documento> listaDocumentos_user = null;
         Session sesion = this.hibernatesesion.AbrirSesion();
         try {
+            sesion.beginTransaction();
             listaDocumentos_user = sesion.find(UsuarioExterno.class, user_id).getDocumentos();
 
             sesion.getTransaction().commit();

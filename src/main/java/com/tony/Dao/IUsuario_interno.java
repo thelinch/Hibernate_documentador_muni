@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.tony.Dao;
 
 import com.tony.models.Documento.Documento;
@@ -10,13 +5,11 @@ import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import com.tony.models.UsuarioInterno.Usuario_interno;
 import java.util.List;
 
-/**
- *
- * @author antony
- */
 public interface IUsuario_interno {
 
-    boolean Registrar_usuario_Externo(UsuarioExterno usuario,Usuario_interno user_interno);
+    boolean Registrar_usuario_Externo(UsuarioExterno usuario, Usuario_interno user_interno);
+
+    boolean Registrar_usuario_interno(Usuario_interno user_interno);
 
     boolean Enviar_area_documento(Documento documento);
 

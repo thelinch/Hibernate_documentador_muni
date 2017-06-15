@@ -16,7 +16,7 @@ import com.tony.models.Documento.Documento;
 @NamedQueries({
     @NamedQuery(name = "UsuarioExterno.documentos.findDni", query = "Select UE from UsuarioExterno UE where UE.dni=:dni"),
     @NamedQuery(name = "UsuarioExterno.all", query = "Select UE from UsuarioExterno UE"),
-    @NamedQuery(name="UsuarioExterno.find_by_dni",query ="SELECT a FROM UsuarioExterno a where a.dni=:dni")
+    @NamedQuery(name = "UsuarioExterno.find_by_dni", query = "SELECT a FROM UsuarioExterno a where a.dni=:dni")
 })
 public class UsuarioExterno extends Persona implements Serializable {
 

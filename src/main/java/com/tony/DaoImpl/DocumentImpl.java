@@ -24,6 +24,7 @@ public class DocumentImpl implements IDocumento {
         Session se = this.hibernatesesion.AbrirSesion();
         UsuarioExterno user = null;
         try {
+            se.beginTransaction();
             user = (UsuarioExterno) se.createNamedQuery("Documento.find_by_usuario_externo").setParameter("id_documento", documento.getId_documento()).uniqueResult();
             se.getTransaction().commit();
         } catch (Exception e) {
@@ -38,6 +39,7 @@ public class DocumentImpl implements IDocumento {
         List<AuditoriaDocumento> auditoria = null;
         Session sesion = this.hibernatesesion.AbrirSesion();
         try {
+            sesion.beginTransaction();
             auditoria = (List<AuditoriaDocumento>) sesion.createCriteria(AuditoriaDocumento.class).createAlias("Operacion_estadoDocumento", "operacion").createAlias("operacion.documento", "documento")
                     .add(Restrictions.eq("documento.id_documento", id_documento)).list();
             sesion.getTransaction().commit();
@@ -54,6 +56,7 @@ public class DocumentImpl implements IDocumento {
         Estado_documentos estado = null;
 //        List<Estado_documentos> lista = new ArrayList<>();
         try {
+            sesionhi.beginTransaction();
             Estado_documentos estadoalterna = (Estado_documentos) sesionhi.createCriteria(Operacion_EstadosDocumentos.class).createAlias("documento", "documentoBuscar")
                     .add(Restrictions.eq("documentoBuscar.id_documento", id_documento)).setProjection(Projections.max("estados")).uniqueResult();
 //                    .list();
@@ -76,6 +79,7 @@ public class DocumentImpl implements IDocumento {
         Documento documento = null;
         Session sesion = this.hibernatesesion.AbrirSesion();
         try {
+            sesion.beginTransaction();
             documento = (Documento) sesion.createNamedQuery("Documento.find_by_id", Documento.class).setParameter("id_documento", id_document).uniqueResult();
             sesion.getTransaction().commit();
         } catch (Exception e) {
@@ -90,6 +94,7 @@ public class DocumentImpl implements IDocumento {
         Tipo_Documento tipo_documento = null;
         Session se = this.hibernatesesion.AbrirSesion();
         try {
+            se.beginTransaction();
             tipo_documento = (Tipo_Documento) se.createCriteria(Documento.class).add(Restrictions.eq("id_documento", id_documento)).setProjection(Projections.property("tipoDocumento")).uniqueResult();
             se.getTransaction().commit();
         } catch (Exception e) {
@@ -102,6 +107,7 @@ public class DocumentImpl implements IDocumento {
     public int get_id_documento() {
         Session sesion = this.hibernatesesion.AbrirSesion();
         try {
+            sesion.beginTransaction();
             System.out.println(sesion.createCriteria(Documento.class).setProjection(Projections.projectionList().add(Projections.max("id_documento")).add(Projections.property("codigo")).getProjection(1)).uniqueResult());
             sesion.getTransaction().commit();
         } catch (Exception e) {

@@ -6,17 +6,20 @@ import com.tony.ServiceImpl.Tipo_documentoServiceImpl;
 import com.tony.ServiceImpl.UsuarioInternoServiceImpl;
 import com.tony.models.Documento.Documento;
 import com.tony.models.Documento.Tipo_Documento;
+import com.tony.models.Tupa;
 import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import com.tony.models.UsuarioExterrno.UsuarioExternoJuridico;
+import com.tony.models.UsuarioInterno.Usuario_interno;
 import java.awt.Color;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.JOptionPane;
 
 public class home_de_la_mesa_partes extends javax.swing.JFrame {
-    
+
     private File archivo;
     private byte[] bytesImg;
     private final UsuarioInternoServiceImpl userInternoService;
@@ -27,14 +30,23 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
     private final List<Tipo_Documento> Lista_tipos_documento = null;
     private final Tipo_documentoServiceImpl tipo_documento_service = new Tipo_documentoServiceImpl();
     private final AreaServiceImpl area_service = new AreaServiceImpl();
-    
+    private final TextAutoCompleter texto_tupac;
+    private final TextAutoCompleter texto_autocompletado_area;
+    private static List<Tupa> list_tupa;
+    private final Usuario_interno usuario_interno;
+
     public home_de_la_mesa_partes() {
         initComponents();
         this.userInternoService = new UsuarioInternoServiceImpl();
         this.setLocationRelativeTo(null);
+        list_tupa = new ArrayList<>();
+        this.usuario_interno = new Usuario_interno();
+        this.usuario_interno.setId_persona(2);
         jPanelPersonaJuridica.setVisible(false);
+        this.texto_tupac = new TextAutoCompleter(this.jTextFieldAsunto);
+        this.texto_autocompletado_area = new TextAutoCompleter(this.jTextFieldArea);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -158,9 +170,23 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldAsunto.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextFieldAsuntoFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldAsuntoFocusLost(evt);
+            }
+        });
+
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Asunto");
 
+        jTextFieldArea.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldAreaFocusLost(evt);
+            }
+        });
         jTextFieldArea.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldAreaActionPerformed(evt);
@@ -819,20 +845,23 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jCheckBoxIsTupacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxIsTupacActionPerformed
-        TextAutoCompleter texto_autocompletado_area = new TextAutoCompleter(this.jTextFieldArea);
-        TextAutoCompleter texto_autocompletado_asunto = new TextAutoCompleter(this.jTextFieldAsunto);
         if (jCheckBoxIsTupac.isSelected()) {
             Calendar fecha = new GregorianCalendar();
             jLabelCodigo_Documento.setText(String.valueOf(fecha.get(Calendar.YEAR)) + String.valueOf(fecha.get(Calendar.MONTH)) + String.valueOf(fecha.get(Calendar.DAY_OF_MONTH)));
             this.area_service.LLenar_autcompleter(texto_autocompletado_area);
-            this.jTextFieldNumeroFolioRequerido.setEditable(false);
+            //this.jTextFieldNumeroFolioRequerido.setEditable(false);
         } else {
-            this.jTextFieldNumeroFolioRequerido.setEditable(true);
+            // this.jTextFieldNumeroFolioRequerido.setEditable(true);
             texto_autocompletado_area.removeAllItems();
-            texto_autocompletado_asunto.removeAllItems();
+            this.limpiarDatos();
         }
     }//GEN-LAST:event_jCheckBoxIsTupacActionPerformed
-
+    private void limpiarDatos() {
+        this.jTextFieldArea.setText("");
+        this.jTextFieldAsunto.setText("");
+        this.jTextFieldNumeroFolioRequerido.setText("");
+        this.jTextFieldPlazo_resolucion_documento.setText("");
+    }
     private void jTextFieldAreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldAreaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldAreaActionPerformed
@@ -906,7 +935,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
 //            DesktopNotify.showDesktopMessage("Un nuevo Documento fue agregado", "Asunto:" + documento.getAsunto() + " ", DesktopNotify.SUCCESS, 5000);
 //            this.userInternoService.CrearIdDocumento(jLabelCodigo_Documento);
             this.userInternoService.limpiarDatosPanel(jPanelDocumento);
-            
+
         }
 
     }//GEN-LAST:event_jButtonRegistrarActionPerformed
@@ -933,9 +962,9 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
             }
 //            this.userInternoService.CrearIdDocumento(jLabelCodigo_Documento);
             jDialogDocumentos.setVisible(true);
-            
+
         }
-        
+
 
     }//GEN-LAST:event_jButton_AceptarActionPerformed
 
@@ -966,25 +995,23 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
             jTextFieldDni.setSelectedTextColor(Color.GREEN);
         } else {
             jTextFieldDni.setSelectedTextColor(Color.red);
-            
+
         }
     }//GEN-LAST:event_jTextFieldDniKeyPressed
 
     private void jDialogDocumentosWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogDocumentosWindowClosing
-//        if (this.usuarioExternoJuridico != null) {
-//            this.usuarioExternoJuridico.setCodigo("antony");
-//            this.userInternoService.Registrar_usuarioExterno(this.usuarioExternoJuridico);
-//            for (Documento doc : this.usuarioExternoJuridico.getDocumentos()) {
-////                this.userInternoService.Registrar_operacion_documento_usuario_interno(usuarioInterno, doc);
-//            }
-//
-//        } else {
-//            this.user.setCodigo("ap");
-//            this.userInternoService.Registrar_usuarioExterno(this.user);
-//        }
-//        this.userInternoService.limpiarDatosPanel(jPanelPersonaJuridica);
-//        this.userInternoService.limpiarDatosPanel(jPanelregistro);
-//        this.userInternoService.limpiarDatosPanel(jPanelDocumento);
+        System.out.println("entro al evento de cerrar ventana Jdialog");
+
+        if (this.usuarioExternoJuridico != null) {
+            this.usuarioExternoJuridico.setCodigo("antony");
+            this.userInternoService.Registrar_usuarioExterno(this.usuarioExternoJuridico, usuario_interno);
+        } else {
+            this.user.setCodigo("ap");
+            this.userInternoService.Registrar_usuarioExterno(this.user, usuario_interno);
+        }
+        this.userInternoService.limpiarDatosPanel(jPanelPersonaJuridica);
+        this.userInternoService.limpiarDatosPanel(jPanelregistro);
+        this.userInternoService.limpiarDatosPanel(jPanelDocumento);
     }//GEN-LAST:event_jDialogDocumentosWindowClosing
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -992,7 +1019,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jDialogDocumentosWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogDocumentosWindowOpened
-        
+
         TextAutoCompleter texto_autocompletado_tipo_documento = new TextAutoCompleter(jTextFieldTipo_documento);
         this.tipo_documento_service.LLenar_autcompleter(texto_autocompletado_tipo_documento);
 
@@ -1016,7 +1043,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
                 return;
             } else {
                 jCheckBox_Conformidad.setSelected(false);
-                
+
             }
         }
         System.out.println("Entro al evento Lost");
@@ -1028,6 +1055,35 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.out.println("entro ne property change");
     }//GEN-LAST:event_jCheckBoxIsTupacPropertyChange
+
+    private void jTextFieldAreaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldAreaFocusLost
+        if (jTextFieldArea.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(jDialogDocumentos, "Ingrese una area valida", "mensaje de confirmacio", 1);
+            this.texto_tupac.removeAllItems();
+            list_tupa.stream().forEach((tupa_objet) -> {
+                list_tupa.remove(tupa_objet);
+            });
+        }
+
+    }//GEN-LAST:event_jTextFieldAreaFocusLost
+
+    private void jTextFieldAsuntoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldAsuntoFocusGained
+        if (jTextFieldArea.getText().length() >= 3 && this.texto_tupac.getItems().length == 0) {
+            System.out.println("entro al metodo");
+            this.area_service.llenar_autocompletar_tupa(jTextFieldArea.getText(), this.texto_tupac);
+//            for (Object objeto_tupas : this.texto_tupac.getItems()) {
+//                list_tupa.add((Tupa) objeto_tupas);
+//            }
+            //Encontrar otra manera de llenar el autocompleter para no hacer doble llamada a la BD
+        }
+    }//GEN-LAST:event_jTextFieldAsuntoFocusGained
+
+    private void jTextFieldAsuntoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldAsuntoFocusLost
+        // TODO add your handling code here:
+//        if (!jTextFieldAsunto.getText().isEmpty()) {
+//
+//        }
+    }//GEN-LAST:event_jTextFieldAsuntoFocusLost
 
     /**
      * @param args the command line arguments

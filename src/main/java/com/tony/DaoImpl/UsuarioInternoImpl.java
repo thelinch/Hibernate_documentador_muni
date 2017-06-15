@@ -31,21 +31,26 @@ public class UsuarioInternoImpl implements IUsuario_interno {
         Session se = this.hibernatesesion.AbrirSesion();
         try {
             if (this.get_usuario_externo_find_by_dni(usuario.getDni()) == null) {
+                se.beginTransaction();
                 se.persist(usuario);
-                se.setFlushMode(FlushModeType.COMMIT);
-
                 operacion = true;
             } else {
-                se.update(usuario);
-                se.merge(usuario);
-
+                se.beginTransaction();
+                UsuarioExterno user = se.find(UsuarioExterno.class, usuario.getId_persona());
+                user.getDocumentos().size();
+                usuario.getDocumentos().stream().forEach((documento) -> {
+                    user.addDocumento(documento);
+                });
             }
+            System.out.println("entro al metodo registrta_usuario_externo");
             se.getTransaction().commit();
             if (!usuario.getDocumentos().isEmpty()) {
-                for (Documento documento : usuario.getDocumentos()) {
+                usuario.getDocumentos().stream().map((documento) -> {
                     this.add_operacion_documento_usuario_interno(usuario_interno, documento);
+                    return documento;
+                }).forEach((documento) -> {
                     this.Enviar_area_documento(documento);
-                }
+                });
             }
         } catch (Exception e) {
             this.error.Manejador_errores(se, "error en UsuarioInternoImpl:Resgistrar_usuario_externo" + e.getMessage());
@@ -65,6 +70,7 @@ public class UsuarioInternoImpl implements IUsuario_interno {
     public boolean Editar_documento(Documento documento) {
         Session sesionhi = this.hibernatesesion.AbrirSesion();
         try {
+            sesionhi.beginTransaction();
             sesionhi.update(documento);
             sesionhi.getTransaction().commit();
             return true;
@@ -79,7 +85,7 @@ public class UsuarioInternoImpl implements IUsuario_interno {
         Session sesionhi = this.hibernatesesion.AbrirSesion();
         List<Usuario_interno> user_internos = null;
         try {
-            sesionhi.getTransaction().begin();
+            sesionhi.beginTransaction();
             Usuario_interno UsergerenteEntity = sesionhi.find(Usuario_interno.class, Usuario_gerente.getId_persona());
             if (UsergerenteEntity.getPerfil().getTipoPerfil().compareTo(Tipo_Perfil_UsuarioInterno.Administrador) == 0) {
                 user_internos = (List<Usuario_interno>) sesionhi.createCriteria(Usuario_interno.class)
@@ -102,6 +108,7 @@ public class UsuarioInternoImpl implements IUsuario_interno {
         Session sesionhi = this.hibernatesesion.AbrirSesion();
         List<UsuarioExterno> userExterno = null;
         try {
+            sesionhi.beginTransaction();
             userExterno = sesionhi.createNamedQuery("UsuarioExterno.all", UsuarioExterno.class).setFirstResult(Inicio).setMaxResults(Final + Inicio).getResultList();
             sesionhi.getTransaction().commit();
         } catch (Exception e) {
@@ -114,6 +121,7 @@ public class UsuarioInternoImpl implements IUsuario_interno {
     public boolean add_documento_a_UsuarioExterno(Documento documento, Usuario_interno usuario_interno, UsuarioExterno usuario_externo) {
         Session sesionhi = this.hibernatesesion.AbrirSesion();
         try {
+            sesionhi.beginTransaction();
             UsuarioExterno userEntidad = sesionhi.find(UsuarioExterno.class, usuario_externo.getId_persona());
             userEntidad.addDocumento(documento);
             sesionhi.getTransaction().commit();
@@ -123,6 +131,7 @@ public class UsuarioInternoImpl implements IUsuario_interno {
         }
         return true;
     }
+//Falta probar este metodo
 
     @Override
     public boolean Derivar_documento(Usuario_interno usuario_interno) {
@@ -134,6 +143,7 @@ public class UsuarioInternoImpl implements IUsuario_interno {
     public boolean add_operacion_documento_usuario_interno(Usuario_interno usuario_interno, Documento documento) {
         Session sesion = this.hibernatesesion.AbrirSesion();
         try {
+            sesion.beginTransaction();
             OperacionDocumento operacion_documento = new OperacionDocumento(usuario_interno, documento);
             sesion.persist(operacion_documento);
             sesion.getTransaction().commit();
@@ -150,12 +160,18 @@ public class UsuarioInternoImpl implements IUsuario_interno {
         Session sesion = this.hibernatesesion.AbrirSesion();
         UsuarioExterno usuario_externo = null;
         try {
+            sesion.beginTransaction();
             usuario_externo = (UsuarioExterno) sesion.createNamedQuery("UsuarioExterno.find_by_dni").setParameter("dni", dni).uniqueResult();
             sesion.getTransaction().commit();
         } catch (Exception e) {
             this.error.Manejador_errores(sesion, "Error en UsuarioInternoImpl : get_usuario_externo_find_by_dni " + e.getMessage());
         }
         return usuario_externo;
+    }
+
+    @Override
+    public boolean Registrar_usuario_interno(Usuario_interno user_interno) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

@@ -13,7 +13,8 @@ import com.tony.models.Tupa;
 @Table(name = "area")
 @NamedQueries(
         {
-            @NamedQuery(name = "Area.all", query = "SELECT a from Area a")})
+            @NamedQuery(name = "Area.all", query = "SELECT a from Area a"),
+            @NamedQuery(name = "Area.find_by_name", query = "SELECT a FROM Area a where a.tipoArea=:name")})
 public class Area implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,13 +26,24 @@ public class Area implements Serializable {
     private Tipos_Area tipoArea;
     @OneToMany(mappedBy = "area", cascade = {CascadeType.REMOVE, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
     private List<Usuario_interno> usuarioInterno;
-    @ManyToOne(fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name = "id_tupa")
-    private Tupa tupa;
+    @ManyToMany(targetEntity = Tupa.class, cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinTable(name = "area_tupa", joinColumns = {
+        @JoinColumn(name = "id_area")}, inverseJoinColumns = {
+        @JoinColumn(name = "id_tupa")})
+    List<Tupa> tupa;
+    //    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+//    @JoinColumn(name = "id_tupa")
+//    private Tupa tupa;
 
     public Area() {
         this.usuarioInterno = new ArrayList<>();
+        this.tupa = new ArrayList<>();
+    }
 
+    public void add_tupa(Tupa tupa) {
+        if (this.tupa.isEmpty() || !this.tupa.contains(tupa)) {
+            this.tupa.add(tupa);
+        }
     }
 
     public void add_usuario_interno_Area(Usuario_interno user) {
@@ -66,12 +78,12 @@ public class Area implements Serializable {
         return usuarioInterno;
     }
 
-    public void setTupa(Tupa tupa) {
-        this.tupa = tupa;
+    public List<Tupa> getTupa() {
+        return tupa;
     }
 
-    public Tupa getTupa() {
-        return tupa;
+    public void setTupa(List<Tupa> tupa) {
+        this.tupa = tupa;
     }
 
 }

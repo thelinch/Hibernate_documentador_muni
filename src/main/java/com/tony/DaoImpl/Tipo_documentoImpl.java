@@ -23,6 +23,7 @@ public class Tipo_documentoImpl implements ITipo_documento {
         Session se = this.hibernateSesion.AbrirSesion();
         List<Tipo_Documento> lista_all_tipo_documento = null;
         try {
+            se.beginTransaction();
             lista_all_tipo_documento = se.createNamedQuery("tipo_documento.all", Tipo_Documento.class).getResultList();
             se.getTransaction().commit();
         } catch (Exception e) {
@@ -37,6 +38,7 @@ public class Tipo_documentoImpl implements ITipo_documento {
         Tipo_Documento tipo_documento = null;
         Session se = this.hibernateSesion.AbrirSesion();
         try {
+            se.beginTransaction();
             com.tony.Estados.Tipo_Documento tipo_documento_emun = com.tony.Estados.Tipo_Documento.valueOf(name);
 //             se.createNamedQuery("tipo_documento.find_by_name", Tipo_Documento.class).setParameter("nombre", name).getSingleResult();
             tipo_documento = (Tipo_Documento) se.createCriteria(Tipo_Documento.class).add(Restrictions.eq("TipoDocumento", tipo_documento_emun)).uniqueResult();
@@ -47,11 +49,13 @@ public class Tipo_documentoImpl implements ITipo_documento {
         return tipo_documento;
     }
 //Probado y validado
+
     @Override
     public List<Documento> all_documento_find_by_id_tipo_documento(int id_tipo_documento) {
         List<Documento> documentos = null;
         Session sesion = this.hibernateSesion.AbrirSesion();
         try {
+            sesion.beginTransaction();
             documentos = sesion.find(Tipo_Documento.class, id_tipo_documento).getDocumentos();
             sesion.getTransaction().commit();
         } catch (Exception e) {

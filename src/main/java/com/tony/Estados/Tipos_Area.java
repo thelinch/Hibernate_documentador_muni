@@ -1,9 +1,10 @@
 package com.tony.Estados;
 
 public enum Tipos_Area {
-    este,
-    lol,
-    pediatria
+    lo,
+    doctor,
+    pedriatria,
+    dota
 //	Comunicaciones_e_Imagen_institucional,
 //	Recursos_Humanos,
 //	Presupuesto,
