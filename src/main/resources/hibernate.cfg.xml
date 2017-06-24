@@ -9,6 +9,7 @@
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/tramite_documentario_desarrollo</property>
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.current_session_context_class">thread</property>
         <mapping class="com.tony.models.Documento.Tipo_peticion"/>
         <mapping class="com.tony.HerenciaEntidades.Persona"/>
         <mapping class="com.tony.models.Documento.AuditoriaDocumento"/>

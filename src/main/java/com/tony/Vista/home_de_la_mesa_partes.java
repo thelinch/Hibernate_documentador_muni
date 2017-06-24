@@ -7,8 +7,8 @@ import com.tony.ServiceImpl.UsuarioInternoServiceImpl;
 import com.tony.models.Documento.Documento;
 import com.tony.models.Documento.Tipo_Documento;
 import com.tony.models.Tupa;
-import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import com.tony.models.UsuarioExterrno.UsuarioExternoJuridico;
+import com.tony.models.UsuarioExterrno.UsuarioExternoNatural;
 import com.tony.models.UsuarioInterno.Usuario_interno;
 import java.awt.Color;
 import java.io.File;
@@ -23,7 +23,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
     private File archivo;
     private byte[] bytesImg;
     private final UsuarioInternoServiceImpl userInternoService;
-    private UsuarioExterno user = null;
+    private UsuarioExternoNatural UsuarioExternoNatural = null;
     private UsuarioExternoJuridico usuarioExternoJuridico = null;
     private final Documento documentoEdicio = null;
     private final Tipo_documentoServiceImpl tipo_documento = new Tipo_documentoServiceImpl();
@@ -906,7 +906,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
 //            }
 //        }
     }//GEN-LAST:event_jButton_SelecionarArchivoActionPerformed
-
+    private int contador = 0;
     private void jButtonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistrarActionPerformed
 //        if (seleccionado.showDialog(null, "Guardar Archivo") == JFileChooser.APPROVE_OPTION) {
 //            archivo = seleccionado.getSelectedFile();
@@ -926,11 +926,12 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(jDialogDocumentos, "Faltan datos en el documento");
             return;
         } else if (JOptionPane.showConfirmDialog(jDialogDocumentos, "Los datos son correctos?") == 0) {
-            Documento documento = new Documento(jLabelCodigo_Documento.getText(), jTextFieldAsunto.getText(), this.tipo_documento.get_tipo_documento_find_by_name(jTextFieldTipo_documento.getText()), jTextArea_Descripcion.getText(), jTextAreaObservaciones.getText(), Integer.parseInt(jTextFieldNumeroFolioPresentado.getText()), jCheckBox_Conformidad.isSelected(), jCheckBoxIsTupac.isSelected());
+            this.contador++;
+            Documento documento = new Documento(jLabelCodigo_Documento.getText() + String.valueOf(this.contador), jTextFieldAsunto.getText(),this.tipo_documento.get_tipo_documento_find_by_name(jTextFieldTipo_documento.getText()), jTextArea_Descripcion.getText(), jTextAreaObservaciones.getText(), Integer.parseInt(jTextFieldNumeroFolioPresentado.getText()), jCheckBox_Conformidad.isSelected(), jCheckBoxIsTupac.isSelected());
             if (this.usuarioExternoJuridico != null) {
                 this.usuarioExternoJuridico.addDocumento(documento);
             } else {
-                this.user.addDocumento(documento);
+                this.UsuarioExternoNatural.addDocumento(documento);
             }
 //            DesktopNotify.showDesktopMessage("Un nuevo Documento fue agregado", "Asunto:" + documento.getAsunto() + " ", DesktopNotify.SUCCESS, 5000);
 //            this.userInternoService.CrearIdDocumento(jLabelCodigo_Documento);
@@ -955,10 +956,10 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
             }
         }
         if (JOptionPane.showConfirmDialog(this, "Son los datos Correctos?") == 0) {
-            this.user = new UsuarioExterno(jTextField_Nombre.getText(), jTextField_Apellido.getText(), Integer.parseInt(jTextFieldDni.getText()), jTextField_Correo.getText(), jTextField_Telefono.getText());
-            user.setCorreo_electronico(jTextField_Correo.getText());
+            this.UsuarioExternoNatural = new UsuarioExternoNatural(jTextField_Nombre.getText(), jTextField_Apellido.getText(), Integer.parseInt(jTextFieldDni.getText()), jTextField_Correo.getText(), jTextField_Telefono.getText());
+            UsuarioExternoNatural.setCorreo_electronico(jTextField_Correo.getText());
             if (this.jComboBoxTipoPersona.getSelectedItem().toString().equals("Juridico")) {
-                this.usuarioExternoJuridico = new UsuarioExternoJuridico(this.user.getNombre(), this.user.getApellido(), this.user.getDni(), this.user.getCorreo_electronico(), this.user.getTelefono(), Integer.parseInt(jTextField_Ruc.getText()), this.jTextField_Organizacion.getText());
+                this.usuarioExternoJuridico = new UsuarioExternoJuridico(this.UsuarioExternoNatural.getNombre(), this.UsuarioExternoNatural.getApellido(), this.UsuarioExternoNatural.getDni(), this.UsuarioExternoNatural.getCorreo_electronico(), this.UsuarioExternoNatural.getTelefono(), Integer.parseInt(jTextField_Ruc.getText()), this.jTextField_Organizacion.getText());
             }
 //            this.userInternoService.CrearIdDocumento(jLabelCodigo_Documento);
             jDialogDocumentos.setVisible(true);
@@ -998,16 +999,15 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_jTextFieldDniKeyPressed
-
     private void jDialogDocumentosWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogDocumentosWindowClosing
-        System.out.println("entro al evento de cerrar ventana Jdialog");
-
         if (this.usuarioExternoJuridico != null) {
             this.usuarioExternoJuridico.setCodigo("antony");
-            this.userInternoService.Registrar_usuarioExterno(this.usuarioExternoJuridico, usuario_interno);
+            System.out.println(this.usuarioExternoJuridico.getDocumentos().size());
+            System.out.println(this.userInternoService.Registrar_usuarioExterno(this.usuarioExternoJuridico, usuario_interno));;
         } else {
-            this.user.setCodigo("ap");
-            this.userInternoService.Registrar_usuarioExterno(this.user, usuario_interno);
+            this.UsuarioExternoNatural.setCodigo("ap");
+            System.out.println(this.UsuarioExternoNatural.getDocumentos().size());
+            this.userInternoService.Registrar_usuarioExterno(this.UsuarioExternoNatural, usuario_interno);
         }
         this.userInternoService.limpiarDatosPanel(jPanelPersonaJuridica);
         this.userInternoService.limpiarDatosPanel(jPanelregistro);

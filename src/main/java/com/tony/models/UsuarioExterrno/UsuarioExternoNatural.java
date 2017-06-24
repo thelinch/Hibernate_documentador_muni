@@ -16,6 +16,8 @@ public class UsuarioExternoNatural extends UsuarioExterno implements Serializabl
 
     }
 
+  
+
     public UsuarioExternoNatural(String nombre, String apellido, int dni, String Correo, String telefono) {
         super(nombre, apellido, dni, Correo, telefono);
     }

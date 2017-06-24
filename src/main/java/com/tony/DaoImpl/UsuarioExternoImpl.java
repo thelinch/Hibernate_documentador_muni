@@ -22,21 +22,21 @@ import org.hibernate.criterion.Restrictions;
  */
 public class UsuarioExternoImpl implements IUsuario_Externo {
 
-    private final hibernateSession hibernatesesion = hibernateSession.get_instancia_hibernate_session();
+    private final hibernateSession hibernatesesion;
     private final Errores error = Errores.get_intancia_error();
 
     public UsuarioExternoImpl() {
+        this.hibernatesesion = new hibernateSession();
     }
 //Probado y validado
 
     @Override
     public Estado_documentos get_last_state_find_by_document(int id_documento) {
 
-        Session sesionhi = this.hibernatesesion.AbrirSesion();
+        Session sesionhi = this.hibernatesesion.get_Sesion();
         Estado_documentos estado = null;
 //        List<Estado_documentos> lista = new ArrayList<>();
         try {
-            sesionhi.beginTransaction();
             Estado_documentos estadoalterna = (Estado_documentos) sesionhi.createCriteria(Operacion_EstadosDocumentos.class).createAlias("documento", "documentoBuscar")
                     .add(Restrictions.eq("documentoBuscar.id_documento", id_documento)).setProjection(Projections.max("estados")).uniqueResult();
 //                    .list();
@@ -57,11 +57,9 @@ public class UsuarioExternoImpl implements IUsuario_Externo {
     @Override
     public List<Documento> get_documentos_find_by_user_externo(int user_id) {
         List<Documento> listaDocumentos_user = null;
-        Session sesion = this.hibernatesesion.AbrirSesion();
+        Session sesion = this.hibernatesesion.get_Sesion();
         try {
-            sesion.beginTransaction();
             listaDocumentos_user = sesion.find(UsuarioExterno.class, user_id).getDocumentos();
-
             sesion.getTransaction().commit();
         } catch (Exception e) {
             this.error.Manejador_errores(sesion, "Error en UsuarioExternoImpl : get_documentos_find_by_externo " + e.getMessage());

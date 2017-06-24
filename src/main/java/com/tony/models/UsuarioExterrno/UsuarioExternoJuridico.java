@@ -1,5 +1,6 @@
 package com.tony.models.UsuarioExterrno;
 
+import com.tony.models.Documento.Documento;
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -23,6 +24,7 @@ public class UsuarioExternoJuridico extends UsuarioExterno implements Serializab
     public UsuarioExternoJuridico() {
 
     }
+
 
     public UsuarioExternoJuridico(String nombre, String apellido, int dni, String Correo, String telefono, int ruc, String Organizacion) {
         super(nombre, apellido, dni, Correo, telefono);

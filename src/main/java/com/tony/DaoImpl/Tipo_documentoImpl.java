@@ -15,15 +15,18 @@ import org.hibernate.criterion.Restrictions;
 
 public class Tipo_documentoImpl implements ITipo_documento {
 
-    private final hibernateSession hibernateSesion = hibernateSession.get_instancia_hibernate_session();
+    private final hibernateSession hibernateSesion;
     private final Errores error = Errores.get_intancia_error();
+
+    public Tipo_documentoImpl() {
+        this.hibernateSesion = new hibernateSession();
+    }
 
     @Override
     public List<Tipo_Documento> all_tipo_documento() {
-        Session se = this.hibernateSesion.AbrirSesion();
+        Session se = this.hibernateSesion.get_Sesion();
         List<Tipo_Documento> lista_all_tipo_documento = null;
         try {
-            se.beginTransaction();
             lista_all_tipo_documento = se.createNamedQuery("tipo_documento.all", Tipo_Documento.class).getResultList();
             se.getTransaction().commit();
         } catch (Exception e) {
@@ -36,15 +39,19 @@ public class Tipo_documentoImpl implements ITipo_documento {
     @Override
     public Tipo_Documento get_tipo_documento_find_by_name(String name) {
         Tipo_Documento tipo_documento = null;
-        Session se = this.hibernateSesion.AbrirSesion();
+        Session se = this.hibernateSesion.get_Sesion();
+
         try {
             se.beginTransaction();
-            com.tony.Estados.Tipo_Documento tipo_documento_emun = com.tony.Estados.Tipo_Documento.valueOf(name);
+            com.tony.Estados.Tipos_Documento tipo_documento_emun = com.tony.Estados.Tipos_Documento.valueOf(name);
 //             se.createNamedQuery("tipo_documento.find_by_name", Tipo_Documento.class).setParameter("nombre", name).getSingleResult();
             tipo_documento = (Tipo_Documento) se.createCriteria(Tipo_Documento.class).add(Restrictions.eq("TipoDocumento", tipo_documento_emun)).uniqueResult();
+            se.getTransaction().commit();
         } catch (Exception e) {
             this.error.Manejador_errores(se, "error en Tipo_documentoImpl:get_tipo_documento_find_by_name" + e.getMessage());
 
+        }finally{
+            se.close();
         }
         return tipo_documento;
     }
@@ -53,9 +60,8 @@ public class Tipo_documentoImpl implements ITipo_documento {
     @Override
     public List<Documento> all_documento_find_by_id_tipo_documento(int id_tipo_documento) {
         List<Documento> documentos = null;
-        Session sesion = this.hibernateSesion.AbrirSesion();
+        Session sesion = this.hibernateSesion.get_Sesion();
         try {
-            sesion.beginTransaction();
             documentos = sesion.find(Tipo_Documento.class, id_tipo_documento).getDocumentos();
             sesion.getTransaction().commit();
         } catch (Exception e) {

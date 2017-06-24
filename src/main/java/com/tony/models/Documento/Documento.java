@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import com.tony.models.UsuarioExterrno.UsuarioExterno;
+import java.util.Objects;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
@@ -50,7 +51,7 @@ public class Documento implements Serializable {
     @Lob()
     @Basic(fetch = FetchType.LAZY)
     private byte[] copia;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.DETACH, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipoDocumento", nullable = false)
     private Tipo_Documento tipoDocumento;
     @Column(name = "isTupac", nullable = false)
@@ -79,13 +80,14 @@ public class Documento implements Serializable {
         this.Disconforme = is_disconforme;
         this.is_tupac = istupac;
         this.tipoDocumento = tipo_documento;
+
     }
+
 //    public void AddTipo_peticions(Tipo_peticion peticion) {
 //        if (this.tipo_peticions.isEmpty() || !this.tipo_peticions.contains(peticion)) {
 //            this.tipo_peticions.add(peticion);
 //        }
 //    }
-
     public void setIs_tupac(boolean is_tupac) {
         this.is_tupac = is_tupac;
     }
@@ -191,6 +193,7 @@ public class Documento implements Serializable {
 
     public void setTipoDocumento(Tipo_Documento tipoDocumento) {
         this.tipoDocumento = tipoDocumento;
+
     }
 
     public Concluido getConcluido() {
@@ -211,7 +214,6 @@ public class Documento implements Serializable {
     }
 
     public List<Operacion_EstadosDocumentos> getOperacionEstados() {
-        this.operacionEstados.size();
         return operacionEstados;
     }
 
@@ -225,10 +227,9 @@ public class Documento implements Serializable {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + id_documento;
-        return result;
+        int hash = 7;
+        hash = 61 * hash + Objects.hashCode(this.codigo);
+        return hash;
     }
 
     @Override
@@ -242,8 +243,8 @@ public class Documento implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Documento other = (Documento) obj;
-        if (id_documento != other.id_documento) {
+        final Documento other = (Documento) obj;
+        if (!Objects.equals(this.codigo, other.codigo)) {
             return false;
         }
         return true;
@@ -251,7 +252,7 @@ public class Documento implements Serializable {
 
     @Override
     public String toString() {
-        return "Documento{" + "id_documento=" + id_documento + ", codigo=" + codigo + ", fecha=" + fecha + ", asunto=" + asunto + ", contenido_doc=" + contenido_doc + ", Observaciones=" + Observaciones + ", Disconforme=" + Disconforme + ", num_foleo=" + num_foleo;
+        return "Documento{" + "id_documento=" + id_documento + ", codigo=" + codigo + ", fecha=" + fecha + ", asunto=" + asunto + ", contenido_doc=" + contenido_doc + ", Observaciones=" + Observaciones + ", Disconforme=" + Disconforme + ", num_foleo=" + num_foleo + " tipo_documento " + this.tipoDocumento;
     }
 
 }

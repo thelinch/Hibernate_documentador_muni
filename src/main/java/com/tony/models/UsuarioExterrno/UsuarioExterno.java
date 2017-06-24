@@ -19,15 +19,12 @@ import com.tony.models.Documento.Documento;
     @NamedQuery(name = "UsuarioExterno.find_by_dni", query = "SELECT a FROM UsuarioExterno a where a.dni=:dni")
 })
 public class UsuarioExterno extends Persona implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @OneToMany(mappedBy = "usuario", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE, CascadeType.DETACH}, orphanRemoval = true)
     private List<Documento> documentos = new ArrayList<>();
-
     public UsuarioExterno() {
 
     }
-
     public UsuarioExterno(String nombre, String apellido, int dni, String Correo, String telefono) {
         super(nombre, apellido, dni);
         this.correo_electronico = Correo;
@@ -42,7 +39,7 @@ public class UsuarioExterno extends Persona implements Serializable {
     }
 
     public List<Documento> getDocumentos() {
-        this.documentos.size();
+       
         return documentos;
     }
 

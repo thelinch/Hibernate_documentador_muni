@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.tony.DaoImpl;
 
 import com.tony.Dao.IUsuario_interno;
@@ -10,51 +5,58 @@ import com.tony.Dao.hibernateSession;
 import com.tony.Estados.Tipo_Perfil_UsuarioInterno;
 import com.tony.models.Documento.Documento;
 import com.tony.models.Documento.OperacionDocumento;
-
 import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import com.tony.models.UsuarioInterno.Usuario_interno;
 import java.util.List;
-import javax.persistence.FlushModeType;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 public class UsuarioInternoImpl implements IUsuario_interno {
 
-    private final hibernateSession hibernatesesion = hibernateSession.get_instancia_hibernate_session();
+    private final hibernateSession hibernatesesion;
     private final Errores error = Errores.get_intancia_error();
 
-    //Probado y validado
+    public UsuarioInternoImpl() {
+        this.hibernatesesion = new hibernateSession();
+    }
+
+    //Falta Probar
     @Override
     public boolean Registrar_usuario_Externo(UsuarioExterno usuario, Usuario_interno usuario_interno) {
         boolean operacion = false;
-        Session se = this.hibernatesesion.AbrirSesion();
+        Session se = null;
         try {
-            if (this.get_usuario_externo_find_by_dni(usuario.getDni()) == null) {
-                se.beginTransaction();
-                se.persist(usuario);
-                operacion = true;
-            } else {
-                se.beginTransaction();
-                UsuarioExterno user = se.find(UsuarioExterno.class, usuario.getId_persona());
-                user.getDocumentos().size();
-                usuario.getDocumentos().stream().forEach((documento) -> {
-                    user.addDocumento(documento);
-                });
-            }
-            System.out.println("entro al metodo registrta_usuario_externo");
+            se = this.hibernatesesion.get_Sesion();
+
+            // UsuarioExterno usuario_externo = this.get_usuario_externo_find_by_dni(usuario.getDni());
+            se.beginTransaction();
+            se.persist(usuario);
             se.getTransaction().commit();
-            if (!usuario.getDocumentos().isEmpty()) {
-                usuario.getDocumentos().stream().map((documento) -> {
-                    this.add_operacion_documento_usuario_interno(usuario_interno, documento);
-                    return documento;
-                }).forEach((documento) -> {
-                    this.Enviar_area_documento(documento);
-                });
-            }
+            operacion = true;
+//            operacion = true;
+//            } else {
+//
+//                usuario.getDocumentos().stream().forEach((documento) -> {
+//                    usuario_externo.addDocumento(documento);
+//                });
+//            }
         } catch (Exception e) {
             this.error.Manejador_errores(se, "error en UsuarioInternoImpl:Resgistrar_usuario_externo" + e.getMessage());
+        } finally {
+            if (se != null) {
+                se.close();
+            }
+
         }
+//        if (!usuario.getDocumentos().isEmpty()) {
+//            usuario.getDocumentos().stream().map((documento) -> {
+//                this.add_operacion_documento_usuario_interno(usuario_interno, documento);
+//                return documento;
+//            }).forEach((documento) -> {
+//                this.Enviar_area_documento(documento);
+//            });
+//        }
         return operacion;
     }
 
@@ -68,21 +70,24 @@ public class UsuarioInternoImpl implements IUsuario_interno {
 
     @Override
     public boolean Editar_documento(Documento documento) {
-        Session sesionhi = this.hibernatesesion.AbrirSesion();
+        Session sesionhi = null;
         try {
+            sesionhi = this.hibernatesesion.get_Sesion();
             sesionhi.beginTransaction();
             sesionhi.update(documento);
             sesionhi.getTransaction().commit();
             return true;
         } catch (Exception e) {
             this.error.Manejador_errores(sesionhi, "error en UsuarioInternoImpl:Editar_documento" + e.getMessage());
+        } finally {
+            sesionhi.close();
         }
         return false;
     }
 
     @Override
     public List<Usuario_interno> All_usuarios_internos(Usuario_interno Usuario_gerente, int inicio) {
-        Session sesionhi = this.hibernatesesion.AbrirSesion();
+        Session sesionhi = this.hibernatesesion.get_Sesion();
         List<Usuario_interno> user_internos = null;
         try {
             sesionhi.beginTransaction();
@@ -105,7 +110,7 @@ public class UsuarioInternoImpl implements IUsuario_interno {
 
     @Override
     public List<UsuarioExterno> All_usuarios_externos(int Inicio, int Final) {
-        Session sesionhi = this.hibernatesesion.AbrirSesion();
+        Session sesionhi = this.hibernatesesion.get_Sesion();
         List<UsuarioExterno> userExterno = null;
         try {
             sesionhi.beginTransaction();
@@ -119,10 +124,11 @@ public class UsuarioInternoImpl implements IUsuario_interno {
 
     @Override
     public boolean add_documento_a_UsuarioExterno(Documento documento, Usuario_interno usuario_interno, UsuarioExterno usuario_externo) {
-        Session sesionhi = this.hibernatesesion.AbrirSesion();
+        Session sesionhi = this.hibernatesesion.get_Sesion();
         try {
             sesionhi.beginTransaction();
             UsuarioExterno userEntidad = sesionhi.find(UsuarioExterno.class, usuario_externo.getId_persona());
+            userEntidad.getDocumentos().size();
             userEntidad.addDocumento(documento);
             sesionhi.getTransaction().commit();
             this.add_operacion_documento_usuario_interno(usuario_interno, documento);
@@ -141,9 +147,8 @@ public class UsuarioInternoImpl implements IUsuario_interno {
 
     @Override
     public boolean add_operacion_documento_usuario_interno(Usuario_interno usuario_interno, Documento documento) {
-        Session sesion = this.hibernatesesion.AbrirSesion();
+        Session sesion = this.hibernatesesion.get_Sesion();
         try {
-            sesion.beginTransaction();
             OperacionDocumento operacion_documento = new OperacionDocumento(usuario_interno, documento);
             sesion.persist(operacion_documento);
             sesion.getTransaction().commit();
@@ -157,7 +162,7 @@ public class UsuarioInternoImpl implements IUsuario_interno {
 
     @Override
     public UsuarioExterno get_usuario_externo_find_by_dni(int dni) {
-        Session sesion = this.hibernatesesion.AbrirSesion();
+        Session sesion = this.hibernatesesion.get_Sesion();
         UsuarioExterno usuario_externo = null;
         try {
             sesion.beginTransaction();
@@ -165,6 +170,8 @@ public class UsuarioInternoImpl implements IUsuario_interno {
             sesion.getTransaction().commit();
         } catch (Exception e) {
             this.error.Manejador_errores(sesion, "Error en UsuarioInternoImpl : get_usuario_externo_find_by_dni " + e.getMessage());
+        } finally {
+            sesion.close();
         }
         return usuario_externo;
     }

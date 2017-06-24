@@ -1,6 +1,6 @@
 package com.tony.Estados;
 
-public enum Tipo_Documento {
+public enum Tipos_Documento {
 	Oficio,
 	Expediente,
 	Carta,

@@ -24,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class UsuarioInternoServiceImpl extends Verificacion implements UsuarioInternoServiceDao, IVerificacion {
     
-    private UsuarioInternoImpl usuariImpl = new UsuarioInternoImpl();
+    private final UsuarioInternoImpl usuariImpl = new UsuarioInternoImpl();
     
     @Override
     public boolean Registrar_usuarioExterno(UsuarioExterno usuario,Usuario_interno user_interno) {
