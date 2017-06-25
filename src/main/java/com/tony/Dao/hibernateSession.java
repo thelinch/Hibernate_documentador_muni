@@ -11,35 +11,48 @@ import org.hibernate.cfg.Configuration;
 
 public class hibernateSession {
 
-    private static final SessionFactory sessionFactory;
-
-    static {
-        try {
-            // Create the SessionFactory from standard (hibernate.cfg.xml) 
-            // config file.
-            Configuration configuracion = new Configuration();
-            configuracion.configure();
-            sessionFactory = configuracion.buildSessionFactory();
-        } catch (Throwable ex) {
-            // Log the exception. 
-            System.err.println("Initial SessionFactory creation failed." + ex);
-            throw new ExceptionInInitializerError(ex);
-        }
-    }
-  
-
-//    public hibernateSession() {
-//        Configuration configuracion = new Configuration();
-//        configuracion.configure();
-//        SessionFactory sessionFactory = configuracion.buildSessionFactory();
-//        sesion = sessionFactory.openSession();
-//        sesion.beginTransaction();
+    private static SessionFactory sessionFactory;
+    private static hibernateSession instancia_hibernate = null;
+    private Session session;
+//    static {
+//        try {
+//            // Create the SessionFactory from standard (hibernate.cfg.xml) 
+//            // config file.
+//            Configuration configuracion = new Configuration();
+//            configuracion.configure();
+//            sessionFactory = configuracion.buildSessionFactory();
+//        } catch (Throwable ex) {
+//            // Log the exception. 
+//            System.err.println("Initial SessionFactory creation failed." + ex);
+//            throw new ExceptionInInitializerError(ex);
+//        }
 //    }
 
-    public Session get_Sesion() {
-       
-        return sessionFactory.openSession();
+    public static hibernateSession get_instancia_hibernateSession() {
+        if (instancia_hibernate == null) {
+            instancia_hibernate = new hibernateSession();
+        }
+        return instancia_hibernate;
+    }
+//    public static SessionFactory get_session_factory() {
+//        Configuration configuration = new Configuration();
+//        configuration.configure();
+//        sessionFactory = configuration.buildSessionFactory();
+//        return sessionFactory;
+//    }
+
+    private hibernateSession() {
+        Configuration configuracion = new Configuration();
+        configuracion.configure();
+        sessionFactory = configuracion.buildSessionFactory();
+
     }
 
+    public SessionFactory get_sessionFactor() {
+        return sessionFactory;
+    }
+//    public Session get_Sesion() {
+//        return sessionFactory.openSession();
+//    }
 
 }

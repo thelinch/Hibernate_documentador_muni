@@ -5,16 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
-
 import com.tony.Listeners.OperacionDocumentoListener;
 import com.tony.models.UsuarioInterno.AuditoriaUsuario;
 import com.tony.models.UsuarioInterno.Usuario_interno;
 
-/**
- * Entity implementation class for Entity: OperacionDocumento
- *
- */
 @Entity
+@EntityListeners(value = OperacionDocumentoListener.class)
 @Table(name = "operacion_documento")
 public class OperacionDocumento implements Serializable {
 
@@ -22,10 +18,10 @@ public class OperacionDocumento implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_OperacionDocumento;
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario_interno usuario;
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_documento", nullable = false)
     private Documento documento;
     @OneToMany(mappedBy = "operacioDocumento", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE, CascadeType.DETACH}, orphanRemoval = true)
@@ -41,9 +37,8 @@ public class OperacionDocumento implements Serializable {
     }
 
     public void AddAuditoriaUsuario(AuditoriaUsuario auiditoria) {
-        if (this.AuditoriaUsuario.isEmpty() || !this.AuditoriaUsuario.contains(auiditoria)) {
-            this.AuditoriaUsuario.add(auiditoria);
-        }
+        this.AuditoriaUsuario.add(auiditoria);
+        auiditoria.setOperacioDocumento(this);
     }
 
     public int getId_OperacionDocumento() {

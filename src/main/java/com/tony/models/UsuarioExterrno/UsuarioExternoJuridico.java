@@ -1,6 +1,4 @@
 package com.tony.models.UsuarioExterrno;
-
-import com.tony.models.Documento.Documento;
 import java.io.Serializable;
 import javax.persistence.*;
 

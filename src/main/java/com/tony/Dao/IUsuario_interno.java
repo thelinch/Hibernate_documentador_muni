@@ -21,7 +21,9 @@ public interface IUsuario_interno {
 
     List<UsuarioExterno> All_usuarios_externos(int Inicio_paginacion, int Final_paginacion);
 
-    boolean add_documento_a_UsuarioExterno(Documento documento, Usuario_interno usuario_interno, UsuarioExterno usuario_externo);
+    boolean add_documento_a_UsuarioExterno(Usuario_interno usuario_interno, UsuarioExterno usuario_externo);
+
+    Usuario_interno get_usuario_interno_by_Dni(int dni);
 
     boolean Derivar_documento(Usuario_interno usuario_interno);
 

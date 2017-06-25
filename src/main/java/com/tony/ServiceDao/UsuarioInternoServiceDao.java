@@ -9,6 +9,7 @@ import com.tony.models.Documento.Documento;
 import com.tony.models.Documento.Estado_documentos;
 import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import com.tony.models.UsuarioInterno.Usuario_interno;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -18,9 +19,9 @@ import javax.swing.table.DefaultTableModel;
  */
 public interface UsuarioInternoServiceDao {
 
-    boolean Registrar_usuarioExterno(UsuarioExterno usuario,Usuario_interno user_interno);
+    boolean Registrar_usuarioExterno(UsuarioExterno usuario, Usuario_interno user_interno);
 
-    boolean Registrar_operacion_documento_usuario_interno(Usuario_interno usuarioInterno,Documento documento);
+    boolean Registrar_operacion_documento_usuario_interno(Usuario_interno usuarioInterno, Documento documento);
 
     boolean Enviar_area_documento(Documento documento);
 
@@ -28,9 +29,9 @@ public interface UsuarioInternoServiceDao {
 
     DefaultTableModel All_usuarios_internos(Usuario_interno Usuario_gerente);
 
-    DefaultTableModel All_usuarios_externos(JTable tabla,int inicio,int Final);
+    DefaultTableModel All_usuarios_externos(JTable tabla, int inicio, int Final);
 
-    boolean add_documentoUsuarioExterno(Documento documento, Usuario_interno usuario_interno, UsuarioExterno usuario_externo);
+    boolean add_documentoUsuarioExterno(Usuario_interno usuario_interno, UsuarioExterno usuario_externo);
 
     boolean Derivar_documento(Usuario_interno usuario_interno);
 
@@ -38,4 +39,9 @@ public interface UsuarioInternoServiceDao {
 
     DefaultTableModel get_flujograma_documento(Documento documento);
 
+    UsuarioExterno get_usuario_externo_find_by_dni(int dni);
+
+    void Llenar_panel_field_class(JPanel panel_fields, Object objeto);
+
+    Usuario_interno get_usuario_interno_by_Dni(int dni);
 }

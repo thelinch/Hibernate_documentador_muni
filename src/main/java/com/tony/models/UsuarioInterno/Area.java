@@ -26,7 +26,7 @@ public class Area implements Serializable {
     private Tipos_Area tipoArea;
     @OneToMany(mappedBy = "area", cascade = {CascadeType.REMOVE, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
     private List<Usuario_interno> usuarioInterno;
-    @ManyToMany(targetEntity = Tupa.class, cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @ManyToMany(targetEntity = Tupa.class, cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
     @JoinTable(name = "area_tupa", joinColumns = {
         @JoinColumn(name = "id_area")}, inverseJoinColumns = {
         @JoinColumn(name = "id_tupa")})

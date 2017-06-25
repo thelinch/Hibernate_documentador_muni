@@ -1,22 +1,28 @@
 package com.tony.Vista;
 
 import com.mxrck.autocompleter.TextAutoCompleter;
+import com.tony.Estados.Tipo_Perfil_UsuarioInterno;
+import com.tony.Estados.Tipos_Area;
 import com.tony.ServiceImpl.AreaServiceImpl;
 import com.tony.ServiceImpl.Tipo_documentoServiceImpl;
 import com.tony.ServiceImpl.UsuarioInternoServiceImpl;
 import com.tony.models.Documento.Documento;
 import com.tony.models.Documento.Tipo_Documento;
 import com.tony.models.Tupa;
+import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import com.tony.models.UsuarioExterrno.UsuarioExternoJuridico;
 import com.tony.models.UsuarioExterrno.UsuarioExternoNatural;
 import com.tony.models.UsuarioInterno.Usuario_interno;
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.text.Document;
 
 public class home_de_la_mesa_partes extends javax.swing.JFrame {
 
@@ -25,6 +31,8 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
     private final UsuarioInternoServiceImpl userInternoService;
     private UsuarioExternoNatural UsuarioExternoNatural = null;
     private UsuarioExternoJuridico usuarioExternoJuridico = null;
+    private static List<Tupa> list_tupa;
+    private final Usuario_interno usuario_interno;
     private final Documento documentoEdicio = null;
     private final Tipo_documentoServiceImpl tipo_documento = new Tipo_documentoServiceImpl();
     private final List<Tipo_Documento> Lista_tipos_documento = null;
@@ -32,19 +40,20 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
     private final AreaServiceImpl area_service = new AreaServiceImpl();
     private final TextAutoCompleter texto_tupac;
     private final TextAutoCompleter texto_autocompletado_area;
-    private static List<Tupa> list_tupa;
-    private final Usuario_interno usuario_interno;
+    private final TextAutoCompleter texto_autocompletado_tipo_document;
 
     public home_de_la_mesa_partes() {
         initComponents();
         this.userInternoService = new UsuarioInternoServiceImpl();
         this.setLocationRelativeTo(null);
         list_tupa = new ArrayList<>();
-        this.usuario_interno = new Usuario_interno();
-        this.usuario_interno.setId_persona(2);
+        this.usuario_interno = this.userInternoService.get_usuario_interno_by_Dni(123);
         jPanelPersonaJuridica.setVisible(false);
         this.texto_tupac = new TextAutoCompleter(this.jTextFieldAsunto);
         this.texto_autocompletado_area = new TextAutoCompleter(this.jTextFieldArea);
+        this.texto_autocompletado_tipo_document = new TextAutoCompleter(jTextFieldTipo_documento);
+        this.jLabelNombre_operador.setText(this.usuario_interno.getNombre());
+        this.jTextFieldFuncionOperador.setText(this.usuario_interno.getPerfil().getTipoPerfil().toString());
     }
 
     @SuppressWarnings("unchecked")
@@ -89,37 +98,24 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         jLabel_Operador = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jLabel_Funcion = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        jTextFieldFuncionOperador = new javax.swing.JTextField();
         jLabel_Fecha = new javax.swing.JLabel();
-        jLabel_Nombre_operador = new javax.swing.JLabel();
+        jLabelNombre_operador = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel_VISTA = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         jTableVistaDocumento_por_enviar = new javax.swing.JTable();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel15 = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
         jTableVista_documetos_enviados = new javax.swing.JTable();
         jLabel16 = new javax.swing.JLabel();
+        jTextFieldDni_search_Vista = new javax.swing.JTextField();
         jPanel_CONTROL = new javax.swing.JPanel();
         jPanel_Sub_Control = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanelregistro = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel_Nombre = new javax.swing.JLabel();
-        jTextField_Nombre = new javax.swing.JTextField();
-        jLabel_Apellido = new javax.swing.JLabel();
-        jTextField_Apellido = new javax.swing.JTextField();
-        jLabel_Correo = new javax.swing.JLabel();
-        jTextField_Correo = new javax.swing.JTextField();
-        jLabel_DNI = new javax.swing.JLabel();
-        jTextFieldDni = new javax.swing.JTextField();
-        jLabel_Telefono = new javax.swing.JLabel();
-        jLabel_Tipo = new javax.swing.JLabel();
-        jTextField_Telefono = new javax.swing.JTextField();
-        jComboBoxTipoPersona = new javax.swing.JComboBox<>();
         jButton_Aceptar = new javax.swing.JButton();
         jButton_Cancelar = new javax.swing.JButton();
         jPanelPersonaJuridica = new javax.swing.JPanel();
@@ -127,8 +123,22 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         jTextField_Ruc = new javax.swing.JTextField();
         jLabel_Organizacion = new javax.swing.JLabel();
         jTextField_Organizacion = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
+        jPanelDatos_usuarios = new javax.swing.JPanel();
+        jLabel_Telefono = new javax.swing.JLabel();
+        jTextField_Telefono = new javax.swing.JTextField();
+        jTextFieldDni = new javax.swing.JTextField();
+        jLabel_DNI = new javax.swing.JLabel();
+        jTextField_Apellido = new javax.swing.JTextField();
+        jTextField_Correo = new javax.swing.JTextField();
+        jLabel_Correo = new javax.swing.JLabel();
+        jLabel_Apellido = new javax.swing.JLabel();
+        jLabel_Nombre = new javax.swing.JLabel();
+        jTextField_Nombre = new javax.swing.JTextField();
+        jTextFieldDni_seach_registro = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jComboBoxTipoPersona = new javax.swing.JComboBox<>();
+        jLabel_Tipo = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
@@ -468,15 +478,15 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         jLabel_Funcion.setText("Funcion:");
         jPanel4.add(jLabel_Funcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(121, 117, 116, 35));
 
-        jTextField2.setEditable(false);
-        jPanel4.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(255, 119, 212, 35));
+        jTextFieldFuncionOperador.setEditable(false);
+        jPanel4.add(jTextFieldFuncionOperador, new org.netbeans.lib.awtextra.AbsoluteConstraints(255, 119, 212, 35));
 
         jLabel_Fecha.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel_Fecha.setText("Fecha de ingreso");
         jPanel4.add(jLabel_Fecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 70, -1, 40));
 
-        jLabel_Nombre_operador.setText("Nombre Operador");
-        jPanel4.add(jLabel_Nombre_operador, new org.netbeans.lib.awtextra.AbsoluteConstraints(253, 28, 208, 25));
+        jLabelNombre_operador.setText("Nombre Operador");
+        jPanel4.add(jLabelNombre_operador, new org.netbeans.lib.awtextra.AbsoluteConstraints(253, 28, 208, 25));
 
         jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         jTabbedPane1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -543,6 +553,15 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel16.setText("Documentos Enviados");
 
+        jTextFieldDni_search_Vista.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextFieldDni_search_VistaKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldDni_search_VistaKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel_VISTALayout = new javax.swing.GroupLayout(jPanel_VISTA);
         jPanel_VISTA.setLayout(jPanel_VISTALayout);
         jPanel_VISTALayout.setHorizontalGroup(
@@ -553,7 +572,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
                     .addGroup(jPanel_VISTALayout.createSequentialGroup()
                         .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jTextFieldDni_search_Vista, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel_VISTALayout.createSequentialGroup()
                         .addGroup(jPanel_VISTALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane5)
@@ -564,7 +583,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
                 .addGroup(jPanel_VISTALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(292, Short.MAX_VALUE))
+                .addContainerGap(338, Short.MAX_VALUE))
         );
         jPanel_VISTALayout.setVerticalGroup(
             jPanel_VISTALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -572,14 +591,14 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel_VISTALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldDni_search_Vista, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel_VISTALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel_VISTALayout.createSequentialGroup()
                         .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(132, Short.MAX_VALUE))
+                        .addContainerGap(124, Short.MAX_VALUE))
                     .addGroup(jPanel_VISTALayout.createSequentialGroup()
                         .addGroup(jPanel_VISTALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(jPanel_VISTALayout.createSequentialGroup()
@@ -596,11 +615,11 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         jPanel_Sub_Control.setLayout(jPanel_Sub_ControlLayout);
         jPanel_Sub_ControlLayout.setHorizontalGroup(
             jPanel_Sub_ControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1236, Short.MAX_VALUE)
+            .addGap(0, 1282, Short.MAX_VALUE)
         );
         jPanel_Sub_ControlLayout.setVerticalGroup(
             jPanel_Sub_ControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 552, Short.MAX_VALUE)
+            .addGap(0, 544, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel_CONTROLLayout = new javax.swing.GroupLayout(jPanel_CONTROL);
@@ -619,83 +638,6 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         jPanelregistro.setPreferredSize(new java.awt.Dimension(1000, 528));
         jPanelregistro.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Registro de usuario");
-        jPanelregistro.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-120, 0, 718, 40));
-
-        jLabel_Nombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel_Nombre.setForeground(new java.awt.Color(153, 0, 0));
-        jLabel_Nombre.setText("Nombre");
-        jPanelregistro.add(jLabel_Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 77, 40));
-
-        jTextField_Nombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTextField_Nombre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField_NombreActionPerformed(evt);
-            }
-        });
-        jPanelregistro.add(jTextField_Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 130, 195, 40));
-
-        jLabel_Apellido.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel_Apellido.setForeground(new java.awt.Color(153, 0, 0));
-        jLabel_Apellido.setText("Apellido");
-        jPanelregistro.add(jLabel_Apellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 77, 35));
-
-        jTextField_Apellido.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTextField_Apellido.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField_ApellidoActionPerformed(evt);
-            }
-        });
-        jPanelregistro.add(jTextField_Apellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 180, 195, 35));
-
-        jLabel_Correo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel_Correo.setForeground(new java.awt.Color(0, 153, 0));
-        jLabel_Correo.setText("Correo");
-        jPanelregistro.add(jLabel_Correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 77, 38));
-
-        jTextField_Correo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTextField_Correo.setName("noRequerido"); // NOI18N
-        jPanelregistro.add(jTextField_Correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 230, 195, 38));
-
-        jLabel_DNI.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel_DNI.setForeground(new java.awt.Color(153, 0, 0));
-        jLabel_DNI.setText("DNI");
-        jPanelregistro.add(jLabel_DNI, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 180, 54, 35));
-
-        jTextFieldDni.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTextFieldDni.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextFieldDniKeyPressed(evt);
-            }
-        });
-        jPanelregistro.add(jTextFieldDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 180, 167, 35));
-
-        jLabel_Telefono.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel_Telefono.setForeground(new java.awt.Color(0, 153, 0));
-        jLabel_Telefono.setText("Telefono");
-        jPanelregistro.add(jLabel_Telefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 230, 65, 34));
-
-        jLabel_Tipo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel_Tipo.setForeground(new java.awt.Color(153, 0, 0));
-        jLabel_Tipo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel_Tipo.setText("Tipo Usuario:");
-        jPanelregistro.add(jLabel_Tipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 103, 37));
-
-        jTextField_Telefono.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTextField_Telefono.setName("noRequerido"); // NOI18N
-        jPanelregistro.add(jTextField_Telefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 230, 164, 35));
-
-        jComboBoxTipoPersona.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jComboBoxTipoPersona.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Natural", "Juridico" }));
-        jComboBoxTipoPersona.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxTipoPersonaActionPerformed(evt);
-            }
-        });
-        jPanelregistro.add(jComboBoxTipoPersona, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 270, -1, 37));
-
         jButton_Aceptar.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton_Aceptar.setText("ACEPTAR");
         jButton_Aceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -710,70 +652,179 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         jPanelregistro.add(jButton_Cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 470, 163, 55));
 
         jPanelPersonaJuridica.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos Obligados", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12), new java.awt.Color(255, 0, 0))); // NOI18N
+        jPanelPersonaJuridica.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel_Ruc.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel_Ruc.setForeground(new java.awt.Color(153, 0, 0));
         jLabel_Ruc.setText("RUC");
+        jPanelPersonaJuridica.add(jLabel_Ruc, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 60, 40));
 
         jTextField_Ruc.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jPanelPersonaJuridica.add(jTextField_Ruc, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, 170, 40));
 
         jLabel_Organizacion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel_Organizacion.setForeground(new java.awt.Color(153, 0, 0));
         jLabel_Organizacion.setText("Organizacion");
+        jPanelPersonaJuridica.add(jLabel_Organizacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 20, -1, 40));
 
         jTextField_Organizacion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jPanelPersonaJuridica.add(jTextField_Organizacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 20, 193, 40));
 
-        javax.swing.GroupLayout jPanelPersonaJuridicaLayout = new javax.swing.GroupLayout(jPanelPersonaJuridica);
-        jPanelPersonaJuridica.setLayout(jPanelPersonaJuridicaLayout);
-        jPanelPersonaJuridicaLayout.setHorizontalGroup(
-            jPanelPersonaJuridicaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelPersonaJuridicaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel_Ruc, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTextField_Ruc, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel_Organizacion)
-                .addGap(18, 18, 18)
-                .addComponent(jTextField_Organizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(44, 44, 44))
-        );
-        jPanelPersonaJuridicaLayout.setVerticalGroup(
-            jPanelPersonaJuridicaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelPersonaJuridicaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanelPersonaJuridicaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel_Organizacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanelPersonaJuridicaLayout.createSequentialGroup()
-                        .addGroup(jPanelPersonaJuridicaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField_Organizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanelPersonaJuridicaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jTextField_Ruc, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
-                                .addComponent(jLabel_Ruc, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(0, 5, Short.MAX_VALUE))))
-        );
+        jPanelregistro.add(jPanelPersonaJuridica, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, 800, 80));
 
-        jPanelregistro.add(jPanelPersonaJuridica, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 590, 80));
+        jLabel_Telefono.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel_Telefono.setForeground(new java.awt.Color(0, 153, 0));
+        jLabel_Telefono.setText("Telefono");
 
-        jTextField5.setName("noRequerido"); // NOI18N
-        jPanelregistro.add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, 180, 30));
+        jTextField_Telefono.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField_Telefono.setName("noRequerido"); // NOI18N
+
+        jTextFieldDni.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextFieldDni.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextFieldDniKeyPressed(evt);
+            }
+        });
+
+        jLabel_DNI.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel_DNI.setForeground(new java.awt.Color(153, 0, 0));
+        jLabel_DNI.setText("DNI");
+
+        jTextField_Apellido.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField_Apellido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField_ApellidoActionPerformed(evt);
+            }
+        });
+
+        jTextField_Correo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField_Correo.setName("noRequerido"); // NOI18N
+
+        jLabel_Correo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel_Correo.setForeground(new java.awt.Color(0, 153, 0));
+        jLabel_Correo.setText("Correo");
+
+        jLabel_Apellido.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel_Apellido.setForeground(new java.awt.Color(153, 0, 0));
+        jLabel_Apellido.setText("Apellido");
+
+        jLabel_Nombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel_Nombre.setForeground(new java.awt.Color(153, 0, 0));
+        jLabel_Nombre.setText("Nombre");
+
+        jTextField_Nombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField_Nombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField_NombreActionPerformed(evt);
+            }
+        });
+
+        jTextFieldDni_seach_registro.setName("noRequerido"); // NOI18N
+        jTextFieldDni_seach_registro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextFieldDni_seach_registroKeyPressed(evt);
+            }
+        });
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel17.setText("Buscar usuario registrado:");
-        jPanelregistro.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 170, 30));
+
+        javax.swing.GroupLayout jPanelDatos_usuariosLayout = new javax.swing.GroupLayout(jPanelDatos_usuarios);
+        jPanelDatos_usuarios.setLayout(jPanelDatos_usuariosLayout);
+        jPanelDatos_usuariosLayout.setHorizontalGroup(
+            jPanelDatos_usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelDatos_usuariosLayout.createSequentialGroup()
+                .addGroup(jPanelDatos_usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelDatos_usuariosLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextFieldDni_seach_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanelDatos_usuariosLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanelDatos_usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanelDatos_usuariosLayout.createSequentialGroup()
+                                .addComponent(jLabel_Nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(13, 13, 13)
+                                .addComponent(jTextField_Nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(27, 27, 27)
+                                .addComponent(jLabel_DNI, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextFieldDni, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanelDatos_usuariosLayout.createSequentialGroup()
+                                .addGroup(jPanelDatos_usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel_Apellido, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel_Correo, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanelDatos_usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextField_Correo, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanelDatos_usuariosLayout.createSequentialGroup()
+                                        .addComponent(jTextField_Apellido, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel_Telefono, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(6, 6, 6)
+                                        .addComponent(jTextField_Telefono, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                .addContainerGap(83, Short.MAX_VALUE))
+        );
+        jPanelDatos_usuariosLayout.setVerticalGroup(
+            jPanelDatos_usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelDatos_usuariosLayout.createSequentialGroup()
+                .addGap(11, 11, 11)
+                .addGroup(jPanelDatos_usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jTextFieldDni_seach_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanelDatos_usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField_Nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel_Nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldDni, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel_DNI, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanelDatos_usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField_Apellido, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField_Telefono, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel_Apellido, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel_Telefono, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanelDatos_usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField_Correo, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel_Correo, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+
+        jPanelregistro.add(jPanelDatos_usuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 630, 240));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Registro de usuario");
+        jPanelregistro.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 718, 40));
+
+        jComboBoxTipoPersona.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jComboBoxTipoPersona.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Natural", "Juridico" }));
+        jComboBoxTipoPersona.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxTipoPersonaActionPerformed(evt);
+            }
+        });
+        jPanelregistro.add(jComboBoxTipoPersona, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 320, -1, 37));
+
+        jLabel_Tipo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel_Tipo.setForeground(new java.awt.Color(153, 0, 0));
+        jLabel_Tipo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel_Tipo.setText("Tipo Usuario:");
+        jPanelregistro.add(jLabel_Tipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(43, 320, 100, 37));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanelregistro, javax.swing.GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE)
+            .addComponent(jPanelregistro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanelregistro, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanelregistro, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("REGISTRO", jPanel3);
@@ -810,7 +861,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
                                 .addComponent(jTextField3)
                                 .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel7Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                 .addComponent(jTabbedPane1)
                 .addContainerGap())
         );
@@ -831,14 +882,14 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(jTextField4)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 583, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50))
+                .addGap(18, 18, 18)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 575, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(146, 146, 146))
         );
 
         jScrollPane4.setViewportView(jPanel7);
 
-        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1270, 790));
+        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 1270, 770));
 
         pack();
         setLocationRelativeTo(null);
@@ -927,7 +978,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
             return;
         } else if (JOptionPane.showConfirmDialog(jDialogDocumentos, "Los datos son correctos?") == 0) {
             this.contador++;
-            Documento documento = new Documento(jLabelCodigo_Documento.getText() + String.valueOf(this.contador), jTextFieldAsunto.getText(),this.tipo_documento.get_tipo_documento_find_by_name(jTextFieldTipo_documento.getText()), jTextArea_Descripcion.getText(), jTextAreaObservaciones.getText(), Integer.parseInt(jTextFieldNumeroFolioPresentado.getText()), jCheckBox_Conformidad.isSelected(), jCheckBoxIsTupac.isSelected());
+            Documento documento = new Documento(jLabelCodigo_Documento.getText() + String.valueOf(this.contador), jTextFieldAsunto.getText(), this.tipo_documento.get_tipo_documento_find_by_name(jTextFieldTipo_documento.getText()), jTextArea_Descripcion.getText(), jTextAreaObservaciones.getText(), Integer.parseInt(jTextFieldNumeroFolioPresentado.getText()), jCheckBox_Conformidad.isSelected(), jCheckBoxIsTupac.isSelected());
             if (this.usuarioExternoJuridico != null) {
                 this.usuarioExternoJuridico.addDocumento(documento);
             } else {
@@ -1000,15 +1051,35 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextFieldDniKeyPressed
     private void jDialogDocumentosWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogDocumentosWindowClosing
+//        if (this.usuario_interno.getPerfil().getTipoPerfil().compareTo(Tipo_Perfil_UsuarioInterno.Profesional) == 0 && this.usuario_interno.getArea().getTipoArea().compareTo(Tipos_Area.pedriatria) == 0) {
         if (this.usuarioExternoJuridico != null) {
             this.usuarioExternoJuridico.setCodigo("antony");
-            System.out.println(this.usuarioExternoJuridico.getDocumentos().size());
-            System.out.println(this.userInternoService.Registrar_usuarioExterno(this.usuarioExternoJuridico, usuario_interno));;
+            if (this.userInternoService.get_usuario_externo_find_by_dni(this.usuarioExternoJuridico.getDni()) != null) {
+                this.userInternoService.add_documentoUsuarioExterno(this.usuario_interno, this.usuarioExternoJuridico);
+            } else {
+                this.userInternoService.Registrar_usuarioExterno(this.usuarioExternoJuridico, usuario_interno);
+            }
+
+            this.usuarioExternoJuridico.getDocumentos().stream().forEach((documento) -> {
+                this.userInternoService.Registrar_operacion_documento_usuario_interno(this.usuario_interno, documento);
+            });
         } else {
             this.UsuarioExternoNatural.setCodigo("ap");
-            System.out.println(this.UsuarioExternoNatural.getDocumentos().size());
-            this.userInternoService.Registrar_usuarioExterno(this.UsuarioExternoNatural, usuario_interno);
+            if (this.userInternoService.get_usuario_externo_find_by_dni(this.UsuarioExternoNatural.getDni()) != null) {
+                this.userInternoService.add_documentoUsuarioExterno(this.usuario_interno, UsuarioExternoNatural);
+            } else {
+                this.userInternoService.Registrar_usuarioExterno(this.UsuarioExternoNatural, this.usuario_interno);
+            }
+                this.UsuarioExternoNatural.getDocumentos().stream().forEach((document) -> {
+                    this.userInternoService.Registrar_operacion_documento_usuario_interno(this.usuario_interno, document);
+                });
         }
+//        } else {
+//            JOptionPane.showMessageDialog(jDialogDocumentos, "usted no tiene permiso de registrar usuarios");
+//        }
+//        
+        this.usuarioExternoJuridico = null;
+        this.UsuarioExternoNatural = null;
         this.userInternoService.limpiarDatosPanel(jPanelPersonaJuridica);
         this.userInternoService.limpiarDatosPanel(jPanelregistro);
         this.userInternoService.limpiarDatosPanel(jPanelDocumento);
@@ -1019,9 +1090,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jDialogDocumentosWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogDocumentosWindowOpened
-
-        TextAutoCompleter texto_autocompletado_tipo_documento = new TextAutoCompleter(jTextFieldTipo_documento);
-        this.tipo_documento_service.LLenar_autcompleter(texto_autocompletado_tipo_documento);
+        this.tipo_documento_service.LLenar_autcompleter(this.texto_autocompletado_tipo_document);
 
     }//GEN-LAST:event_jDialogDocumentosWindowOpened
 
@@ -1085,6 +1154,39 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
 //        }
     }//GEN-LAST:event_jTextFieldAsuntoFocusLost
 
+    private void jTextFieldDni_search_VistaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldDni_search_VistaKeyPressed
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldDni_search_VistaKeyPressed
+
+    private void jTextFieldDni_search_VistaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldDni_search_VistaKeyReleased
+
+    }//GEN-LAST:event_jTextFieldDni_search_VistaKeyReleased
+
+    private void jTextFieldDni_seach_registroKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldDni_seach_registroKeyPressed
+
+        char validar = evt.getKeyChar();
+        if (!Character.isLetter(validar)) {
+            if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (jTextFieldDni_seach_registro.getText().length() == 8) {
+                    UsuarioExterno usuario_externo = this.userInternoService.get_usuario_externo_find_by_dni(Integer.parseInt(this.jTextFieldDni_seach_registro.getText()));
+
+                    this.userInternoService.Llenar_panel_field_class(jPanelDatos_usuarios, usuario_externo);
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "ingrese los 8 numeros");
+                }
+
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Ingrese solo numero");
+            getToolkit().beep();
+            evt.consume();
+
+        }
+
+    }//GEN-LAST:event_jTextFieldDni_seach_registroKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -1131,7 +1233,6 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox_Conformidad;
     private javax.swing.JComboBox<String> jComboBoxTipoPersona;
     private javax.swing.JDialog jDialogDocumentos;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1153,13 +1254,13 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelCodigo_Documento;
     private javax.swing.JLabel jLabelNombreCodigo_Documento;
     private javax.swing.JLabel jLabelNombre_archivo;
+    private javax.swing.JLabel jLabelNombre_operador;
     private javax.swing.JLabel jLabel_Apellido;
     private javax.swing.JLabel jLabel_Correo;
     private javax.swing.JLabel jLabel_DNI;
     private javax.swing.JLabel jLabel_Fecha;
     private javax.swing.JLabel jLabel_Funcion;
     private javax.swing.JLabel jLabel_Nombre;
-    private javax.swing.JLabel jLabel_Nombre_operador;
     private javax.swing.JLabel jLabel_Operador;
     private javax.swing.JLabel jLabel_Organizacion;
     private javax.swing.JLabel jLabel_Ruc;
@@ -1168,6 +1269,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanelDatos_usuarios;
     private javax.swing.JPanel jPanelDocumento;
     private javax.swing.JPanel jPanelPersonaJuridica;
     private javax.swing.JPanel jPanel_CONTROL;
@@ -1187,13 +1289,14 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextAreaObservaciones;
     private javax.swing.JTextArea jTextArea_Descripcion;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextFieldArea;
     private javax.swing.JTextField jTextFieldAsunto;
     private javax.swing.JTextField jTextFieldDni;
+    private javax.swing.JTextField jTextFieldDni_seach_registro;
+    private javax.swing.JTextField jTextFieldDni_search_Vista;
+    private javax.swing.JTextField jTextFieldFuncionOperador;
     private javax.swing.JTextField jTextFieldNumeroFolioPresentado;
     private javax.swing.JTextField jTextFieldNumeroFolioRequerido;
     private javax.swing.JTextField jTextFieldPlazo_resolucion_documento;

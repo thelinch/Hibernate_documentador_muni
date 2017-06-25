@@ -15,22 +15,25 @@ import org.hibernate.criterion.Restrictions;
 
 public class Tipo_documentoImpl implements ITipo_documento {
 
-    private final hibernateSession hibernateSesion;
+    private final hibernateSession hibernateSesion = hibernateSession.get_instancia_hibernateSession();
     private final Errores error = Errores.get_intancia_error();
 
     public Tipo_documentoImpl() {
-        this.hibernateSesion = new hibernateSession();
+
     }
 
     @Override
     public List<Tipo_Documento> all_tipo_documento() {
-        Session se = this.hibernateSesion.get_Sesion();
+        Session se = this.hibernateSesion.get_sessionFactor().openSession();
         List<Tipo_Documento> lista_all_tipo_documento = null;
         try {
+            se.beginTransaction();
             lista_all_tipo_documento = se.createNamedQuery("tipo_documento.all", Tipo_Documento.class).getResultList();
             se.getTransaction().commit();
         } catch (Exception e) {
             this.error.Manejador_errores(se, "error en Tipo_documentoImpl:all_tipo_documento" + e.getMessage());
+        } finally {
+            se.close();
         }
         return lista_all_tipo_documento;
     }
@@ -39,7 +42,7 @@ public class Tipo_documentoImpl implements ITipo_documento {
     @Override
     public Tipo_Documento get_tipo_documento_find_by_name(String name) {
         Tipo_Documento tipo_documento = null;
-        Session se = this.hibernateSesion.get_Sesion();
+        Session se = this.hibernateSesion.get_sessionFactor().openSession();
 
         try {
             se.beginTransaction();
@@ -50,7 +53,7 @@ public class Tipo_documentoImpl implements ITipo_documento {
         } catch (Exception e) {
             this.error.Manejador_errores(se, "error en Tipo_documentoImpl:get_tipo_documento_find_by_name" + e.getMessage());
 
-        }finally{
+        } finally {
             se.close();
         }
         return tipo_documento;
@@ -60,12 +63,15 @@ public class Tipo_documentoImpl implements ITipo_documento {
     @Override
     public List<Documento> all_documento_find_by_id_tipo_documento(int id_tipo_documento) {
         List<Documento> documentos = null;
-        Session sesion = this.hibernateSesion.get_Sesion();
+        Session sesion = this.hibernateSesion.get_sessionFactor().openSession();
         try {
+            sesion.beginTransaction();
             documentos = sesion.find(Tipo_Documento.class, id_tipo_documento).getDocumentos();
             sesion.getTransaction().commit();
         } catch (Exception e) {
             this.error.Manejador_errores(sesion, "mensaje de Tipo_documento :all_documento_find_by_id_tipo_documento " + e.getMessage());
+        } finally {
+            sesion.close();
         }
 
         return documentos;

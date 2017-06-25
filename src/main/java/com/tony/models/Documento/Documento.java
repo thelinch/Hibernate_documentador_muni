@@ -56,7 +56,7 @@ public class Documento implements Serializable {
     private Tipo_Documento tipoDocumento;
     @Column(name = "isTupac", nullable = false)
     private boolean is_tupac;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.MERGE,CascadeType.DETACH,CascadeType.PERSIST})
     @JoinColumn(name = "id_UsuarioExterno", nullable = false)
     private UsuarioExterno usuario;
     @OneToMany(mappedBy = "documento", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)

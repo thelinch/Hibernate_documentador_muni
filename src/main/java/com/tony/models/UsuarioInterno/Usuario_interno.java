@@ -17,7 +17,8 @@ import com.tony.models.Documento.OperacionDocumento;
 @NamedQueries({
     @NamedQuery(name = "Usuario_interno.all", query = "Select a from Usuario_interno a"),
     @NamedQuery(name = "Usuario_interno.find.Perfil", query = "Select a from Usuario_interno a WHERE a.perfil.tipoPerfil=:perfil"),
-    @NamedQuery(name = "Usuario_interno.find.Area", query = "SELECT  a from Usuario_interno a where a.area.tipoArea=:area")})
+    @NamedQuery(name = "Usuario_interno.find.Area", query = "SELECT  a from Usuario_interno a where a.area.tipoArea=:area"),
+    @NamedQuery(name = "Usuario_interni.findb_by_dni", query = "SELECT a from Usuario_interno a where a.dni=:dni")})
 public class Usuario_interno extends Persona implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -70,13 +71,12 @@ public class Usuario_interno extends Persona implements Serializable {
     public void setOperacionUsuarioInterno(List<OperacionDocumento> operacionUsuarioInterno) {
         this.operacionUsuarioInterno = operacionUsuarioInterno;
     }
-        
+
     @Override
     public String getCodigo() {
         return super.getCodigo(); //To change body of generated methods, choose Tools | Templates.
     }
 
-   
     @Override
     public String getApellido() {
         return super.getApellido(); //To change body of generated methods, choose Tools | Templates.
@@ -84,7 +84,7 @@ public class Usuario_interno extends Persona implements Serializable {
 
     public Usuario_interno(String nombre, String apellido, int dni) {
         super(nombre, apellido, dni);
-        
+
     }
 
     @Override
