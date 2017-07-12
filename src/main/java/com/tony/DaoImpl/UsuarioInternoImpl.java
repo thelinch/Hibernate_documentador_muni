@@ -6,7 +6,9 @@ import com.tony.Estados.Tipo_Perfil_UsuarioInterno;
 import com.tony.Estados.Tipos_Area;
 import com.tony.models.Documento.Documento;
 import com.tony.models.Documento.OperacionDocumento;
+import com.tony.models.Tupa;
 import com.tony.models.UsuarioExterrno.UsuarioExterno;
+import com.tony.models.UsuarioInterno.Area;
 import com.tony.models.UsuarioInterno.Usuario_interno;
 import java.util.List;
 import org.hibernate.Criteria;
@@ -28,6 +30,7 @@ public class UsuarioInternoImpl implements IUsuario_interno {
         boolean operacion = false;
         Session se = null;
         try {
+            se.byId(Usuario_interno.class).getReference(usuario_interno.getId_persona());
             se = this.hibernate_sesion.get_sessionFactor().openSession();
             se.beginTransaction();
             se.persist(usuario);
@@ -64,6 +67,23 @@ public class UsuarioInternoImpl implements IUsuario_interno {
 
         }
         return true;
+    }
+//Tenemos que botar todas las areas que tengan ese procedimiento,para que la persona encargada pueda hacer el respectivo envio
+//Probado y validado
+
+    public List<Area> get_areas_find_by_tupac_procedimiento(String Procedimiento) {
+        Session session = this.hibernate_sesion.get_sessionFactor().openSession();
+        List<Area> areas = null;
+        try {
+            session.beginTransaction();
+            areas = session.createNamedQuery("tupac.get_areas_find_by_procedimiento", Tupa.class).setParameter("procedimiento", Procedimiento).uniqueResult().getAreas();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            this.error.Manejador_errores(session, "EL  mensaje de error viene de UsuarioInternoImpl : get_area_ud_find_by_tupac_procedimiento " + e.getMessage());
+        } finally {
+            session.close();
+        }
+        return areas;
     }
 
     @Override
@@ -235,6 +255,23 @@ public class UsuarioInternoImpl implements IUsuario_interno {
         }
         return usuarioInterno;
 
+    }
+
+    @Override
+    public List<Documento> get_documents_find_by_Is_Disconforme() {
+        List<Documento> documentos = null;
+        Session sesion = null;
+        try {
+            sesion = this.hibernate_sesion.get_sessionFactor().openSession();
+            sesion.beginTransaction();
+            documentos = sesion.createNamedQuery("Documento.find_by_is_Disconforme", Documento.class).list();
+            sesion.getTransaction().commit();
+        } catch (Exception e) {
+            this.error.Manejador_errores(sesion, "El mensaje viene de UsuarioInternoImpl:get_documents_find_by_Is_Disconforme " + e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return documentos;
     }
 
 }

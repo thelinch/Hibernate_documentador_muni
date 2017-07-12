@@ -10,6 +10,7 @@ import com.tony.DaoImpl.AreaImpl;
 import com.tony.DaoImpl.DocumentImpl;
 import com.tony.DaoImpl.Tipo_documentoImpl;
 import com.tony.DaoImpl.UsuarioExternoImpl;
+import com.tony.DaoImpl.UsuarioInternoImpl;
 import com.tony.Estados.Estado_Concluido;
 import com.tony.Estados.Estado_documento;
 import com.tony.Estados.Tipos_Documento;
@@ -21,14 +22,12 @@ import com.tony.models.UsuarioInterno.Perfil;
 import org.hibernate.Session;
 
 public class main {
-
-
+    
     public static void main(String[] args) {
-        //main mai = new main()
-        AreaImpl area = new AreaImpl();
-        area.get_usuarios_interno_find_by_Area_name("pedriatria").forEach(System.out::println);
-//        mai.sesionHibernate.AbrirSesion();
-//        Tipo_documentoImpl tipo_documento = new Tipo_documentoImpl();
+        UsuarioExternoImpl usuarioExterno = new UsuarioExternoImpl();
+        usuarioExterno.get_auditoria_find_by_id_documento(2).forEach(System.out::println);//main mai = new main()
+        //        mai.sesionHibernate.AbrirSesion();
+        //        Tipo_documentoImpl tipo_documento = new Tipo_documentoImpl();
         //        DocumentImpl doc = new DocumentImpl();
         //        System.out.println(doc.get_tipo_document_find_by_documento(1));
         //UsuarioExternoImpl user = new UsuarioExternoImpl();

@@ -12,7 +12,7 @@ import com.tony.models.UsuarioInterno.Usuario_interno;
 @Entity
 @EntityListeners(value = OperacionDocumentoListener.class)
 @Table(name = "operacion_documento")
-public class OperacionDocumento implements Serializable {
+public class OperacionDocumento implements Serializable{
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -106,5 +106,7 @@ public class OperacionDocumento implements Serializable {
     public String toString() {
         return "OperacionDocumento [id_OperacionDocumento=" + id_OperacionDocumento + ", usuario=" + "]";
     }
+
+ 
 
 }

@@ -3,24 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.tony.Dao;
+package com.tony.ServiceDao;
 
 import com.tony.models.Documento.AuditoriaDocumento;
-import com.tony.models.Documento.Documento;
 import com.tony.models.Documento.Estado_documentos;
-import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import java.util.List;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author antony
- */
-public interface IUsuario_Externo {
+public interface UsuarioExternoServiceDao {
 
     Estado_documentos get_last_state_find_by_document(int id_documento);
 
-    List<Documento> get_documentos_find_by_user_externo(int user_id);
+    DefaultTableModel get_documentos_find_by_user_externo(int user_id, JTable tabla);
 
-    List<AuditoriaDocumento> get_auditoria_find_by_id_documento(int Id_documento);
-
+    void get_auditoria_find_by_id_documento(int Id_documento, JDialog dialog);
 }

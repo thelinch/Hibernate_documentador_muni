@@ -1,13 +1,17 @@
 package com.tony.models;
 
+import com.tony.models.UsuarioInterno.Area;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "tupa")
 @NamedQueries(
         {
-            @NamedQuery(name = "tupac.find_by_name", query = "SELECT a from Tupa a where a.procedimiento=:procedimiento")})
+            @NamedQuery(name = "tupac.find_by_name", query = "SELECT a from Tupa a where a.procedimiento=:procedimiento"),
+            @NamedQuery(name = "tupac.get_areas_find_by_procedimiento", query = "SELECT a from Tupa a where a.procedimiento=:procedimiento")})
 public class Tupa implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -21,6 +25,8 @@ public class Tupa implements Serializable {
     private int proceso;
     @Column(nullable = false)
     private int plazo;
+    @ManyToMany(mappedBy = "tupa", targetEntity = Area.class, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},fetch = FetchType.EAGER)
+    private List<Area> areas = new ArrayList<>();
 //@ManyToOne(fetch=FetchType.LAZY)
 //@JoinColumn(name="id_area",nullable=false)
 //private Area area;
@@ -35,6 +41,14 @@ public class Tupa implements Serializable {
 
     public int getId_tupa() {
         return id_tupa;
+    }
+
+    public void setAreas(List<Area> areas) {
+        this.areas = areas;
+    }
+
+    public List<Area> getAreas() {
+        return areas;
     }
 
     public void setId_tupa(int id_tupa) {

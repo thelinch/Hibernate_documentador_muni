@@ -31,7 +31,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
     private final UsuarioInternoServiceImpl userInternoService;
     private UsuarioExternoNatural UsuarioExternoNatural = null;
     private UsuarioExternoJuridico usuarioExternoJuridico = null;
-    private static List<Tupa> list_tupa;
+    private List<Tupa> lista_tupac;
     private final Usuario_interno usuario_interno;
     private final Documento documentoEdicio = null;
     private final Tipo_documentoServiceImpl tipo_documento = new Tipo_documentoServiceImpl();
@@ -46,7 +46,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         initComponents();
         this.userInternoService = new UsuarioInternoServiceImpl();
         this.setLocationRelativeTo(null);
-        list_tupa = new ArrayList<>();
+        lista_tupac = new ArrayList<>();
         this.usuario_interno = this.userInternoService.get_usuario_interno_by_Dni(123);
         jPanelPersonaJuridica.setVisible(false);
         this.texto_tupac = new TextAutoCompleter(this.jTextFieldAsunto);
@@ -54,6 +54,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         this.texto_autocompletado_tipo_document = new TextAutoCompleter(jTextFieldTipo_documento);
         this.jLabelNombre_operador.setText(this.usuario_interno.getNombre());
         this.jTextFieldFuncionOperador.setText(this.usuario_interno.getPerfil().getTipoPerfil().toString());
+        this.userInternoService.get_documentos_find_by_Is_Disconforme(jTableVistaDocumento_por_enviar);
     }
 
     @SuppressWarnings("unchecked")
@@ -91,6 +92,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         jTextFieldTipo_documento = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
         jLabelNombre_archivo = new javax.swing.JLabel();
+        jDialogEdicionDocumentos = new javax.swing.JDialog();
         jScrollPane4 = new javax.swing.JScrollPane();
         jPanel7 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -188,6 +190,18 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
                 jTextFieldAsuntoFocusLost(evt);
             }
         });
+        jTextFieldAsunto.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                jTextFieldAsuntoInputMethodTextChanged(evt);
+            }
+        });
+        jTextFieldAsunto.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jTextFieldAsuntoPropertyChange(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Asunto");
@@ -210,6 +224,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         jLabel6.setText("#Folio");
 
         jTextFieldNumeroFolioRequerido.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextFieldNumeroFolioRequerido.setToolTipText("procedimiento");
         jTextFieldNumeroFolioRequerido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldNumeroFolioRequeridoActionPerformed(evt);
@@ -243,6 +258,8 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel8.setText("Plazo");
+
+        jTextFieldPlazo_resolucion_documento.setToolTipText("plazo");
 
         jCheckBox_Conformidad.setText("Desconforme");
         jCheckBox_Conformidad.setEnabled(false);
@@ -407,10 +424,10 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
                             .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelDocumentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextFieldNumeroFolioPresentado, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldNumeroFolioRequerido, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldPlazo_resolucion_documento, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanelDocumentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextFieldNumeroFolioPresentado, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                    .addComponent(jTextFieldPlazo_resolucion_documento, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                    .addComponent(jTextFieldNumeroFolioRequerido))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBox_Conformidad)
                 .addGap(16, 16, 16)
@@ -452,6 +469,17 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
             .addGroup(jDialogDocumentosLayout.createSequentialGroup()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 771, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 180, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jDialogEdicionDocumentosLayout = new javax.swing.GroupLayout(jDialogEdicionDocumentos.getContentPane());
+        jDialogEdicionDocumentos.getContentPane().setLayout(jDialogEdicionDocumentosLayout);
+        jDialogEdicionDocumentosLayout.setHorizontalGroup(
+            jDialogEdicionDocumentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jDialogEdicionDocumentosLayout.setVerticalGroup(
+            jDialogEdicionDocumentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -1070,9 +1098,9 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
             } else {
                 this.userInternoService.Registrar_usuarioExterno(this.UsuarioExternoNatural, this.usuario_interno);
             }
-                this.UsuarioExternoNatural.getDocumentos().stream().forEach((document) -> {
-                    this.userInternoService.Registrar_operacion_documento_usuario_interno(this.usuario_interno, document);
-                });
+            this.UsuarioExternoNatural.getDocumentos().stream().forEach((document) -> {
+                this.userInternoService.Registrar_operacion_documento_usuario_interno(this.usuario_interno, document);
+            });
         }
 //        } else {
 //            JOptionPane.showMessageDialog(jDialogDocumentos, "usted no tiene permiso de registrar usuarios");
@@ -1129,17 +1157,23 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         if (jTextFieldArea.getText().isEmpty()) {
             JOptionPane.showMessageDialog(jDialogDocumentos, "Ingrese una area valida", "mensaje de confirmacio", 1);
             this.texto_tupac.removeAllItems();
-            list_tupa.stream().forEach((tupa_objet) -> {
-                list_tupa.remove(tupa_objet);
+            lista_tupac.stream().forEach((tupa_objet) -> {
+                lista_tupac.remove(tupa_objet);
             });
         }
 
     }//GEN-LAST:event_jTextFieldAreaFocusLost
 
     private void jTextFieldAsuntoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldAsuntoFocusGained
-        if (jTextFieldArea.getText().length() >= 3 && this.texto_tupac.getItems().length == 0) {
+        if (jTextFieldArea.getText().length() >= 3) {
             System.out.println("entro al metodo");
-            this.area_service.llenar_autocompletar_tupa(jTextFieldArea.getText(), this.texto_tupac);
+            //   this.lista_tupac = this.area_service.get_tupa_find_by_area_name(jTextFieldArea.getText().trim());
+            this.area_service.llenar_autocompletar_tupa(this.jTextFieldArea.getText(), this.texto_tupac);
+//            this.lista_tupac.stream().forEach((tupac) -> {
+//                this.texto_tupac.addItem(tupac.getProcedimiento());
+//            });
+//            this.texto_tupac.setMode(1);
+//            this.texto_tupac.setCaseSensitive(true);
 //            for (Object objeto_tupas : this.texto_tupac.getItems()) {
 //                list_tupa.add((Tupa) objeto_tupas);
 //            }
@@ -1149,7 +1183,14 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
 
     private void jTextFieldAsuntoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldAsuntoFocusLost
         // TODO add your handling code here:
-//        if (!jTextFieldAsunto.getText().isEmpty()) {
+//        if (!jTextFieldAsunto.getText().isEmpty() && jCheckBoxIsTupac.isSelected()) {
+//            this.lista_tupac.stream().filter((tupac) -> {
+//                return tupac.getProcedimiento().equals(this.texto_tupac.getItemSelected().toString());
+//            }).forEach((tupacfilter) -> {
+//                this.jTextFieldNumeroFolioRequerido.setText(String.valueOf(tupacfilter.getProceso()));
+//                this.jTextFieldPlazo_resolucion_documento.setText(String.valueOf(tupacfilter.getPlazo()));
+//
+//            });
 //
 //        }
     }//GEN-LAST:event_jTextFieldAsuntoFocusLost
@@ -1186,6 +1227,16 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jTextFieldDni_seach_registroKeyPressed
+
+    private void jTextFieldAsuntoPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jTextFieldAsuntoPropertyChange
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jTextFieldAsuntoPropertyChange
+
+    private void jTextFieldAsuntoInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jTextFieldAsuntoInputMethodTextChanged
+        // TODO add your handling code here:
+        System.out.println("entro en el cambio de propiedad de jTextFieldAsunto");
+    }//GEN-LAST:event_jTextFieldAsuntoInputMethodTextChanged
 
     /**
      * @param args the command line arguments
@@ -1233,6 +1284,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox_Conformidad;
     private javax.swing.JComboBox<String> jComboBoxTipoPersona;
     private javax.swing.JDialog jDialogDocumentos;
+    private javax.swing.JDialog jDialogEdicionDocumentos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

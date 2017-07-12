@@ -37,6 +37,8 @@ public interface UsuarioInternoServiceDao {
 
     Estado_documentos get_estado(Documento documento);
 
+    DefaultTableModel get_documentos_find_by_Is_Disconforme(JTable tabla);
+
     DefaultTableModel get_flujograma_documento(Documento documento);
 
     UsuarioExterno get_usuario_externo_find_by_dni(int dni);

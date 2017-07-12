@@ -27,6 +27,8 @@ public interface IUsuario_interno {
 
     boolean Derivar_documento(Usuario_interno usuario_interno);
 
+    List<Documento> get_documents_find_by_Is_Disconforme();
+
     boolean add_operacion_documento_usuario_interno(Usuario_interno usuario_interno, Documento document);
 //    Estado_documentos get_ultimo_estado(int documento);
 //

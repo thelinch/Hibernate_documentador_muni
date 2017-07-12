@@ -5,7 +5,12 @@
  */
 package com.tony.Vista;
 
+import com.tony.ServiceImpl.UsuarioExternoServiceImpl;
+import java.awt.Component;
+import java.awt.GridLayout;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -13,13 +18,33 @@ import javax.swing.JOptionPane;
  */
 public class Home_User_development extends javax.swing.JFrame {
 
+    private UsuarioExternoServiceImpl usuario_exerno_service_imple = new UsuarioExternoServiceImpl();
     private int numero_de_veces = 0;
+    JPanel panel3 = new JPanel(new GridLayout(2, 2));
 
     /**
      * Creates new form Home_User_development
      */
     public Home_User_development() {
+
         initComponents();
+//        JLabel labecreado = new JLabel("este essss");
+//        JLabel labecreado1 = new JLabel("este essss1");
+//        JLabel labecreado2 = new JLabel("este essss2");
+//        JLabel labecreado3 = new JLabel("este essss3");
+//        labecreado.setBounds(10, 10, 40, 100);//Jlabel
+//        labecreado1.setBounds(10, 60, 40, 100);
+//        labecreado2.setBounds(10, 10, 40, 100);//valor
+//        labecreado3.setBounds(10, 60, 40, 100);
+
+        this.jTableDocumentos_Usuario_externo.setModel(this.usuario_exerno_service_imple.get_documentos_find_by_user_externo(20, jTableDocumentos_Usuario_externo));
+//        panel3.add(labecreado);
+//        panel3.add(labecreado1);
+//        panel3.add(labecreado2);
+//        panel3.add(labecreado3);
+//
+//        panel3.setBounds(10, 10, 400, 400);
+//        jDialogDetalle_documento.add(panel3);
     }
 
     /**
@@ -32,12 +57,6 @@ public class Home_User_development extends javax.swing.JFrame {
     private void initComponents() {
 
         jDialogDetalle_documento = new javax.swing.JDialog();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jCPanel1 = new com.bolivia.panel.JCPanel();
         jCPanel2 = new com.bolivia.panel.JCPanel();
@@ -53,7 +72,7 @@ public class Home_User_development extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTableDocumentos = new javax.swing.JTable();
+        jTableDocumentos_Usuario_externo = new javax.swing.JTable();
 
         jDialogDetalle_documento.setBackground(new java.awt.Color(255, 255, 255));
         jDialogDetalle_documento.setLocation(new java.awt.Point(500, 20));
@@ -61,97 +80,22 @@ public class Home_User_development extends javax.swing.JFrame {
         jDialogDetalle_documento.setModal(true);
         jDialogDetalle_documento.setType(java.awt.Window.Type.UTILITY);
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setMinimumSize(new java.awt.Dimension(100, 500));
-        jPanel2.setPreferredSize(new java.awt.Dimension(700, 700));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 282, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-
-        jLabel9.setText("Estado Actual:");
-
-        jLabel10.setText("Estado Anterior:");
-
-        jLabel11.setText("Lol");
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(89, Short.MAX_VALUE))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34))))
-        );
-
         jLabel12.setBackground(new java.awt.Color(102, 153, 0));
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel12.setText("Flujograma del documento");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                            .addGap(76, 76, 76)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(77, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(379, Short.MAX_VALUE))
-        );
 
         javax.swing.GroupLayout jDialogDetalle_documentoLayout = new javax.swing.GroupLayout(jDialogDetalle_documento.getContentPane());
         jDialogDetalle_documento.getContentPane().setLayout(jDialogDetalle_documentoLayout);
         jDialogDetalle_documentoLayout.setHorizontalGroup(
             jDialogDetalle_documentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
         );
         jDialogDetalle_documentoLayout.setVerticalGroup(
             jDialogDetalle_documentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jDialogDetalle_documentoLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(627, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -291,20 +235,20 @@ public class Home_User_development extends javax.swing.JFrame {
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Documentos", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 1, 14), new java.awt.Color(0, 51, 51))); // NOI18N
 
-        jTableDocumentos.setModel(new javax.swing.table.DefaultTableModel(
+        jTableDocumentos_Usuario_externo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "ID Documento", "Proceso", "Estado", "Asunto"
+                "ID Documento", "Proceso", "Estado"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -315,23 +259,23 @@ public class Home_User_development extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTableDocumentos.setGridColor(new java.awt.Color(255, 255, 255));
-        jTableDocumentos.setRowHeight(20);
-        jTableDocumentos.setSelectionBackground(new java.awt.Color(163, 168, 248));
-        jTableDocumentos.addMouseListener(new java.awt.event.MouseAdapter() {
+        jTableDocumentos_Usuario_externo.setGridColor(new java.awt.Color(255, 255, 255));
+        jTableDocumentos_Usuario_externo.setRowHeight(20);
+        jTableDocumentos_Usuario_externo.setSelectionBackground(new java.awt.Color(163, 168, 248));
+        jTableDocumentos_Usuario_externo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTableDocumentosMouseClicked(evt);
+                jTableDocumentos_Usuario_externoMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jTableDocumentosMouseEntered(evt);
+                jTableDocumentos_Usuario_externoMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jTableDocumentosMouseExited(evt);
+                jTableDocumentos_Usuario_externoMouseExited(evt);
             }
         });
-        jScrollPane1.setViewportView(jTableDocumentos);
+        jScrollPane1.setViewportView(jTableDocumentos_Usuario_externo);
 
-        jCPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, 570, -1));
+        jCPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, 620, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -347,27 +291,28 @@ public class Home_User_development extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTableDocumentosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDocumentosMouseEntered
+    private void jTableDocumentos_Usuario_externoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDocumentos_Usuario_externoMouseEntered
 
-    }//GEN-LAST:event_jTableDocumentosMouseEntered
+    }//GEN-LAST:event_jTableDocumentos_Usuario_externoMouseEntered
 
-    private void jTableDocumentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDocumentosMouseClicked
-        if (jTableDocumentos.isColumnSelected(0) && jTableDocumentos.getRowSelectionAllowed()) {
-            System.out.println("entro al metodo" + this.numero_de_veces++);
+    private void jTableDocumentos_Usuario_externoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDocumentos_Usuario_externoMouseClicked
+        if (jTableDocumentos_Usuario_externo.isColumnSelected(0) && jTableDocumentos_Usuario_externo.getRowSelectionAllowed()) {
+            int id_documento = Integer.parseInt(jTableDocumentos_Usuario_externo.getValueAt(jTableDocumentos_Usuario_externo.getSelectedRow(), 0).toString());
+            this.usuario_exerno_service_imple.get_auditoria_find_by_id_documento(id_documento, this.jDialogDetalle_documento);
             jDialogDetalle_documento.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "si desea ver el flujograma de tu documento del click al id ");
         }
-    }//GEN-LAST:event_jTableDocumentosMouseClicked
+    }//GEN-LAST:event_jTableDocumentos_Usuario_externoMouseClicked
 
-    private void jTableDocumentosMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDocumentosMouseExited
+    private void jTableDocumentos_Usuario_externoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDocumentos_Usuario_externoMouseExited
         if (jDialogDetalle_documento.isVisible() && JOptionPane.showConfirmDialog(this, "Desea Salir? ") == 0) {
 
             jDialogDetalle_documento.setVisible(false);
 
         }
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTableDocumentosMouseExited
+    }//GEN-LAST:event_jTableDocumentos_Usuario_externoMouseExited
 
     /**
      * @param args the command line arguments
@@ -409,8 +354,6 @@ public class Home_User_development extends javax.swing.JFrame {
     private com.bolivia.panel.JCPanel jCPanel2;
     private javax.swing.JDialog jDialogDetalle_documento;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -419,14 +362,10 @@ public class Home_User_development extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelApellido_user;
     private javax.swing.JLabel jLabelNombre_user;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTableDocumentos;
+    private javax.swing.JTable jTableDocumentos_Usuario_externo;
     // End of variables declaration//GEN-END:variables
 }

@@ -7,19 +7,17 @@ package com.tony.DaoImpl;
 
 import com.tony.Dao.IUsuario_Externo;
 import com.tony.Dao.hibernateSession;
+import com.tony.models.Documento.AuditoriaDocumento;
 import com.tony.models.Documento.Documento;
 import com.tony.models.Documento.Estado_documentos;
 import com.tony.models.Documento.Operacion_EstadosDocumentos;
 import com.tony.models.UsuarioExterrno.UsuarioExterno;
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
-/**
- *
- * @author antony
- */
 public class UsuarioExternoImpl implements IUsuario_Externo {
 
     private final hibernateSession hibernatesesion = hibernateSession.get_instancia_hibernateSession();
@@ -63,7 +61,9 @@ public class UsuarioExternoImpl implements IUsuario_Externo {
         Session sesion = this.hibernatesesion.get_sessionFactor().openSession();
         try {
             sesion.beginTransaction();
-            listaDocumentos_user = sesion.find(UsuarioExterno.class, user_id).getDocumentos();
+            UsuarioExterno usuario_externo = sesion.find(UsuarioExterno.class, user_id);
+            usuario_externo.getDocumentos().size();
+            listaDocumentos_user = usuario_externo.getDocumentos();
             sesion.getTransaction().commit();
         } catch (Exception e) {
             this.error.Manejador_errores(sesion, "Error en UsuarioExternoImpl : get_documentos_find_by_externo " + e.getMessage());
@@ -71,6 +71,27 @@ public class UsuarioExternoImpl implements IUsuario_Externo {
             sesion.close();
         }
         return listaDocumentos_user;
+    }
+
+    @Override
+    public List<AuditoriaDocumento> get_auditoria_find_by_id_documento(int Id_documento) {
+        List<AuditoriaDocumento> auditoria_docuemento = new ArrayList<>();
+        Session sesion = this.hibernatesesion.get_sessionFactor().openSession();
+        List<Operacion_EstadosDocumentos> operacion_estado_documento = null;
+        try {
+            sesion.beginTransaction();
+            operacion_estado_documento = sesion.createCriteria(Operacion_EstadosDocumentos.class).createAlias("documento", "documentoBuscar").add(Restrictions.eq("documentoBuscar.id_documento", Id_documento))
+                    .list();
+            for (Operacion_EstadosDocumentos operacion_EstadosDocumentos : operacion_estado_documento) {
+                auditoria_docuemento.add(sesion.find(AuditoriaDocumento.class, operacion_EstadosDocumentos.getId_operacioEstados()));
+            }
+            sesion.getTransaction().commit();
+        } catch (Exception e) {
+            this.error.Manejador_errores(sesion, "El error viene de UsuarioExternoImpl:get_auiditoria_find_by_id_documento " + e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return auditoria_docuemento;
     }
 
 }

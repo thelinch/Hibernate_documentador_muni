@@ -179,10 +179,10 @@
                               <Component id="jLabel7" alignment="1" min="-2" pref="38" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jTextFieldNumeroFolioPresentado" alignment="0" min="-2" pref="31" max="-2" attributes="0"/>
-                              <Component id="jTextFieldNumeroFolioRequerido" alignment="0" min="-2" pref="27" max="-2" attributes="0"/>
-                              <Component id="jTextFieldPlazo_resolucion_documento" min="-2" pref="31" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jTextFieldNumeroFolioPresentado" alignment="0" pref="31" max="32767" attributes="0"/>
+                              <Component id="jTextFieldPlazo_resolucion_documento" pref="31" max="32767" attributes="0"/>
+                              <Component id="jTextFieldNumeroFolioRequerido" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jCheckBox_Conformidad" min="-2" max="-2" attributes="0"/>
@@ -256,6 +256,8 @@
                   <Events>
                     <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jTextFieldAsuntoFocusGained"/>
                     <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jTextFieldAsuntoFocusLost"/>
+                    <EventHandler event="inputMethodTextChanged" listener="java.awt.event.InputMethodListener" parameters="java.awt.event.InputMethodEvent" handler="jTextFieldAsuntoInputMethodTextChanged"/>
+                    <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="jTextFieldAsuntoPropertyChange"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel4">
@@ -293,6 +295,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Tahoma" size="14" style="0"/>
                     </Property>
+                    <Property name="toolTipText" type="java.lang.String" value="procedimiento"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFieldNumeroFolioRequeridoActionPerformed"/>
@@ -328,6 +331,9 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="jTextFieldPlazo_resolucion_documento">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="plazo"/>
+                  </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="jCheckBox_Conformidad">
                   <Properties>
@@ -444,6 +450,21 @@
           </SubComponents>
         </Container>
       </SubComponents>
+    </Container>
+    <Container class="javax.swing.JDialog" name="jDialogEdicionDocumentos">
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="400" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="300" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+      </Layout>
     </Container>
   </NonVisualComponents>
   <Properties>

@@ -5,7 +5,6 @@
  */
 package com.tony.ServiceImpl;
 
-import com.mxrck.autocompleter.AutoCompleter;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import com.tony.DaoImpl.AreaImpl;
 import com.tony.ServiceDao.AreaServiceDao;

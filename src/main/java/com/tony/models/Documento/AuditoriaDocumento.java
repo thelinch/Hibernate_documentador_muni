@@ -104,7 +104,7 @@ public class AuditoriaDocumento implements Serializable {
 
     @Override
     public String toString() {
-        return "AuditoriaDocumento{" + "id_auditoriaDocumento=" + id_auditoriaDocumento + ", EstadoAnterior=" + EstadoAnterior + ", EstadoActual=" + EstadoActual + " fecha "+this.fecha+'}';
+        return "AuditoriaDocumento{" + "id_auditoriaDocumento=" + id_auditoriaDocumento + ", EstadoAnterior=" + EstadoAnterior + ", EstadoActual=" + EstadoActual + " fecha " + this.fecha + '}';
     }
 
 }

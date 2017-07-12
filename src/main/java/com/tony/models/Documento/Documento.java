@@ -28,7 +28,8 @@ import javax.persistence.NamedQuery;
 @Table(name = "documento")
 @NamedQueries({
     @NamedQuery(name = "Documento.find_by_usuario_externo", query = "SELECT a.usuario from Documento a where a.id_documento= :id_documento"),
-    @NamedQuery(name = "Documento.find_by_id", query = "SELECT doc from Documento doc where doc.id_documento= :id_documento ")})
+    @NamedQuery(name = "Documento.find_by_id", query = "SELECT doc from Documento doc where doc.id_documento= :id_documento "),
+    @NamedQuery(name = "Documento.find_by_is_Disconforme", query = "SELECT doc from Documento doc where doc.Disconforme=false")})
 public class Documento implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,12 +57,12 @@ public class Documento implements Serializable {
     private Tipo_Documento tipoDocumento;
     @Column(name = "isTupac", nullable = false)
     private boolean is_tupac;
-    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.MERGE,CascadeType.DETACH,CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST})
     @JoinColumn(name = "id_UsuarioExterno", nullable = false)
     private UsuarioExterno usuario;
-    @OneToMany(mappedBy = "documento", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "documento", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<OperacionDocumento> operacionesDocumento = new ArrayList<>();
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     @JoinColumn(name = "id_concluido")
     private Concluido concluido;
     @OneToMany(mappedBy = "documento", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE, CascadeType.DETACH}, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -252,7 +253,7 @@ public class Documento implements Serializable {
 
     @Override
     public String toString() {
-        return "Documento{" + "id_documento=" + id_documento + ", codigo=" + codigo + ", fecha=" + fecha + ", asunto=" + asunto + ", contenido_doc=" + contenido_doc + ", Observaciones=" + Observaciones + ", Disconforme=" + Disconforme + ", num_foleo=" + num_foleo + " tipo_documento " + this.tipoDocumento;
+        return "Documento{" + "id_documento=" + id_documento + ", codigo=" + codigo + ", fecha=" + fecha + ", asunto=" + asunto + ", contenido_doc=" + contenido_doc + ", Observaciones=" + Observaciones + ", Disconforme=" + Disconforme + ", num_foleo=" + num_foleo+" usuario "+usuario.getNombre() ;
     }
 
 }
