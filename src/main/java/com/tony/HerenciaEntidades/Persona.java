@@ -1,6 +1,7 @@
 package com.tony.HerenciaEntidades;
 
 import java.io.Serializable;
+import javafx.beans.DefaultProperty;
 
 import javax.persistence.*;
 
@@ -16,6 +17,7 @@ import javax.persistence.*;
             @NamedQuery(name = "Persona.findDni", query = "select per from Persona per where per.dni=:dni")}
 )
 public abstract class Persona implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

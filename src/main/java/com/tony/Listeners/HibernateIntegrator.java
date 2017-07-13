@@ -3,14 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.tony.DaoImpl;
+package com.tony.Listeners;
 
 import org.hibernate.boot.Metadata;
-import org.hibernate.boot.MetadataSources;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
-import org.hibernate.event.internal.DefaultAutoFlushEventListener;
-import org.hibernate.event.internal.DefaultMergeEventListener;
-import org.hibernate.event.internal.DefaultPersistEventListener;
 import org.hibernate.event.service.spi.EventListenerRegistry;
 import org.hibernate.event.spi.EventType;
 import org.hibernate.integrator.spi.Integrator;
@@ -20,18 +16,24 @@ import org.hibernate.service.spi.SessionFactoryServiceRegistry;
  *
  * @author antony
  */
-public class MyIntegrator implements Integrator {
+public class HibernateIntegrator implements Integrator {
 
     @Override
     public void integrate(Metadata mtdt, SessionFactoryImplementor sfi, SessionFactoryServiceRegistry sfsr) {
-        final EventListenerRegistry eventListener_registry = sfsr.getService(EventListenerRegistry.class);
-        eventListener_registry.setListeners(EventType.AUTO_FLUSH, DefaultAutoFlushEventListener.class);
-        eventListener_registry.appendListeners(EventType.PERSIST, DefaultPersistEventListener.class);
-        eventListener_registry.appendListeners(EventType.MERGE, DefaultMergeEventListener.class);
+        final EventListenerRegistry eventListenerRegistry = sfsr.getService(EventListenerRegistry.class);
+
+        Operacion_Documento_Event_adapter pea = new Operacion_Documento_Event_adapter();
+        
+        pea.setService(new DummyService());
+
+        eventListenerRegistry.setListeners(EventType.PRE_INSERT, pea);
+        eventListenerRegistry.setListeners(EventType.PRE_UPDATE, pea);
+        eventListenerRegistry.setListeners(EventType.POST_INSERT, pea);
     }
 
     @Override
     public void disintegrate(SessionFactoryImplementor sfi, SessionFactoryServiceRegistry sfsr) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

@@ -13,7 +13,6 @@ public class hibernateSession {
 
     private static SessionFactory sessionFactory;
     private static hibernateSession instancia_hibernate = null;
-    private Session session;
 //    static {
 //        try {
 //            // Create the SessionFactory from standard (hibernate.cfg.xml) 

@@ -22,13 +22,13 @@ public class Operacion_EstadosDocumentos implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_operacioEstados;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "id_estados", nullable = false)
     private Estado_documentos estados;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "id_documento", nullable = false)
     private Documento documento;
-    @OneToMany(mappedBy = "Operacion_estadoDocumento",fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH}, orphanRemoval = true)
+    @OneToMany(mappedBy = "Operacion_estadoDocumento", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH}, orphanRemoval = true)
     private List<AuditoriaDocumento> auditoriaDocumentos = new ArrayList<>();
 
     public Operacion_EstadosDocumentos() {
@@ -110,5 +110,4 @@ public class Operacion_EstadosDocumentos implements Serializable {
         return "Operacion_EstadosDocumentos{" + "id_operacioEstados=" + id_operacioEstados + ", documento=" + documento + '}';
     }
 
-   
 }

@@ -5,7 +5,9 @@ import com.tony.Dao.hibernateSession;
 import com.tony.Estados.Tipo_Perfil_UsuarioInterno;
 import com.tony.Estados.Tipos_Area;
 import com.tony.models.Documento.Documento;
+import com.tony.models.Documento.Estado_documentos;
 import com.tony.models.Documento.OperacionDocumento;
+import com.tony.models.Documento.Operacion_EstadosDocumentos;
 import com.tony.models.Tupa;
 import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import com.tony.models.UsuarioInterno.Area;
@@ -30,7 +32,6 @@ public class UsuarioInternoImpl implements IUsuario_interno {
         boolean operacion = false;
         Session se = null;
         try {
-            se.byId(Usuario_interno.class).getReference(usuario_interno.getId_persona());
             se = this.hibernate_sesion.get_sessionFactor().openSession();
             se.beginTransaction();
             se.persist(usuario);
@@ -194,24 +195,6 @@ public class UsuarioInternoImpl implements IUsuario_interno {
     public boolean Derivar_documento(Usuario_interno usuario_interno) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-//Probar este metodo
-
-    @Override
-    public boolean add_operacion_documento_usuario_interno(Usuario_interno usuario_interno, Documento documento) {
-        Session sesion = this.hibernate_sesion.get_sessionFactor().openSession();
-        try {
-            sesion.beginTransaction();
-            OperacionDocumento operacion_documento = new OperacionDocumento(usuario_interno, documento);
-            sesion.persist(operacion_documento);
-            sesion.getTransaction().commit();
-            return true;
-        } catch (Exception e) {
-            this.error.Manejador_errores(sesion, "Mensaje de Error de UsuarioInternoImpl:add_operacion_documento_usuario_interno " + e.getMessage());
-        } finally {
-            sesion.close();
-        }
-        return false;
-    }
 //Probado y validad
 
     @Override
@@ -272,6 +255,47 @@ public class UsuarioInternoImpl implements IUsuario_interno {
             sesion.close();
         }
         return documentos;
+    }
+
+//Probado y validado
+    @Override
+    public boolean add_operacion_documento_usuario_interno(Usuario_interno usuario_interno, Documento documento) {
+        Session sesion = this.hibernate_sesion.get_sessionFactor().openSession();
+        try {
+            sesion.beginTransaction();
+            OperacionDocumento operacion_documento = new OperacionDocumento(usuario_interno, documento);
+            sesion.persist(operacion_documento);
+            sesion.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            this.error.Manejador_errores(sesion, "Mensaje de Error de UsuarioInternoImpl:add_operacion_documento_usuario_interno " + e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean add_operacion_estado_documento_usuario_interno(Documento documento, Enum estado_documento) {
+        Session sesion = this.hibernate_sesion.get_sessionFactor().openSession();
+        Operacion_EstadosDocumentos operacion_estado_documento = null;
+
+        sesion.beginTransaction();
+        try {
+            Estado_documentos estado_documento_traido = sesion.createNamedQuery("estado_documentos_find_by_estado_documento", Estado_documentos.class).setParameter("estado", estado_documento).uniqueResult();
+            if (estado_documento_traido != null) {
+                operacion_estado_documento = new Operacion_EstadosDocumentos(estado_documento_traido, documento);
+                sesion.persist(operacion_estado_documento);
+                sesion.getTransaction().commit();
+                return true;
+            }
+        } catch (Exception e) {
+            this.error.Manejador_errores(sesion, "Error en add_operacion_estado_documento_usuario_interno " + e.getMessage());
+        } finally {
+            sesion.close();
+        }
+
+        return true;
     }
 
 }

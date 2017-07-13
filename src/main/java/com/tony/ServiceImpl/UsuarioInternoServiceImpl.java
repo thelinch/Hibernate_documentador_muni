@@ -28,78 +28,78 @@ import javax.swing.table.DefaultTableModel;
  * @author antony
  */
 public class UsuarioInternoServiceImpl extends Verificacion implements UsuarioInternoServiceDao, IVerificacion {
-    
+
     private final UsuarioInternoImpl usuariImpl = new UsuarioInternoImpl();
-    
+
     @Override
     public boolean Registrar_usuarioExterno(UsuarioExterno usuario, Usuario_interno user_interno) {
-        
+
         return this.usuariImpl.Registrar_usuario_Externo(usuario, user_interno);
     }
-    
+
     @Override
     public boolean Registrar_operacion_documento_usuario_interno(Usuario_interno usuarioInterno, Documento documento) {
         return this.usuariImpl.add_operacion_documento_usuario_interno(usuarioInterno, documento);
     }
-    
+
     @Override
     public boolean Enviar_area_documento(Documento documento) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
     public boolean Editar_documento(Documento documento) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
     public DefaultTableModel All_usuarios_internos(Usuario_interno Usuario_gerente) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
     public DefaultTableModel All_usuarios_externos(JTable tabla, int inicio, int Final) {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
         List<UsuarioExterno> usuariosExternos = this.usuariImpl.All_usuarios_externos(inicio, Final);
         return modelo;
-        
+
     }
-    
+
     @Override
     public boolean add_documentoUsuarioExterno(Usuario_interno usuario_interno, UsuarioExterno usuario_externo) {
         return this.usuariImpl.add_documento_a_UsuarioExterno(usuario_interno, usuario_externo);
     }
-    
+
     @Override
     public boolean Derivar_documento(Usuario_interno usuario_interno) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
     public Estado_documentos get_estado(Documento documento) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
     public DefaultTableModel get_flujograma_documento(Documento documento) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
     public boolean VerificacionJpanes(JPanel panel) {
         return super.VerificacionJpanes(panel);
     }
-    
+
     @Override
     public void limpiarDatosPanel(JPanel panel) {
         super.limpiarDatosPanel(panel);
     }
-    
+
     @Override
     public UsuarioExterno get_usuario_externo_find_by_dni(int dni) {
         return this.usuariImpl.get_usuario_externo_find_by_dni(dni); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
     public void Llenar_panel_field_class(JPanel panel_fields, Object objeto) {
         Field properties[] = null;
@@ -109,14 +109,14 @@ public class UsuarioInternoServiceImpl extends Verificacion implements UsuarioIn
             user_juridico = (UsuarioExternoJuridico) objeto;
             Class _clas = UsuarioExternoJuridico.class;
             properties = _clas.getDeclaredFields();
-            
+
             System.out.println("entro al usuarioExternoJuridico");
         } else if (objeto instanceof UsuarioExternoNatural) {
             UsuarioExternoNatural user_natural = (UsuarioExternoNatural) objeto;
             Class _clas_user_natural = UsuarioExternoNatural.class;
             properties = _clas_user_natural.getFields();
             System.out.println("entro al usuarioExternoNatrual  ");
-            
+
         } else if (objeto instanceof Tupa) {
             //Falta hacer de tupa
 
@@ -132,14 +132,14 @@ public class UsuarioInternoServiceImpl extends Verificacion implements UsuarioIn
             }
             i++;
         }
-        
+
     }
-    
+
     @Override
     public Usuario_interno get_usuario_interno_by_Dni(int dni) {
         return this.usuariImpl.get_usuario_interno_by_Dni(dni);
     }
-    
+
     @Override
     public DefaultTableModel get_documentos_find_by_Is_Disconforme(JTable tabla) {
         DefaultTableModel defaultTableModel = (DefaultTableModel) tabla.getModel();
@@ -154,7 +154,12 @@ public class UsuarioInternoServiceImpl extends Verificacion implements UsuarioIn
             defaultTableModel.addRow(objeto);
         }
         return defaultTableModel;
-        
+
     }
-    
+
+    @Override
+    public boolean add_operacion_estado_documento_usuario_interno(Documento documento, Enum Estado_documento) {
+        return this.usuariImpl.add_operacion_estado_documento_usuario_interno(documento, Estado_documento);
+    }
+
 }

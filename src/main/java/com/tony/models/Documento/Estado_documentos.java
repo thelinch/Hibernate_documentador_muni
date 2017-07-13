@@ -14,6 +14,9 @@ import com.tony.Estados.Estado_documento;
  */
 @Entity
 @Table(name = "estado_documento")
+@NamedQueries(
+        {
+            @NamedQuery(name = "estado_documentos_find_by_estado_documento", query = "SELECT a from Estado_documentos a where a.estado=:estado")})
 public class Estado_documentos implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -46,4 +46,6 @@ public interface UsuarioInternoServiceDao {
     void Llenar_panel_field_class(JPanel panel_fields, Object objeto);
 
     Usuario_interno get_usuario_interno_by_Dni(int dni);
+
+    boolean add_operacion_estado_documento_usuario_interno(Documento documento, Enum Estado_documento);
 }

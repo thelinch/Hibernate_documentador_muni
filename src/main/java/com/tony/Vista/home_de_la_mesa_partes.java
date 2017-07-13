@@ -1,8 +1,7 @@
 package com.tony.Vista;
 
 import com.mxrck.autocompleter.TextAutoCompleter;
-import com.tony.Estados.Tipo_Perfil_UsuarioInterno;
-import com.tony.Estados.Tipos_Area;
+import com.tony.Estados.Estado_documento;
 import com.tony.ServiceImpl.AreaServiceImpl;
 import com.tony.ServiceImpl.Tipo_documentoServiceImpl;
 import com.tony.ServiceImpl.UsuarioInternoServiceImpl;
@@ -21,8 +20,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.text.Document;
 
 public class home_de_la_mesa_partes extends javax.swing.JFrame {
 
@@ -1090,6 +1087,8 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
 
             this.usuarioExternoJuridico.getDocumentos().stream().forEach((documento) -> {
                 this.userInternoService.Registrar_operacion_documento_usuario_interno(this.usuario_interno, documento);
+                this.userInternoService.add_operacion_estado_documento_usuario_interno(documento, Estado_documento.Recepcionado);
+
             });
         } else {
             this.UsuarioExternoNatural.setCodigo("ap");
@@ -1100,6 +1099,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
             }
             this.UsuarioExternoNatural.getDocumentos().stream().forEach((document) -> {
                 this.userInternoService.Registrar_operacion_documento_usuario_interno(this.usuario_interno, document);
+                this.userInternoService.add_operacion_estado_documento_usuario_interno(document, Estado_documento.Recepcionado);
             });
         }
 //        } else {

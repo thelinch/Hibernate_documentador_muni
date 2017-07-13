@@ -1,6 +1,7 @@
 package com.tony.Dao;
 
 import com.tony.models.Documento.Documento;
+import com.tony.models.Documento.Estado_documentos;
 import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import com.tony.models.UsuarioInterno.Usuario_interno;
 import java.util.List;
@@ -30,6 +31,8 @@ public interface IUsuario_interno {
     List<Documento> get_documents_find_by_Is_Disconforme();
 
     boolean add_operacion_documento_usuario_interno(Usuario_interno usuario_interno, Documento document);
+
+    boolean add_operacion_estado_documento_usuario_interno(Documento documento, Enum Estado_documento);
 //    Estado_documentos get_ultimo_estado(int documento);
 //
 //    Documento get_find_by_id_documento(int id_documento);
