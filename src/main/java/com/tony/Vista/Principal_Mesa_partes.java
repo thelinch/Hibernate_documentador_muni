@@ -324,45 +324,15 @@ public class Principal_Mesa_partes extends javax.swing.JFrame {
     private void jCPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCPanel1MouseClicked
         this.funcionalidades_ventanas.getTotal_pantallas().forEach((pantalla) -> {
             if (pantalla.getFrame() != null && pantalla.getFrame().isShowing()) {
-                if (pantalla.getNombre().equalsIgnoreCase("Agregar Usuario")) {
-                    if (this.validad_registro_usuario()) {
-                        JOptionPane.showMessageDialog(pantalla.getFrame().getRootPane(), "Realmente desea cerrar la ventana??");
-                    }
-                } else {
-                    pantalla.getFrame().show(false);
-                    pantalla.setActivado(false);
-                }
+
+                pantalla.getFrame().show(false);
+                pantalla.setActivado(false);
 
             }
 
         });
     }//GEN-LAST:event_jCPanel1MouseClicked
-    private boolean validad_registro_usuario() {
-        if (this.registro_usuario != null && this.registro_usuario.isShowing()) {
-            for (Component component : this.registro_usuario.getRootPane().getComponents()) {
-                System.out.println(component.getClass().toString());
-                if (component instanceof JPanel) {
-                    JPanel panel = (JPanel) component;
-                    for (Component JtexfieldComponent : panel.getComponents()) {
-                        if (JtexfieldComponent instanceof JPanel) {
-                            JPanel panel2 = (JPanel) JtexfieldComponent;
-                            for (Component object : panel2.getComponents()) {
-                                if (object instanceof JTextField) {
-                                    JTextField field = (JTextField) object;
-                                    System.out.println(field.getText());
-                                    if (!field.getText().equals("")) {
-                                        return true;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
-        return false;
-    }
 
     private void jLabelMenu_agregar_usuarioMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelMenu_agregar_usuarioMouseEntered
         // TODO add your handling code here:

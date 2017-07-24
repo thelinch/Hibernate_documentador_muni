@@ -11,6 +11,9 @@
         <Property name="modalExclusionType" type="java.awt.Dialog$ModalExclusionType" editor="org.netbeans.modules.form.editors.EnumEditor">
           <Value id="APPLICATION_EXCLUDE"/>
         </Property>
+        <Property name="modalityType" type="java.awt.Dialog$ModalityType" editor="org.netbeans.modules.form.editors.EnumEditor">
+          <Value id="DOCUMENT_MODAL"/>
+        </Property>
       </Properties>
       <Events>
         <EventHandler event="windowActivated" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="jDialogDocumentosWindowActivated"/>
@@ -130,20 +133,17 @@
                                           <Group type="102" attributes="0">
                                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                                   <Component id="jTextFieldNumeroFolioRequerido" alignment="1" max="32767" attributes="0"/>
-                                                  <Component id="jSpinnerNumeroFoleo" alignment="1" max="32767" attributes="0"/>
                                                   <Component id="jLabel6" alignment="1" max="32767" attributes="0"/>
                                               </Group>
                                               <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                                   <Component id="jTextFieldNumeroFolioPresentado" pref="98" max="32767" attributes="0"/>
-                                                  <Component id="jSpinnerFoleoPresentados" max="32767" attributes="0"/>
                                                   <Component id="jLabel7" alignment="1" max="32767" attributes="0"/>
                                               </Group>
                                               <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                                   <Component id="jLabel8" pref="94" max="32767" attributes="0"/>
                                                   <Component id="jTextFieldPlazo_resolucion_documento" pref="94" max="32767" attributes="0"/>
-                                                  <Component id="jSpinnerPLazo" alignment="0" max="32767" attributes="0"/>
                                               </Group>
                                           </Group>
                                       </Group>
@@ -181,31 +181,25 @@
                               <Component id="jTextFieldTipo_documento" pref="39" max="32767" attributes="0"/>
                               <Component id="jLabel18" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="89" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jSpinnerNumeroFoleo" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
-                              <Component id="jSpinnerFoleoPresentados" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
-                              <Component id="jSpinnerPLazo" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel7" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
                               <Component id="jLabel6" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
+                              <Component id="jLabel7" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
                               <Component id="jLabel8" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jTextFieldNumeroFolioPresentado" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
                               <Component id="jTextFieldNumeroFolioRequerido" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                              <Component id="jTextFieldNumeroFolioPresentado" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
                               <Component id="jTextFieldPlazo_resolucion_documento" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jCheckBox_Conformidad" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jLabel10" min="-2" pref="46" max="-2" attributes="0"/>
-                          <EmptySpace pref="11" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="jScrollPane3" min="-2" pref="150" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                          <EmptySpace pref="105" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jButton_SelecionarArchivo" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
@@ -473,15 +467,6 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabelNombre_archivo">
-                </Component>
-                <Component class="javax.swing.JSpinner" name="jSpinnerFoleoPresentados">
-                  <Properties>
-                    <Property name="name" type="java.lang.String" value="" noResource="true"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JSpinner" name="jSpinnerNumeroFoleo">
-                </Component>
-                <Component class="javax.swing.JSpinner" name="jSpinnerPLazo">
                 </Component>
               </SubComponents>
             </Container>

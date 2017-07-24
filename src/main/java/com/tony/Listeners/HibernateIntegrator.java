@@ -24,7 +24,6 @@ public class HibernateIntegrator implements Integrator {
         Operacion_Documento_Event_adapter pea = new Operacion_Documento_Event_adapter();
         pea.setService(new DummyService());
         eventListenerRegistry.setListeners(EventType.PRE_INSERT, pea);
-        eventListenerRegistry.setListeners(EventType.PRE_UPDATE, pea);
         eventListenerRegistry.setListeners(EventType.POST_INSERT, pea);
 
     }

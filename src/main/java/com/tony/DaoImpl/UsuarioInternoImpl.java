@@ -280,15 +280,14 @@ public class UsuarioInternoImpl implements IUsuario_interno {
     public boolean add_operacion_estado_documento_usuario_interno(Documento documento, Enum estado_documento) {
         Session sesion = this.hibernate_sesion.get_sessionFactor().openSession();
         Operacion_EstadosDocumentos operacion_estado_documento = null;
-
         sesion.beginTransaction();
         try {
             Estado_documentos estado_documento_traido = sesion.createNamedQuery("estado_documentos_find_by_estado_documento", Estado_documentos.class).setParameter("estado", estado_documento).uniqueResult();
             if (estado_documento_traido != null) {
+                System.out.println("el estado traido es " + estado_documento_traido.getEstado().toString());
+
                 operacion_estado_documento = new Operacion_EstadosDocumentos(estado_documento_traido, documento);
                 sesion.persist(operacion_estado_documento);
-                sesion.flush();
-                sesion.getTransaction().commit();
                 return true;
             }
         } catch (Exception e) {

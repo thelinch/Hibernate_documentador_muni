@@ -105,9 +105,6 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
         jTextFieldTipo_documento = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
         jLabelNombre_archivo = new javax.swing.JLabel();
-        jSpinnerFoleoPresentados = new javax.swing.JSpinner();
-        jSpinnerNumeroFoleo = new javax.swing.JSpinner();
-        jSpinnerPLazo = new javax.swing.JSpinner();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -140,6 +137,7 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
         jDialogDocumentos.setFocusTraversalPolicyProvider(true);
         jDialogDocumentos.setMinimumSize(new java.awt.Dimension(659, 644));
         jDialogDocumentos.setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+        jDialogDocumentos.setModalityType(java.awt.Dialog.ModalityType.DOCUMENT_MODAL);
         jDialogDocumentos.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 jDialogDocumentosWindowActivated(evt);
@@ -330,8 +328,6 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
         jLabel18.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel18.setText("Tipo Documento");
 
-        jSpinnerFoleoPresentados.setName(""); // NOI18N
-
         javax.swing.GroupLayout jPanelDocumentoLayout = new javax.swing.GroupLayout(jPanelDocumento);
         jPanelDocumento.setLayout(jPanelDocumentoLayout);
         jPanelDocumentoLayout.setHorizontalGroup(
@@ -395,18 +391,15 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
                                 .addGroup(jPanelDocumentoLayout.createSequentialGroup()
                                     .addGroup(jPanelDocumentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(jTextFieldNumeroFolioRequerido, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jSpinnerNumeroFoleo, javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                     .addGap(32, 32, 32)
                                     .addGroup(jPanelDocumentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(jTextFieldNumeroFolioPresentado, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
-                                        .addComponent(jSpinnerFoleoPresentados)
                                         .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                     .addGap(57, 57, 57)
                                     .addGroup(jPanelDocumentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
-                                        .addComponent(jTextFieldPlazo_resolucion_documento, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
-                                        .addComponent(jSpinnerPLazo)))))
+                                        .addComponent(jTextFieldPlazo_resolucion_documento, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)))))
                         .addGroup(jPanelDocumentoLayout.createSequentialGroup()
                             .addContainerGap()
                             .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 566, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -432,28 +425,23 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
                 .addGroup(jPanelDocumentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTextFieldTipo_documento, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
                     .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(89, 89, 89)
+                .addGap(55, 55, 55)
                 .addGroup(jPanelDocumentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jSpinnerNumeroFoleo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinnerFoleoPresentados, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinnerPLazo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanelDocumentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelDocumentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldNumeroFolioPresentado, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldNumeroFolioRequerido, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldNumeroFolioPresentado, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldPlazo_resolucion_documento, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBox_Conformidad)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
                 .addGroup(jPanelDocumentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelDocumentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton_SelecionarArchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1010,8 +998,7 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
         //
         //            }
         //        }
-        //Desde Abajo estaba descomentado
-
+        //Desde Abajo estaba descomentad
         if (this.usuario_interno_service.VerificacionJpanes(jPanelDocumento)) {
             JOptionPane.showMessageDialog(jDialogDocumentos, "Faltan datos en el documento");
             return;
@@ -1030,13 +1017,24 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
 
             //        Estaba antes descomentaod    DesktopNotify.showDesktopMessage("Un nuevo Documento fue agregado", "Asunto:" + documento.getAsunto() + " ", DesktopNotify.SUCCESS, 5000);
             //        Estaba antes descomentaod     this.userInternoService.CrearIdDocumento(jLabelCodigo_Documento);
-            this.usuario_interno_service.limpiarDatosPanel(jPanelDocumento);
+            
+            this.limpiar_datos_documento();
 
         }
 
 
     }//GEN-LAST:event_jButtonRegistrarActionPerformed
-
+    private void limpiar_datos_documento() {
+        this.jTextFieldArea.setText("");
+        this.jTextFieldAsunto.setText("");
+        this.jTextFieldTipo_documento.setText("");
+        this.jTextFieldNumeroFolioRequerido.setText("");
+        this.jTextFieldNumeroFolioPresentado.setText("");
+        this.jTextFieldPlazo_resolucion_documento.setText("");
+        this.jTextAreaObservaciones.setText("");
+        this.jTextArea_Descripcion.setText("");
+        this.jLabel9.setText("");
+    }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -1081,6 +1079,7 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
 //                JOptionPane.showMessageDialog(jDialogDocumentos, "ingrese al menos un documento");
 //
 //            }
+//           
 //        } else {
 //            if (usuarioExterno_temporal.getDocumentos().isEmpty()) {
 //                JOptionPane.showConfirmDialog(jDialogDocumentos, "ingrese al menos un documentos");
@@ -1092,17 +1091,15 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
 //                this.usuario_interno_service.add_operacion_estado_documento_usuario_interno(documentos, Estado_documento.Recepcionado);
 //            });
 //        }
-
-//        } else {
-//            JOptionPane.showMessageDialog(jDialogDocumentos, "usted no tiene permiso de registrar usuarios");
-//        }
+//
 //        
-        this.usuarioExternoJuridico = null;
-        this.UsuarioExternoNatural = null;
-        this.usuarioExterno_temporal = null;
-        this.usuario_interno_service.limpiarDatosPanel(jPanelPersonaJuridica);
-        this.usuario_interno_service.limpiarDatosPanel(jPanelDatos_usuarios);
-        this.usuario_interno_service.limpiarDatosPanel(jPanelDocumento);
+//        
+//        this.usuarioExternoJuridico = null;
+//        this.UsuarioExternoNatural = null;
+//        this.usuarioExterno_temporal = null;
+//        this.usuario_interno_service.limpiarDatosPanel(jPanelPersonaJuridica);
+//        this.usuario_interno_service.limpiarDatosPanel(jPanelDatos_usuarios);
+//        this.usuario_interno_service.limpiarDatosPanel(jPanelDocumento);
     }//GEN-LAST:event_jDialogDocumentosWindowClosing
     String Texto_anterior = "";
     private void jTextFieldDniFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldDniFocusLost
@@ -1201,9 +1198,6 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JSpinner jSpinnerFoleoPresentados;
-    private javax.swing.JSpinner jSpinnerNumeroFoleo;
-    private javax.swing.JSpinner jSpinnerPLazo;
     private javax.swing.JTextArea jTextAreaObservaciones;
     private javax.swing.JTextArea jTextArea_Descripcion;
     private javax.swing.JTextField jTextFieldArea;
