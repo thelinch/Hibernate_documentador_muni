@@ -21,14 +21,12 @@ public class HibernateIntegrator implements Integrator {
     @Override
     public void integrate(Metadata mtdt, SessionFactoryImplementor sfi, SessionFactoryServiceRegistry sfsr) {
         final EventListenerRegistry eventListenerRegistry = sfsr.getService(EventListenerRegistry.class);
-
         Operacion_Documento_Event_adapter pea = new Operacion_Documento_Event_adapter();
-        
         pea.setService(new DummyService());
-
         eventListenerRegistry.setListeners(EventType.PRE_INSERT, pea);
         eventListenerRegistry.setListeners(EventType.PRE_UPDATE, pea);
         eventListenerRegistry.setListeners(EventType.POST_INSERT, pea);
+
     }
 
     @Override

@@ -18,14 +18,16 @@ import com.tony.Estados.Tipo_Perfil_UsuarioInterno;
 import com.tony.Estados.Tipos_Area;
 import com.tony.models.Documento.Concluido;
 import com.tony.models.Documento.Estado_documentos;
+import com.tony.models.Documento.Tipo_Documento;
+import com.tony.models.UsuarioInterno.Area;
 import com.tony.models.UsuarioInterno.Perfil;
 import org.hibernate.Session;
 
 public class main {
-    
+
     public static void main(String[] args) {
-        UsuarioExternoImpl usuarioExterno = new UsuarioExternoImpl();
-        usuarioExterno.get_auditoria_find_by_id_documento(2).forEach(System.out::println);//main mai = new main()
+//        UsuarioExternoImpl usuarioExterno = new UsuarioExternoImpl();
+//        usuarioExterno.get_auditoria_find_by_id_documento(2).forEach(System.out::println);//main mai = new main()
         //        mai.sesionHibernate.AbrirSesion();
         //        Tipo_documentoImpl tipo_documento = new Tipo_documentoImpl();
         //        DocumentImpl doc = new DocumentImpl();
@@ -34,16 +36,19 @@ public class main {
         // user.get_documentos_find_by_user_externo(1).stream().forEach(System.out::println);
         //doc.get_flujograma_documento(1).stream().forEach(System.out::println);
         //mai.inicio();
+//        main main = new main();
+//        main.inicio();
     }
 
-//    private void inicio() {
-//        Session sesion = this.sesionHibernate.AbrirSesion();
+    private void inicio() {
+//        Session sesion = hibernateSession.get_instancia_hibernateSession().get_sessionFactor().openSession();
+//        sesion.beginTransaction();
 //        for (Estado_Concluido estado_concluido : Estado_Concluido.values()) {
 //            Concluido con = new Concluido();
 //            con.setEstadoConcluido(estado_concluido);
 //            sesion.persist(con);
 //        }
-//        for (Tipo_Documento tipodocumento : Tipo_Documento.values()) {
+//        for (Tipos_Documento tipodocumento : Tipos_Documento.values()) {
 //            com.tony.models.Documento.Tipo_Documento tipo = new com.tony.models.Documento.Tipo_Documento();
 //            tipo.setTipoDocumento(tipodocumento);
 //            sesion.persist(tipo);
@@ -58,6 +63,11 @@ public class main {
 //            estado.setEstado(estado_documento);
 //            sesion.persist(estado);
 //        }
+//        for (Tipos_Area area : Tipos_Area.values()) {
+//            Area areaim = new Area();
+//            areaim.setTipoArea(area);
+//            sesion.persist(areaim);
+//        }
 //        sesion.getTransaction().commit();
-//    }
+    }
 }

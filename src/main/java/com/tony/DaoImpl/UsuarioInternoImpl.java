@@ -155,7 +155,7 @@ public class UsuarioInternoImpl implements IUsuario_interno {
         try {
             session.beginTransaction();
             Usuario_interno user_interno = (Usuario_interno) session.get(Usuario_interno.class, usuario_interno.getId_persona());
-            if (user_interno.getPerfil().getTipoPerfil().compareTo(Tipo_Perfil_UsuarioInterno.Profesional) == 0 && usuario_interno.getArea().getTipoArea().compareTo(Tipos_Area.pedriatria) == 0) {
+            if (user_interno.getPerfil().getTipoPerfil().compareTo(Tipo_Perfil_UsuarioInterno.Profesional) == 0 && usuario_interno.getArea().getTipoArea().compareTo(Tipos_Area.Tramite_Documentario_y_Archivo_Central) == 0) {
                 valor_privilegios = true;
             }
             session.getTransaction().commit();
@@ -175,7 +175,6 @@ public class UsuarioInternoImpl implements IUsuario_interno {
             sesionhi.beginTransaction();
             UsuarioExterno userEntidad = (UsuarioExterno) sesionhi.createNamedQuery("UsuarioExterno.find_by_dni", UsuarioExterno.class).setParameter("dni", usuario_externo.getDni()).uniqueResult();
             userEntidad.getDocumentos().size();
-            sesionhi.evict(userEntidad);
             usuario_externo.getDocumentos().stream().forEach((documentos) -> {
                 userEntidad.addDocumento(documentos);
 //                this.add_operacion_documento_usuario_interno(usuario_interno, documentos);
@@ -229,6 +228,8 @@ public class UsuarioInternoImpl implements IUsuario_interno {
             usuarioInterno.setPerfil(usuarioInterno_temporal.getPerfil());
             usuarioInterno.setArea(usuarioInterno_temporal.getArea());
             usuarioInterno.setNombre(usuarioInterno_temporal.getNombre());
+            usuarioInterno.setApellido(usuarioInterno_temporal.getApellido());
+            usuarioInterno.setCorreo_electronico(usuarioInterno_temporal.getCorreo_electronico());
             usuarioInterno.setId_persona(usuarioInterno_temporal.getId_persona());
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -286,11 +287,12 @@ public class UsuarioInternoImpl implements IUsuario_interno {
             if (estado_documento_traido != null) {
                 operacion_estado_documento = new Operacion_EstadosDocumentos(estado_documento_traido, documento);
                 sesion.persist(operacion_estado_documento);
+                sesion.flush();
                 sesion.getTransaction().commit();
                 return true;
             }
         } catch (Exception e) {
-            this.error.Manejador_errores(sesion, "Error en add_operacion_estado_documento_usuario_interno " + e.getMessage());
+            this.error.Manejador_errores(sesion, "UsuarioInternoImpl:Error en add_operacion_estado_documento_usuario_interno " + e.getMessage());
         } finally {
             sesion.close();
         }

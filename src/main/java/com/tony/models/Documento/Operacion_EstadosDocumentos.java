@@ -36,10 +36,10 @@ public class Operacion_EstadosDocumentos implements Serializable {
     }
 
     public void AddAuditoriaDocumento(AuditoriaDocumento auditoria) {
-        if (this.auditoriaDocumentos.isEmpty() || !this.auditoriaDocumentos.contains(auditoria)) {
-            this.auditoriaDocumentos.add(auditoria);
-            auditoria.setOperacion_estadoDocumento(this);
-        }
+
+        this.auditoriaDocumentos.add(auditoria);
+        auditoria.setOperacion_estadoDocumento(this);
+
     }
 
     public Operacion_EstadosDocumentos(Estado_documentos estados, Documento documento) {

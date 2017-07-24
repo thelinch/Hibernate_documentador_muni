@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
-import com.tony.Listeners.OperacionDocumentoListener;
 import com.tony.models.UsuarioInterno.AuditoriaUsuario;
 import com.tony.models.UsuarioInterno.Usuario_interno;
 
@@ -21,6 +20,8 @@ public class OperacionDocumento implements Serializable {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario_interno usuario;
+    @Column
+    private boolean is_documento = true;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_documento", nullable = false)
     private Documento documento;
@@ -34,6 +35,14 @@ public class OperacionDocumento implements Serializable {
     public OperacionDocumento(Usuario_interno usuario, Documento documento) {
         this.usuario = usuario;
         this.documento = documento;
+    }
+
+    public boolean isIs_documento() {
+        return is_documento;
+    }
+
+    public void setIs_documento(boolean is_documento) {
+        this.is_documento = is_documento;
     }
 
     public void AddAuditoriaUsuario(AuditoriaUsuario auiditoria) {

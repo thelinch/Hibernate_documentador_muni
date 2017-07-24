@@ -7,11 +7,13 @@ package com.tony.ServiceImpl;
 
 import com.mxrck.autocompleter.TextAutoCompleter;
 import com.tony.DaoImpl.AreaImpl;
+import com.tony.Estados.Tipos_Area;
 import com.tony.ServiceDao.AreaServiceDao;
 import com.tony.ServiceDao.LLenar_autocompletar;
 import com.tony.models.Tupa;
 import com.tony.models.UsuarioInterno.Area;
 import com.tony.models.UsuarioInterno.Usuario_interno;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -68,12 +70,14 @@ public class AreaServiceImpl implements AreaServiceDao, LLenar_autocompletar {
 
     @Override
     public void llenar_autocompletar_tupa(String nombre_area, TextAutoCompleter autocomplete) {
+        if (autocomplete.getItems().length != 0) {
+            autocomplete.removeAllItems();
+        }
         this.get_tupa_find_by_area_name(nombre_area).stream().forEach((tupa) -> {
-            autocomplete.addItem(tupa);
-            autocomplete.setMode(0);
-            autocomplete.setCaseSensitive(true);
+            autocomplete.addItem(tupa.getProcedimiento());
         });
-
+        autocomplete.setMode(0);
+        autocomplete.setCaseSensitive(true);
     }
 
 }

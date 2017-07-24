@@ -9,12 +9,18 @@ package com.tony.Vista;
  *
  * @author antony
  */
-public class Interfas_login_Usuario_development extends javax.swing.JFrame {
+public class Login_usuario extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form Interfas_login_Usuario_development
-     */
-    public Interfas_login_Usuario_development() {
+    private static Login_usuario login = null;
+
+    public static Login_usuario instancia_login_usuario() {
+        if (login == null) {
+            login = new Login_usuario();
+        }
+        return login;
+    }
+
+    private Login_usuario() {
         initComponents();
     }
 
@@ -27,6 +33,7 @@ public class Interfas_login_Usuario_development extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jCPanel1 = new com.bolivia.panel.JCPanel();
         jPanel2 = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel3 = new javax.swing.JLabel();
@@ -35,11 +42,25 @@ public class Interfas_login_Usuario_development extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         jPasswordField1 = new javax.swing.JPasswordField();
         jButtonIngresar = new javax.swing.JButton();
-        jCPanel1 = new com.bolivia.panel.JCPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setResizable(false);
+        setName("Login"); // NOI18N
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jCPanel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/T.png"))); // NOI18N
+        jCPanel1.setVisibleLogo(false);
+
+        javax.swing.GroupLayout jCPanel1Layout = new javax.swing.GroupLayout(jCPanel1);
+        jCPanel1.setLayout(jCPanel1Layout);
+        jCPanel1Layout.setHorizontalGroup(
+            jCPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 350, Short.MAX_VALUE)
+        );
+        jCPanel1Layout.setVerticalGroup(
+            jCPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 440, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(jCPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 350, 440));
 
         jPanel2.setBackground(new java.awt.Color(0, 51, 51));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -77,60 +98,9 @@ public class Interfas_login_Usuario_development extends javax.swing.JFrame {
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 0, 410, 440));
 
-        jCPanel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/T.png"))); // NOI18N
-        jCPanel1.setVisibleLogo(false);
-
-        javax.swing.GroupLayout jCPanel1Layout = new javax.swing.GroupLayout(jCPanel1);
-        jCPanel1.setLayout(jCPanel1Layout);
-        jCPanel1Layout.setHorizontalGroup(
-            jCPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 350, Short.MAX_VALUE)
-        );
-        jCPanel1Layout.setVerticalGroup(
-            jCPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 440, Short.MAX_VALUE)
-        );
-
-        getContentPane().add(jCPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 350, 440));
-
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Interfas_login_Usuario_development.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Interfas_login_Usuario_development.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Interfas_login_Usuario_development.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Interfas_login_Usuario_development.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Interfas_login_Usuario_development().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonIngresar;

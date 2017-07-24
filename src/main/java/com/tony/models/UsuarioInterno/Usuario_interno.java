@@ -25,7 +25,7 @@ public class Usuario_interno extends Persona implements Serializable {
     @ManyToOne
     @JoinColumn(name = "perfil_id_perfil", nullable = false)
     private Perfil perfil;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "area_id_area", nullable = false)
     private Area area;
     //@ManyToMany(targetEntity=Documento.class)
@@ -87,10 +87,6 @@ public class Usuario_interno extends Persona implements Serializable {
 
     }
 
-    @Override
-    public String toString() {
-        return "Usuario_interno [perfil=" + perfil + ", area=" + area + ", operacionUsuarioInterno="
-                + operacionUsuarioInterno + "]";
-    }
+   
 
 }

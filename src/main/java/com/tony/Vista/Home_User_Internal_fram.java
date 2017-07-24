@@ -6,45 +6,29 @@
 package com.tony.Vista;
 
 import com.tony.ServiceImpl.UsuarioExternoServiceImpl;
-import java.awt.Component;
-import java.awt.GridLayout;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 /**
  *
  * @author antony
  */
-public class Home_User_development extends javax.swing.JFrame {
+public class Home_User_Internal_fram extends javax.swing.JInternalFrame {
 
+    private static Home_User_Internal_fram home_user = null;
     private UsuarioExternoServiceImpl usuario_exerno_service_imple = new UsuarioExternoServiceImpl();
     private int numero_de_veces = 0;
-    JPanel panel3 = new JPanel(new GridLayout(2, 2));
 
-    /**
-     * Creates new form Home_User_development
-     */
-    public Home_User_development() {
+    public static Home_User_Internal_fram get_Instancion_Home_User_Internal_fram() {
+        if (home_user == null) {
+            home_user = new Home_User_Internal_fram();
+        }
+        return home_user;
+    }
 
+    private Home_User_Internal_fram() {
         initComponents();
-//        JLabel labecreado = new JLabel("este essss");
-//        JLabel labecreado1 = new JLabel("este essss1");
-//        JLabel labecreado2 = new JLabel("este essss2");
-//        JLabel labecreado3 = new JLabel("este essss3");
-//        labecreado.setBounds(10, 10, 40, 100);//Jlabel
-//        labecreado1.setBounds(10, 60, 40, 100);
-//        labecreado2.setBounds(10, 10, 40, 100);//valor
-//        labecreado3.setBounds(10, 60, 40, 100);
-
-        this.jTableDocumentos_Usuario_externo.setModel(this.usuario_exerno_service_imple.get_documentos_find_by_user_externo(20, jTableDocumentos_Usuario_externo));
-//        panel3.add(labecreado);
-//        panel3.add(labecreado1);
-//        panel3.add(labecreado2);
-//        panel3.add(labecreado3);
-//
-//        panel3.setBounds(10, 10, 400, 400);
-//        jDialogDetalle_documento.add(panel3);
+       
+        this.jTableDocumentos_Usuario_externo.setModel(this.usuario_exerno_service_imple.get_documentos_find_by_user_externo(2, jTableDocumentos_Usuario_externo));
     }
 
     /**
@@ -76,17 +60,30 @@ public class Home_User_development extends javax.swing.JFrame {
 
         jDialogDetalle_documento.setBackground(new java.awt.Color(255, 255, 255));
         jDialogDetalle_documento.setLocation(new java.awt.Point(500, 20));
-        jDialogDetalle_documento.setMinimumSize(new java.awt.Dimension(500, 470));
+        jDialogDetalle_documento.setMinimumSize(new java.awt.Dimension(230, 470));
         jDialogDetalle_documento.setModal(true);
         jDialogDetalle_documento.setType(java.awt.Window.Type.UTILITY);
-        jDialogDetalle_documento.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel12.setBackground(new java.awt.Color(102, 153, 0));
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel12.setText("Flujograma del documento");
-        jDialogDetalle_documento.getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 435, 80));
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        javax.swing.GroupLayout jDialogDetalle_documentoLayout = new javax.swing.GroupLayout(jDialogDetalle_documento.getContentPane());
+        jDialogDetalle_documento.getContentPane().setLayout(jDialogDetalle_documentoLayout);
+        jDialogDetalle_documentoLayout.setHorizontalGroup(
+            jDialogDetalle_documentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+        );
+        jDialogDetalle_documentoLayout.setVerticalGroup(
+            jDialogDetalle_documentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialogDetalle_documentoLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(627, Short.MAX_VALUE))
+        );
+
+        setName("Ver Documentos"); // NOI18N
+        setNormalBounds(new java.awt.Rectangle(200, 100, 0, 0));
 
         jCPanel1.setFirstColor(new java.awt.Color(255, 255, 255));
         jCPanel1.setSecondColor(new java.awt.Color(204, 0, 51));
@@ -279,10 +276,6 @@ public class Home_User_development extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTableDocumentos_Usuario_externoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDocumentos_Usuario_externoMouseEntered
-
-    }//GEN-LAST:event_jTableDocumentos_Usuario_externoMouseEntered
-
     private void jTableDocumentos_Usuario_externoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDocumentos_Usuario_externoMouseClicked
         if (jTableDocumentos_Usuario_externo.isColumnSelected(0) && jTableDocumentos_Usuario_externo.getRowSelectionAllowed()) {
             int id_documento = Integer.parseInt(jTableDocumentos_Usuario_externo.getValueAt(jTableDocumentos_Usuario_externo.getSelectedRow(), 0).toString());
@@ -293,6 +286,10 @@ public class Home_User_development extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTableDocumentos_Usuario_externoMouseClicked
 
+    private void jTableDocumentos_Usuario_externoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDocumentos_Usuario_externoMouseEntered
+
+    }//GEN-LAST:event_jTableDocumentos_Usuario_externoMouseEntered
+
     private void jTableDocumentos_Usuario_externoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableDocumentos_Usuario_externoMouseExited
         if (jDialogDetalle_documento.isVisible() && JOptionPane.showConfirmDialog(this, "Desea Salir? ") == 0) {
 
@@ -302,40 +299,6 @@ public class Home_User_development extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTableDocumentos_Usuario_externoMouseExited
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Home_User_development.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Home_User_development.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Home_User_development.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Home_User_development.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Home_User_development().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.bolivia.panel.JCPanel jCPanel1;
