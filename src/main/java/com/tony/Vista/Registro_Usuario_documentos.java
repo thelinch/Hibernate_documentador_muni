@@ -6,6 +6,7 @@
 package com.tony.Vista;
 
 import com.mxrck.autocompleter.TextAutoCompleter;
+import com.tony.Estados.Estado_documento;
 import com.tony.ServiceImpl.AreaServiceImpl;
 import com.tony.ServiceImpl.Tipo_documentoServiceImpl;
 import com.tony.ServiceImpl.UsuarioInternoServiceImpl;
@@ -1003,8 +1004,8 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(jDialogDocumentos, "Faltan datos en el documento");
             return;
         } else if (JOptionPane.showConfirmDialog(jDialogDocumentos, "Los datos son correctos?") == 0) {
-            this.contador++;
-            Documento documento = new Documento(jLabelCodigo_Documento.getText() + String.valueOf(this.contador), jTextFieldAsunto.getText(), this.tipo_documento.get_tipo_documento_find_by_name(jTextFieldTipo_documento.getText()), jTextArea_Descripcion.getText(), jTextAreaObservaciones.getText(), Integer.parseInt(jTextFieldNumeroFolioPresentado.getText()), jCheckBox_Conformidad.isSelected(), jCheckBoxIsTupac.isSelected());
+
+            Documento documento = new Documento(jTextFieldAsunto.getText(), this.tipo_documento.get_tipo_documento_find_by_name(jTextFieldTipo_documento.getText()), jTextArea_Descripcion.getText(), jTextAreaObservaciones.getText(), Integer.parseInt(jTextFieldNumeroFolioPresentado.getText()), jCheckBox_Conformidad.isSelected(), jCheckBoxIsTupac.isSelected());
             if (this.usuarioExterno_temporal == null) {
                 if (this.usuarioExternoJuridico != null) {
                     this.usuarioExternoJuridico.addDocumento(documento);
@@ -1017,7 +1018,6 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
 
             //        Estaba antes descomentaod    DesktopNotify.showDesktopMessage("Un nuevo Documento fue agregado", "Asunto:" + documento.getAsunto() + " ", DesktopNotify.SUCCESS, 5000);
             //        Estaba antes descomentaod     this.userInternoService.CrearIdDocumento(jLabelCodigo_Documento);
-            
             this.limpiar_datos_documento();
 
         }
@@ -1058,48 +1058,46 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
 
     private void jDialogDocumentosWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogDocumentosWindowClosing
         // TODO add your handling code here:
-//        if (this.usuarioExterno_temporal == null) {
-//            if (this.usuarioExternoJuridico != null) {
-//                this.usuarioExternoJuridico.setCodigo("antony");
-//                this.usuario_interno_service.Registrar_usuarioExterno(this.usuarioExternoJuridico, usuario_interno);
-//                this.usuarioExternoJuridico.getDocumentos().stream().forEach((documento) -> {
-//                    this.usuario_interno_service.Registrar_operacion_documento_usuario_interno(this.usuario_interno, documento);
-//                    this.usuario_interno_service.add_operacion_estado_documento_usuario_interno(documento, Estado_documento.Recepcionado);
-//                });
-//            } else if (!this.UsuarioExternoNatural.getDocumentos().isEmpty()) {
-//                this.UsuarioExternoNatural.setCodigo("ap");
-//                this.usuario_interno_service.Registrar_usuarioExterno(this.UsuarioExternoNatural, this.usuario_interno);
-//
-//                this.UsuarioExternoNatural.getDocumentos().stream().forEach((document) -> {
-//                    this.usuario_interno_service.Registrar_operacion_documento_usuario_interno(this.usuario_interno, document);
-//                    this.usuario_interno_service.add_operacion_estado_documento_usuario_interno(document, Estado_documento.Recepcionado);
-//                });
-//
-//            } else {
-//                JOptionPane.showMessageDialog(jDialogDocumentos, "ingrese al menos un documento");
-//
-//            }
-//           
-//        } else {
-//            if (usuarioExterno_temporal.getDocumentos().isEmpty()) {
-//                JOptionPane.showConfirmDialog(jDialogDocumentos, "ingrese al menos un documentos");
-//
-//            }
-//            this.usuario_interno_service.add_documentoUsuarioExterno(usuario_interno, usuarioExterno_temporal);
-//            usuarioExterno_temporal.getDocumentos().stream().forEach((documentos) -> {
-//                this.usuario_interno_service.Registrar_operacion_documento_usuario_interno(this.usuario_interno, documentos);
-//                this.usuario_interno_service.add_operacion_estado_documento_usuario_interno(documentos, Estado_documento.Recepcionado);
-//            });
-//        }
-//
-//        
-//        
-//        this.usuarioExternoJuridico = null;
-//        this.UsuarioExternoNatural = null;
-//        this.usuarioExterno_temporal = null;
-//        this.usuario_interno_service.limpiarDatosPanel(jPanelPersonaJuridica);
-//        this.usuario_interno_service.limpiarDatosPanel(jPanelDatos_usuarios);
-//        this.usuario_interno_service.limpiarDatosPanel(jPanelDocumento);
+        if (this.usuarioExterno_temporal == null) {
+            if (this.usuarioExternoJuridico != null) {
+                this.usuarioExternoJuridico.setCodigo("antony");
+                this.usuario_interno_service.Registrar_usuarioExterno(this.usuarioExternoJuridico, usuario_interno);
+                this.usuarioExternoJuridico.getDocumentos().stream().forEach((documento) -> {
+                    this.usuario_interno_service.Registrar_operacion_documento_usuario_interno(this.usuario_interno, documento);
+                    this.usuario_interno_service.add_operacion_estado_documento_usuario_interno(documento, Estado_documento.Recepcionado);
+                });
+            } else if (!this.UsuarioExternoNatural.getDocumentos().isEmpty()) {
+                this.UsuarioExternoNatural.setCodigo("ap");
+                this.usuario_interno_service.Registrar_usuarioExterno(this.UsuarioExternoNatural, this.usuario_interno);
+
+                this.UsuarioExternoNatural.getDocumentos().stream().forEach((document) -> {
+                    this.usuario_interno_service.Registrar_operacion_documento_usuario_interno(this.usuario_interno, document);
+                    this.usuario_interno_service.add_operacion_estado_documento_usuario_interno(document, Estado_documento.Recepcionado);
+                });
+
+            } else {
+                JOptionPane.showMessageDialog(jDialogDocumentos, "ingrese al menos un documento");
+
+            }
+
+        } else {
+            if (usuarioExterno_temporal.getDocumentos().isEmpty()) {
+                JOptionPane.showConfirmDialog(jDialogDocumentos, "ingrese al menos un documentos");
+
+            }
+            this.usuario_interno_service.add_documentoUsuarioExterno(usuario_interno, usuarioExterno_temporal);
+            usuarioExterno_temporal.getDocumentos().stream().forEach((documentos) -> {
+                this.usuario_interno_service.Registrar_operacion_documento_usuario_interno(this.usuario_interno, documentos);
+                this.usuario_interno_service.add_operacion_estado_documento_usuario_interno(documentos, Estado_documento.Recepcionado);
+            });
+        }
+
+        this.usuarioExternoJuridico = null;
+        this.UsuarioExternoNatural = null;
+        this.usuarioExterno_temporal = null;
+        this.usuario_interno_service.limpiarDatosPanel(jPanelPersonaJuridica);
+        this.usuario_interno_service.limpiarDatosPanel(jPanelDatos_usuarios);
+        this.usuario_interno_service.limpiarDatosPanel(jPanelDocumento);
     }//GEN-LAST:event_jDialogDocumentosWindowClosing
     String Texto_anterior = "";
     private void jTextFieldDniFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldDniFocusLost

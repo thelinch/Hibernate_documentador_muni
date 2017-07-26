@@ -46,6 +46,7 @@ public class DummyService {
         try {
             System.out.println("la sesion esta abierta?" + sesion.isOpen());
             sesion.clear();
+            sesion.detach(operacion_estado_documento);
             List<Estado_documentos> lista_estados = this.get_estados_documento(operacion_estado_documento.getDocumento().getId_documento(), sesion);
             auiditoria_documento.setEstadoActual(operacion_estado_documento.getEstados().getEstado().toString());
             if (!lista_estados.isEmpty() && lista_estados.size() >= 2) {
@@ -54,7 +55,7 @@ public class DummyService {
                 auiditoria_documento.setEstadoAnterior(null);
             }
             operacion_estado_documento.AddAuditoriaDocumento(auiditoria_documento);
-            sesion.detach(operacion_estado_documento);
+
             sesion.merge(operacion_estado_documento);
             sesion.getTransaction().commit();
         } catch (Exception e) {
@@ -67,7 +68,6 @@ public class DummyService {
         List<Estado_documentos> lista_estados = sesion.createCriteria(Documento.class).createAlias("operacionEstados", "op")
                 .setProjection(Projections.property("op.estados"))
                 .add(Restrictions.idEq(id_documento)).list();
-        lista_estados.forEach(System.out::println);
         return lista_estados;
     }
 

@@ -173,13 +173,15 @@ public class UsuarioInternoImpl implements IUsuario_interno {
         Session sesionhi = this.hibernate_sesion.get_sessionFactor().openSession();
         try {
             sesionhi.beginTransaction();
-            UsuarioExterno userEntidad = (UsuarioExterno) sesionhi.createNamedQuery("UsuarioExterno.find_by_dni", UsuarioExterno.class).setParameter("dni", usuario_externo.getDni()).uniqueResult();
-            userEntidad.getDocumentos().size();
-            usuario_externo.getDocumentos().stream().forEach((documentos) -> {
-                userEntidad.addDocumento(documentos);
-//                this.add_operacion_documento_usuario_interno(usuario_interno, documentos);
-            });
-            sesionhi.merge(userEntidad);
+            //sesionhi.update();
+//            UsuarioExterno userEntidad = (UsuarioExterno) sesionhi.createNamedQuery("UsuarioExterno.find_by_dni", UsuarioExterno.class).setParameter("dni", usuario_externo.getDni()).uniqueResult();
+//            userEntidad.getDocumentos().size();
+//            sesionhi.detach(userEntidad);
+//            usuario_externo.getDocumentos().stream().forEach((documentos) -> {
+//                userEntidad.addDocumento(documentos);
+////                this.add_operacion_documento_usuario_interno(usuario_interno, documentos);
+//            });
+//            sesionhi.merge(userEntidad);
             sesionhi.getTransaction().commit();
         } catch (Exception e) {
             this.error.Manejador_errores(sesionhi, "error en UsuarioInternoImpl:add_documento_a_UsuarioExterno" + e.getMessage());
@@ -231,6 +233,7 @@ public class UsuarioInternoImpl implements IUsuario_interno {
             usuarioInterno.setApellido(usuarioInterno_temporal.getApellido());
             usuarioInterno.setCorreo_electronico(usuarioInterno_temporal.getCorreo_electronico());
             usuarioInterno.setId_persona(usuarioInterno_temporal.getId_persona());
+            usuarioInterno.setDni(usuarioInterno_temporal.getDni());
             session.getTransaction().commit();
         } catch (Exception e) {
             this.error.Manejador_errores(session, "el  mensaje viene de UsuarioInternoImpl:get_usuario_interno_by_Dni " + e.getMessage());
@@ -285,7 +288,6 @@ public class UsuarioInternoImpl implements IUsuario_interno {
             Estado_documentos estado_documento_traido = sesion.createNamedQuery("estado_documentos_find_by_estado_documento", Estado_documentos.class).setParameter("estado", estado_documento).uniqueResult();
             if (estado_documento_traido != null) {
                 System.out.println("el estado traido es " + estado_documento_traido.getEstado().toString());
-
                 operacion_estado_documento = new Operacion_EstadosDocumentos(estado_documento_traido, documento);
                 sesion.persist(operacion_estado_documento);
                 return true;

@@ -10,9 +10,7 @@ import com.tony.models.Documento.Documento;
 import com.tony.models.UsuarioInterno.Usuario_interno;
 import java.awt.Component;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 /**
  *
@@ -31,7 +29,7 @@ public class Principal_Mesa_partes extends javax.swing.JFrame {
         initComponents();
         this.init();
         this.userInternoService = new UsuarioInternoServiceImpl();
-        this.usuario_interno = this.userInternoService.get_usuario_interno_by_Dni(123);
+        this.usuario_interno = this.userInternoService.get_usuario_interno_by_Dni(71837677);
         this.jLabelNombre.setText(this.usuario_interno.getNombre() + " " + this.usuario_interno.getApellido());
         this.jLabelArea.setText(this.usuario_interno.getArea().getTipoArea().toString());
         this.jLabelFuncion.setText(this.usuario_interno.getPerfil().getTipoPerfil().toString());

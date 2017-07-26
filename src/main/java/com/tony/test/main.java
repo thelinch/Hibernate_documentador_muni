@@ -32,8 +32,9 @@ public class main {
     public static void main(String[] args) {
         Tipo_documentoImpl tipo = new Tipo_documentoImpl();
         UsuarioInternoServiceImpl userInternoService = new UsuarioInternoServiceImpl();
-        Usuario_interno usuerio_interno = userInternoService.get_usuario_interno_by_Dni(123);
-        Documento doc = new Documento("1455", "dwdwd", tipo.get_tipo_documento_find_by_name(Tipos_Documento.Expediente.toString()), null, null, 7, true, true);
+        Usuario_interno usuerio_interno = userInternoService.get_usuario_interno_by_Dni(71837677);
+        System.out.println("Nombre " + usuerio_interno.getNombre() + " dni " + usuerio_interno.getDni());
+        Documento doc = new Documento("dwdwd", tipo.get_tipo_documento_find_by_name(Tipos_Documento.Expediente.toString()), null, null, 7, true, true);
         UsuarioExternoNatural user = new UsuarioExternoNatural("tony", "lol", 47440, null, null);
         user.setCodigo("ap");
         user.addDocumento(doc);
@@ -56,33 +57,33 @@ public class main {
     }
 
     private void inicio() {
-//        Session sesion = hibernateSession.get_instancia_hibernateSession().get_sessionFactor().openSession();
-//        sesion.beginTransaction();
-//        for (Estado_Concluido estado_concluido : Estado_Concluido.values()) {
-//            Concluido con = new Concluido();
-//            con.setEstadoConcluido(estado_concluido);
-//            sesion.persist(con);
-//        }
-//        for (Tipos_Documento tipodocumento : Tipos_Documento.values()) {
-//            com.tony.models.Documento.Tipo_Documento tipo = new com.tony.models.Documento.Tipo_Documento();
-//            tipo.setTipoDocumento(tipodocumento);
-//            sesion.persist(tipo);
-//        }
-//        for (Tipo_Perfil_UsuarioInterno perfil_usuario_interno : Tipo_Perfil_UsuarioInterno.values()) {
-//            Perfil perfil = new Perfil();
-//            perfil.setTipoPerfil(perfil_usuario_interno);
-//            sesion.persist(perfil);
-//        }
-//        for (Estado_documento estado_documento : Estado_documento.values()) {
-//            Estado_documentos estado = new Estado_documentos();
-//            estado.setEstado(estado_documento);
-//            sesion.persist(estado);
-//        }
-//        for (Tipos_Area area : Tipos_Area.values()) {
-//            Area areaim = new Area();
-//            areaim.setTipoArea(area);
-//            sesion.persist(areaim);
-//        }
-//        sesion.getTransaction().commit();
+        Session sesion = hibernateSession.get_instancia_hibernateSession().get_sessionFactor().openSession();
+        sesion.beginTransaction();
+        for (Estado_Concluido estado_concluido : Estado_Concluido.values()) {
+            Concluido con = new Concluido();
+            con.setEstadoConcluido(estado_concluido);
+            sesion.persist(con);
+        }
+        for (Tipos_Documento tipodocumento : Tipos_Documento.values()) {
+            com.tony.models.Documento.Tipo_Documento tipo = new com.tony.models.Documento.Tipo_Documento();
+            tipo.setTipoDocumento(tipodocumento);
+            sesion.persist(tipo);
+        }
+        for (Tipo_Perfil_UsuarioInterno perfil_usuario_interno : Tipo_Perfil_UsuarioInterno.values()) {
+            Perfil perfil = new Perfil();
+            perfil.setTipoPerfil(perfil_usuario_interno);
+            sesion.persist(perfil);
+        }
+        for (Estado_documento estado_documento : Estado_documento.values()) {
+            Estado_documentos estado = new Estado_documentos();
+            estado.setEstado(estado_documento);
+            sesion.persist(estado);
+        }
+        for (Tipos_Area area : Tipos_Area.values()) {
+            Area areaim = new Area();
+            areaim.setTipoArea(area);
+            sesion.persist(areaim);
+        }
+        sesion.getTransaction().commit();
     }
 }

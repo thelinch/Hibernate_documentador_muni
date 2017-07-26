@@ -1003,7 +1003,7 @@ public class home_de_la_mesa_partes extends javax.swing.JFrame {
             return;
         } else if (JOptionPane.showConfirmDialog(jDialogDocumentos, "Los datos son correctos?") == 0) {
             this.contador++;
-            Documento documento = new Documento(jLabelCodigo_Documento.getText() + String.valueOf(this.contador), jTextFieldAsunto.getText(), this.tipo_documento.get_tipo_documento_find_by_name(jTextFieldTipo_documento.getText()), jTextArea_Descripcion.getText(), jTextAreaObservaciones.getText(), Integer.parseInt(jTextFieldNumeroFolioPresentado.getText()), jCheckBox_Conformidad.isSelected(), jCheckBoxIsTupac.isSelected());
+            Documento documento = new Documento( jTextFieldAsunto.getText(), this.tipo_documento.get_tipo_documento_find_by_name(jTextFieldTipo_documento.getText()), jTextArea_Descripcion.getText(), jTextAreaObservaciones.getText(), Integer.parseInt(jTextFieldNumeroFolioPresentado.getText()), jCheckBox_Conformidad.isSelected(), jCheckBoxIsTupac.isSelected());
             if (this.usuarioExternoJuridico != null) {
                 this.usuarioExternoJuridico.addDocumento(documento);
             } else {
