@@ -7,7 +7,10 @@ package com.tony.ServiceImpl;
 
 import com.tony.Dao.IVerificacion;
 import com.tony.DaoImpl.UsuarioInternoImpl;
+import com.tony.Estados.Estado_documento;
+import com.tony.Estados.Tipos_Area;
 import com.tony.ServiceDao.UsuarioInternoServiceDao;
+import com.tony.models.Documento.AuditoriaDocumento;
 import com.tony.models.Documento.Documento;
 import com.tony.models.Documento.Estado_documentos;
 import com.tony.models.Tupa;
@@ -15,9 +18,13 @@ import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import com.tony.models.UsuarioExterrno.UsuarioExternoJuridico;
 import com.tony.models.UsuarioExterrno.UsuarioExternoNatural;
 import com.tony.models.UsuarioInterno.Usuario_interno;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.GridLayout;
 import java.lang.reflect.Field;
 import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -30,6 +37,7 @@ import javax.swing.table.DefaultTableModel;
 public class UsuarioInternoServiceImpl extends Verificacion implements UsuarioInternoServiceDao, IVerificacion {
 
     private final UsuarioInternoImpl usuariImpl = new UsuarioInternoImpl();
+    private final Object[] colores = {Color.BLUE, Color.GRAY, Color.green, Color.lightGray, Color.TRANSLUCENT, Color.CYAN, Color.BITMASK, Color.ORANGE, Color.PINK};
 
     @Override
     public boolean Registrar_usuarioExterno(UsuarioExterno usuario, Usuario_interno user_interno) {
@@ -49,7 +57,7 @@ public class UsuarioInternoServiceImpl extends Verificacion implements UsuarioIn
 
     @Override
     public boolean Editar_documento(Documento documento) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.usuariImpl.Editar_documento(documento);
     }
 
     @Override
@@ -77,11 +85,6 @@ public class UsuarioInternoServiceImpl extends Verificacion implements UsuarioIn
 
     @Override
     public Estado_documentos get_estado(Documento documento) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public DefaultTableModel get_flujograma_documento(Documento documento) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -146,13 +149,19 @@ public class UsuarioInternoServiceImpl extends Verificacion implements UsuarioIn
         defaultTableModel.setRowCount(0);
         List<Documento> documentos = this.usuariImpl.get_documents_find_by_Is_Disconforme();
         Object[] objeto = new Object[documentos.size()];
-        for (Documento documento : documentos) {
+        documentos.stream().map((documento) -> {
             objeto[0] = documento.getId_documento();
+            return documento;
+        }).map((documento) -> {
             objeto[1] = documento.getAsunto();
+            return documento;
+        }).map((documento) -> {
             objeto[2] = "registrado";
             objeto[3] = documento.getUsuario().getNombre();
+            return documento;
+        }).forEach((_item) -> {
             defaultTableModel.addRow(objeto);
-        }
+        });
         return defaultTableModel;
 
     }
@@ -160,6 +169,71 @@ public class UsuarioInternoServiceImpl extends Verificacion implements UsuarioIn
     @Override
     public boolean add_operacion_estado_documento_usuario_interno(Documento documento, Enum Estado_documento) {
         return this.usuariImpl.add_operacion_estado_documento_usuario_interno(documento, Estado_documento);
+    }
+
+    @Override
+    public void get_flujograma_documento(int id_documento, JPanel panel) {
+        List<AuditoriaDocumento> documentoAuditoria = this.usuariImpl.get_flujograma_documento(id_documento);
+        //dialog2.removeAll();
+        int numero_paneles = 0;
+        panel.setLayout(new GridLayout(documentoAuditoria.size(), 1));
+        for (Component componente : panel.getComponents()) {
+            if (componente instanceof JPanel) {
+                JPanel panel_instancia = (JPanel) componente;
+                panel.remove(panel_instancia);
+            }
+
+        }
+        for (AuditoriaDocumento auditoriaDocumento : documentoAuditoria) {
+            JPanel panel_2 = new JPanel(new GridLayout(3, 2));
+            panel_2.add(this.get_label_panel_variable("Fecha :", 40, 20, 40, 100));
+            panel_2.add(this.get_label_panel_variable(auditoriaDocumento.getFecha() == null ? "no hay fecha " : auditoriaDocumento.getFecha().toString(), 10, 20, 40, 100));
+
+            for (int i = 1; i <= 4; i++) {
+                if (i == 1) {
+                    panel_2.add(this.get_label_panel_variable("Anterior:", 40, 20, 40, 100));
+                    panel_2.add(this.get_label_panel_variable(auditoriaDocumento.getEstadoAnterior(), 10, 20, 40, 100));
+                } else if (i == 2) {
+                    panel_2.add(this.get_label_panel_variable("Actual:", 40, 60, 40, 100));
+                    panel_2.add(this.get_label_panel_variable(auditoriaDocumento.getEstadoActual(), 10, 60, 40, 100));
+                }
+            }
+            //panel_2.setBackground((Color) this.colores[Math.round(new Random().nextInt(this.colores.length - 1))]);
+            numero_paneles++;
+            panel_2.setSize(100, 4 * 100);
+            panel_2.setBorder(BorderFactory.createEtchedBorder());
+            panel.add(panel_2);
+        }
+        panel.setSize(100, numero_paneles * 120);
+
+    }
+
+    private JLabel get_label_panel_variable(String texto, int x, int y, int with, int height) {
+        JLabel label = new JLabel();
+        label.setText(texto);
+        label.setBounds(x, y, with, height);
+        return label;
+    }
+
+    @Override
+    public DefaultTableModel get_all_documento_find_by_usuario_and_state_document(Estado_documento estado_requerido, Tipos_Area area, JTable tabla) {
+        DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+        modelo.setRowCount(0);
+        List<Documento> documentos = this.usuariImpl.get_all_documentos_find_by_state(estado_requerido, area);
+        documentos.stream().forEach((documento) -> {
+            modelo.addRow(new Object[]{documento.getId_documento(), documento.getAsunto(), documento.getUsuario().getNombre(), documento.getUsuario().getDni(), documento.isDisconforme() ? "disconforme" : "conforme"});
+        });
+        return modelo;
+    }
+
+    @Override
+    public Documento get_document_find_by_id_document(int id_documento) {
+        return this.usuariImpl.get_document_find_by_id_document(id_documento);
+    }
+
+    @Override
+    public Tupa get_tupa_find_by_asunto(String Asunto) {
+        return this.usuariImpl.get_tupa_find_by_asunto(Asunto);
     }
 
 }

@@ -2,6 +2,8 @@ package com.tony.DaoImpl;
 
 import com.tony.Dao.IDocumento;
 import com.tony.Dao.hibernateSession;
+import com.tony.Estados.Estado_documento;
+import com.tony.Estados.Tipos_Area;
 import com.tony.models.Documento.AuditoriaDocumento;
 import com.tony.models.Documento.Documento;
 import com.tony.models.Documento.Estado_documentos;
@@ -9,13 +11,14 @@ import com.tony.models.Documento.Operacion_EstadosDocumentos;
 import com.tony.models.Documento.Tipo_Documento;
 import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 public class DocumentImpl implements IDocumento {
 
-    private hibernateSession hibernatesesion = hibernateSession.get_instancia_hibernateSession();
+    private final hibernateSession hibernatesesion = hibernateSession.get_instancia_hibernateSession();
     private final Errores error = Errores.get_intancia_error();
 
     public DocumentImpl() {
@@ -131,4 +134,24 @@ public class DocumentImpl implements IDocumento {
         }
         return 1;
     }
+
+    @Override
+    public List<Documento> get_all_documentos_find_by_state(Estado_documento estado_requerido, Tipos_Area area) {
+        List<Documento> documentos = null;
+        Session sesion = this.hibernatesesion.get_sessionFactor().openSession();
+        try {
+            sesion.beginTransaction();
+            documentos = (List<Documento>) sesion.createNamedQuery("OperacionDocumento.find_by_area_and_state").setParameter("area", area).list();
+            documentos = documentos.stream().filter((documento) -> {
+                return documento.getOperacionEstados().get(documento.getOperacionEstados().size() - 1).getEstados().getEstado().compareTo(estado_requerido) == 0;
+            }).collect(Collectors.toList());
+            sesion.getTransaction().commit();
+        } catch (Exception e) {
+            this.error.Manejador_errores(sesion, "El error viene de DocumentoImpl get_all_documentos_find_by_state " + e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return documentos;
+    }
+
 }

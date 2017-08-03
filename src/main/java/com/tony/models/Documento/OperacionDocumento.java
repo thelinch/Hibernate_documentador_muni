@@ -11,6 +11,7 @@ import com.tony.models.UsuarioInterno.Usuario_interno;
 @Entity
 //@EntityListeners(value = OperacionDocumentoListener.class)
 @Table(name = "operacion_documento")
+@NamedQuery(name = "OperacionDocumento.find_by_area_and_state", query = "SELECT doc.documento from OperacionDocumento doc where doc.usuario.area.tipoArea=:area")
 public class OperacionDocumento implements Serializable {
 
     private static final long serialVersionUID = 1L;

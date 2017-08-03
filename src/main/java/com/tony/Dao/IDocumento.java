@@ -5,6 +5,8 @@
  */
 package com.tony.Dao;
 
+import com.tony.Estados.Estado_documento;
+import com.tony.Estados.Tipos_Area;
 import com.tony.models.Documento.AuditoriaDocumento;
 import com.tony.models.Documento.Documento;
 import com.tony.models.Documento.Estado_documentos;
@@ -28,7 +30,8 @@ public interface IDocumento {
 
     Tipo_Documento get_tipo_document_find_by_documento(int id_documento);
 
+    List<Documento> get_all_documentos_find_by_state(Estado_documento estado_requerido,Tipos_Area area);
+
     int get_id_documento();
-    
 
 }

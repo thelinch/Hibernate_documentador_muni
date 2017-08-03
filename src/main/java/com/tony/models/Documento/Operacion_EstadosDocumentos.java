@@ -14,10 +14,9 @@ import com.tony.Listeners.OperacionEstadoDocumentoListener;
  */
 @Entity
 @Table(name = "operacion_Estados_documentos")
-@EntityListeners(value = OperacionEstadoDocumentoListener.class)
 public class Operacion_EstadosDocumentos implements Serializable {
 
-    private static final long ser0ialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

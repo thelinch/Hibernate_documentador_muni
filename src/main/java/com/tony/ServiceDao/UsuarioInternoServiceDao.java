@@ -5,8 +5,11 @@
  */
 package com.tony.ServiceDao;
 
+import com.tony.Estados.Estado_documento;
+import com.tony.Estados.Tipos_Area;
 import com.tony.models.Documento.Documento;
 import com.tony.models.Documento.Estado_documentos;
+import com.tony.models.Tupa;
 import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import com.tony.models.UsuarioInterno.Usuario_interno;
 import javax.swing.JPanel;
@@ -39,13 +42,19 @@ public interface UsuarioInternoServiceDao {
 
     DefaultTableModel get_documentos_find_by_Is_Disconforme(JTable tabla);
 
-    DefaultTableModel get_flujograma_documento(Documento documento);
+    void get_flujograma_documento(int id_documento, JPanel panel);
 
     UsuarioExterno get_usuario_externo_find_by_dni(int dni);
 
     void Llenar_panel_field_class(JPanel panel_fields, Object objeto);
 
     Usuario_interno get_usuario_interno_by_Dni(int dni);
+
+    DefaultTableModel get_all_documento_find_by_usuario_and_state_document(Estado_documento estado_requerido, Tipos_Area area, JTable tabla);
+
+    Documento get_document_find_by_id_document(int id_documento);
+
+    Tupa get_tupa_find_by_asunto(String Asunto);
 
     boolean add_operacion_estado_documento_usuario_interno(Documento documento, Enum Estado_documento);
 }

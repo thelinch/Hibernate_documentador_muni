@@ -28,20 +28,22 @@ import com.tony.models.UsuarioInterno.Usuario_interno;
 import org.hibernate.Session;
 
 public class main {
-
+    
     public static void main(String[] args) {
-        Tipo_documentoImpl tipo = new Tipo_documentoImpl();
-        UsuarioInternoServiceImpl userInternoService = new UsuarioInternoServiceImpl();
-        Usuario_interno usuerio_interno = userInternoService.get_usuario_interno_by_Dni(71837677);
-        System.out.println("Nombre " + usuerio_interno.getNombre() + " dni " + usuerio_interno.getDni());
-        Documento doc = new Documento("dwdwd", tipo.get_tipo_documento_find_by_name(Tipos_Documento.Expediente.toString()), null, null, 7, true, true);
-        UsuarioExternoNatural user = new UsuarioExternoNatural("tony", "lol", 47440, null, null);
-        user.setCodigo("ap");
-        user.addDocumento(doc);
-        userInternoService.Registrar_usuarioExterno(user, usuerio_interno);
-        userInternoService.Registrar_operacion_documento_usuario_interno(usuerio_interno, doc);
-        userInternoService.add_operacion_estado_documento_usuario_interno(doc, Estado_documento.Recepcionado);
+//        Tipo_documentoImpl tipo = new Tipo_documentoImpl();
+//        UsuarioInternoServiceImpl userInternoService = new UsuarioInternoServiceImpl();
+//        Usuario_interno usuerio_interno = userInternoService.get_usuario_interno_by_Dni(71837677);
+//        System.out.println("Nombre " + usuerio_interno.getNombre() + " dni " + usuerio_interno.getDni());
+//        Documento doc = new Documento("dwdwd", tipo.get_tipo_documento_find_by_name(Tipos_Documento.Expediente.toString()), null, null, 7, true, true);
+//        UsuarioExternoNatural user = new UsuarioExternoNatural("tony", "lol", 47440, null, null);
+//        user.setCodigo("ap");
+//        user.addDocumento(doc);
+//        userInternoService.Registrar_usuarioExterno(user, usuerio_interno);
+//        userInternoService.Registrar_operacion_documento_usuario_interno(usuerio_interno, doc);
+//        userInternoService.add_operacion_estado_documento_usuario_interno(doc, Estado_documento.Recepcionado);
 
+        DocumentImpl docu = new DocumentImpl();
+        docu.get_all_documentos_find_by_state(Estado_documento.Recepcionado, Tipos_Area.Tramite_Documentario_y_Archivo_Central);
 //        UsuarioExternoImpl usuarioExterno = new UsuarioExternoImpl();
 //        usuarioExterno.get_auditoria_find_by_id_documento(2).forEach(System.out::println);//main mai = new main()
         //        mai.sesionHibernate.AbrirSesion();
@@ -55,7 +57,7 @@ public class main {
 //        main main = new main();
 //        main.inicio();
     }
-
+    
     private void inicio() {
         Session sesion = hibernateSession.get_instancia_hibernateSession().get_sessionFactor().openSession();
         sesion.beginTransaction();

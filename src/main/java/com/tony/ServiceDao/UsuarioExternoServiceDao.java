@@ -5,11 +5,8 @@
  */
 package com.tony.ServiceDao;
 
-import com.tony.models.Documento.AuditoriaDocumento;
 import com.tony.models.Documento.Estado_documentos;
-import java.util.List;
 import javax.swing.JDialog;
-import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 

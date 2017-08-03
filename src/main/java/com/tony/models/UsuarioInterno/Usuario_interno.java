@@ -87,6 +87,4 @@ public class Usuario_interno extends Persona implements Serializable {
 
     }
 
-   
-
 }

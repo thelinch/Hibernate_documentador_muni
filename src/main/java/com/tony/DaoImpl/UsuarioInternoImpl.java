@@ -2,8 +2,10 @@ package com.tony.DaoImpl;
 
 import com.tony.Dao.IUsuario_interno;
 import com.tony.Dao.hibernateSession;
+import com.tony.Estados.Estado_documento;
 import com.tony.Estados.Tipo_Perfil_UsuarioInterno;
 import com.tony.Estados.Tipos_Area;
+import com.tony.models.Documento.AuditoriaDocumento;
 import com.tony.models.Documento.Documento;
 import com.tony.models.Documento.Estado_documentos;
 import com.tony.models.Documento.OperacionDocumento;
@@ -13,8 +15,10 @@ import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import com.tony.models.UsuarioInterno.Area;
 import com.tony.models.UsuarioInterno.Usuario_interno;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 public class UsuarioInternoImpl implements IUsuario_interno {
@@ -94,7 +98,7 @@ public class UsuarioInternoImpl implements IUsuario_interno {
 //            sesionhi = this.hibernatesesion.get_Sesion();
             sesionhi = this.hibernate_sesion.get_sessionFactor().openSession();
             sesionhi.beginTransaction();
-            sesionhi.update(documento);
+            sesionhi.merge(documento);
             sesionhi.getTransaction().commit();
             return true;
         } catch (Exception e) {
@@ -172,16 +176,11 @@ public class UsuarioInternoImpl implements IUsuario_interno {
     public boolean add_documento_a_UsuarioExterno(Usuario_interno usuario_interno, UsuarioExterno usuario_externo) {
         Session sesionhi = this.hibernate_sesion.get_sessionFactor().openSession();
         try {
-            sesionhi.beginTransaction();
-            //sesionhi.update();
-//            UsuarioExterno userEntidad = (UsuarioExterno) sesionhi.createNamedQuery("UsuarioExterno.find_by_dni", UsuarioExterno.class).setParameter("dni", usuario_externo.getDni()).uniqueResult();
-//            userEntidad.getDocumentos().size();
-//            sesionhi.detach(userEntidad);
-//            usuario_externo.getDocumentos().stream().forEach((documentos) -> {
-//                userEntidad.addDocumento(documentos);
-////                this.add_operacion_documento_usuario_interno(usuario_interno, documentos);
-//            });
-//            sesionhi.merge(userEntidad);
+            usuario_externo.getDocumentos().forEach((documentos) -> {
+//                sesionhi.saveOrUpdate(documentos);
+                System.out.println(" asunto documentos " + documentos.getAsunto() + " Foleo " + documentos.getNum_foleo());
+            });
+            //sesionhi.merge(usuario_externo);
             sesionhi.getTransaction().commit();
         } catch (Exception e) {
             this.error.Manejador_errores(sesionhi, "error en UsuarioInternoImpl:add_documento_a_UsuarioExterno" + e.getMessage());
@@ -205,6 +204,8 @@ public class UsuarioInternoImpl implements IUsuario_interno {
         try {
             sesion.beginTransaction();
             usuario_externo = (UsuarioExterno) sesion.createNamedQuery("UsuarioExterno.find_by_dni").setParameter("dni", dni).uniqueResult();
+            sesion.detach(usuario_externo);
+            //usuario_externo.getDocumentos().size();
             sesion.getTransaction().commit();
         } catch (Exception e) {
             this.error.Manejador_errores(sesion, "Error en UsuarioInternoImpl : get_usuario_externo_find_by_dni " + e.getMessage());
@@ -282,12 +283,11 @@ public class UsuarioInternoImpl implements IUsuario_interno {
     @Override
     public boolean add_operacion_estado_documento_usuario_interno(Documento documento, Enum estado_documento) {
         Session sesion = this.hibernate_sesion.get_sessionFactor().openSession();
-        Operacion_EstadosDocumentos operacion_estado_documento = null;
+        Operacion_EstadosDocumentos operacion_estado_documento;
         sesion.beginTransaction();
         try {
             Estado_documentos estado_documento_traido = sesion.createNamedQuery("estado_documentos_find_by_estado_documento", Estado_documentos.class).setParameter("estado", estado_documento).uniqueResult();
             if (estado_documento_traido != null) {
-                System.out.println("el estado traido es " + estado_documento_traido.getEstado().toString());
                 operacion_estado_documento = new Operacion_EstadosDocumentos(estado_documento_traido, documento);
                 sesion.persist(operacion_estado_documento);
                 return true;
@@ -299,6 +299,79 @@ public class UsuarioInternoImpl implements IUsuario_interno {
         }
 
         return true;
+    }
+
+    @Override
+    public List<AuditoriaDocumento> get_flujograma_documento(int id_documento) {
+        List<AuditoriaDocumento> auditoria = null;
+        Session sesion = this.hibernate_sesion.get_sessionFactor().openSession();
+        try {
+            sesion.beginTransaction();
+            auditoria = (List<AuditoriaDocumento>) sesion.createCriteria(AuditoriaDocumento.class).createAlias("Operacion_estadoDocumento", "operacion").createAlias("operacion.documento", "documento")
+                    .add(Restrictions.eq("documento.id_documento", id_documento)).list();
+            sesion.getTransaction().commit();
+        } catch (Exception e) {
+            this.error.Manejador_errores(sesion, "error en DocumentoImpl: get_flujograma_documento " + e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return auditoria;
+    }
+//Probado y validado
+
+    @Override
+    public List<Documento> get_all_documentos_find_by_state(Estado_documento estado_requerido, Tipos_Area area) {
+        List<Documento> documentos = null;
+        Session sesion = this.hibernate_sesion.get_sessionFactor().openSession();
+        try {
+            sesion.beginTransaction();
+            documentos = (List<Documento>) sesion.createNamedQuery("OperacionDocumento.find_by_area_and_state").setParameter("area", area).list();
+            documentos = documentos.stream().filter((documento) -> {
+                return documento.getOperacionEstados().get(documento.getOperacionEstados().size() - 1).getEstados().getEstado().compareTo(estado_requerido) == 0;
+            }).distinct().collect(Collectors.toList());
+            sesion.getTransaction().commit();
+        } catch (Exception e) {
+            this.error.Manejador_errores(sesion, "El error viene de DocumentoImpl get_all_documentos_find_by_state " + e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return documentos;
+    }
+
+    @Override
+    public Documento get_document_find_by_id_document(int id_documento) {
+        Session sesion = null;
+        Documento doc = null;
+        try {
+            sesion = this.hibernate_sesion.get_sessionFactor().openSession();
+            sesion.beginTransaction();
+            doc = sesion.find(Documento.class, id_documento);
+            sesion.detach(doc);
+            sesion.getTransaction().commit();
+        } catch (Exception e) {
+            this.error.Manejador_errores(sesion, " el mensaje viene de UsuarioInternoImpl: get_document_find_by_id_document " + e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return doc;
+
+    }
+
+    @Override
+    public Tupa get_tupa_find_by_asunto(String Asunto) {
+        Session sesion = null;
+        Tupa tupa = null;
+        try {
+            sesion = this.hibernate_sesion.get_sessionFactor().openSession();
+            sesion.beginTransaction();
+            tupa = (Tupa) sesion.createNamedQuery("tupac.get_areas_find_by_procedimiento").setParameter("procedimiento", Asunto).uniqueResult();
+            sesion.getTransaction().commit();
+        } catch (Exception e) {
+            this.error.Manejador_errores(sesion, " el mensaje viene de UsuarioInternoImpl: get_tupa_find_by_asunto " + e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return tupa;
     }
 
 }

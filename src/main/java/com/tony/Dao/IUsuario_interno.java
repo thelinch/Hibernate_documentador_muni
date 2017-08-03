@@ -1,7 +1,12 @@
 package com.tony.Dao;
 
+import com.tony.Estados.Estado_documento;
+import com.tony.Estados.Tipos_Area;
+import com.tony.models.Documento.AuditoriaDocumento;
 import com.tony.models.Documento.Documento;
 import com.tony.models.Documento.Estado_documentos;
+import com.tony.models.Documento.Operacion_EstadosDocumentos;
+import com.tony.models.Tupa;
 import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import com.tony.models.UsuarioInterno.Usuario_interno;
 import java.util.List;
@@ -37,7 +42,14 @@ public interface IUsuario_interno {
 //
 //    Documento get_find_by_id_documento(int id_documento);
 //
-//    List<Operacion_EstadosDocumentos> get_flujograma_documento(Documento documento);
+
+    Tupa get_tupa_find_by_asunto(String Asunto);
+
+    Documento get_document_find_by_id_document(int id_documento);
+
+    List<Documento> get_all_documentos_find_by_state(Estado_documento estado_requerido, Tipos_Area area);
+
+    List<AuditoriaDocumento> get_flujograma_documento(int id_documento);
 //
 //    Tipo_Documento find_by_id_documento(int TipoDocumento);
 }
