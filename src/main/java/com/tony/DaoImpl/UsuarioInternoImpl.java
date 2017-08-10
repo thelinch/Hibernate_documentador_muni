@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 public class UsuarioInternoImpl implements IUsuario_interno {
@@ -67,11 +66,15 @@ public class UsuarioInternoImpl implements IUsuario_interno {
     }
 
     @Override
-    public boolean Enviar_area_documento(Documento documento) {
+    public boolean Enviar_area_documento(Documento documento, Usuario_interno user_interno) {
         if (!documento.isDisconforme()) {
-
+            try {
+                return this.add_operacion_documento_usuario_interno(user_interno, documento);
+            } catch (Exception e) {
+                System.out.println("el mensaje viene de UsuarioInterniImpl:Enviar_area_documento " + e.getMessage());
+            }
         }
-        return true;
+        return false;
     }
 //Tenemos que botar todas las areas que tengan ese procedimiento,para que la persona encargada pueda hacer el respectivo envio
 //Probado y validado
@@ -372,6 +375,44 @@ public class UsuarioInternoImpl implements IUsuario_interno {
             sesion.close();
         }
         return tupa;
+    }
+
+    @Override
+    public List<Area> get_area_find_by_tupa(String nameTupa) {
+        Session se = null;
+        Tupa tupa = null;
+        try {
+            se = this.hibernate_sesion.get_sessionFactor().openSession();
+            se.beginTransaction();
+            tupa = (Tupa) se.createNamedQuery("tupac.get_areas_find_by_procedimiento").setParameter("procedimiento", nameTupa).uniqueResult();
+            tupa.getAreas().size();
+            se.getTransaction().commit();
+        } catch (Exception e) {
+            this.error.Manejador_errores(se, "El error viene de UsuarioInternoImple:get_area_find_by_tupa " + e.getMessage());
+        } finally {
+            se.close();
+        }
+        return tupa.getAreas();
+    }
+
+    @Override
+    public List<Usuario_interno> get_usuario_interno_find_by_nombre_area(String Area_Nombre) {
+        Session se = null;
+        Area area = null;
+        try {
+            se = this.hibernate_sesion.get_sessionFactor().openSession();
+            Tipos_Area tipo = Tipos_Area.valueOf(Area_Nombre);
+            se.beginTransaction();
+            area = (Area) se.createNamedQuery("Area.get_usuarioInterno_find_by_name_area").setParameter("tipo_area", tipo).uniqueResult();
+            area.getUsuarioInterno().size();
+            se.getTransaction().commit();
+        } catch (Exception e) {
+            this.error.Manejador_errores(se, "El error viene de UsuarioInternoImple:get_area_find_by_tupa " + e.getMessage());
+        } finally {
+            se.close();
+        }
+        return area.getUsuarioInterno();
+
     }
 
 }

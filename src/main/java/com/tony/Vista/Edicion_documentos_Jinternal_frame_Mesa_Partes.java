@@ -1,4 +1,6 @@
 package com.tony.Vista;
+
+import com.mxrck.autocompleter.TextAutoCompleter;
 import com.tony.DaoImpl.DocumentImpl;
 import com.tony.Estados.Estado_documento;
 import com.tony.ServiceImpl.UsuarioInternoServiceImpl;
@@ -14,7 +16,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.table.TableRowSorter;
 
 class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JInternalFrame {
-    
+
     private TableRowSorter trsFiltro;
     private static Edicion_documentos_Jinternal_frame_Mesa_Partes edicion_documentos = null;
     private final Usuario_interno usuario_interno = Principal_Mesa_partes.usuario_interno;
@@ -23,17 +25,24 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
     private List<Documento> documentos = new ArrayList<>();
     private Documento documento_de_edicion;
     private int id_documento;
-    
+    private TextAutoCompleter llenar_area = null;
+    private String texto_area = "";
+    private TextAutoCompleter llenar_trabajadores = null;
+    private List<Usuario_interno> lista_usuarios_interno_enviar;
+    private Usuario_interno user_seleccionado = null;
+
     public static Edicion_documentos_Jinternal_frame_Mesa_Partes get_instancia_Edicion_Documentos() {
         if (edicion_documentos == null) {
             edicion_documentos = new Edicion_documentos_Jinternal_frame_Mesa_Partes();
         }
         return edicion_documentos;
     }
-    
+
     private Edicion_documentos_Jinternal_frame_Mesa_Partes() {
         initComponents();
         this.jTableEdicion_docuementos.setModel(this.usuario_interno_service.get_all_documento_find_by_usuario_and_state_document(Estado_documento.Recepcionado, usuario_interno.getArea().getTipoArea(), jTableEdicion_docuementos));
+        this.llenar_area = new TextAutoCompleter(this.jTextFieldArea_asignada);
+        this.llenar_trabajadores = new TextAutoCompleter(this.jTextFieldPersona_Asignada);
     }
 
     /**
@@ -58,7 +67,7 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
         jLabelAsunto_documento = new javax.swing.JLabel();
         jLabelID_Documento = new javax.swing.JLabel();
         jCheckBoxConformidad = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
+        jButtonEdicion_documentos = new javax.swing.JButton();
         jSpinnerforlio_presentado = new javax.swing.JSpinner();
         jLabelFolio_requrido = new javax.swing.JLabel();
         buttonGroupbutotn = new javax.swing.ButtonGroup();
@@ -71,7 +80,7 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
         jSeparator1 = new javax.swing.JSeparator();
         jTextFieldArea_asignada = new javax.swing.JTextField();
         jTextFieldPersona_Asignada = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        jButtonEnviar_Area = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         jLabelNombre_Persona_Asginada = new javax.swing.JLabel();
@@ -98,6 +107,14 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
         jDialogEdicion_documentos.setModalityType(java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
         jDialogEdicion_documentos.setResizable(false);
         jDialogEdicion_documentos.setType(java.awt.Window.Type.UTILITY);
+        jDialogEdicion_documentos.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                jDialogEdicion_documentosWindowActivated(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                jDialogEdicion_documentosWindowOpened(evt);
+            }
+        });
 
         jCPanel2.setBackground(new java.awt.Color(102, 204, 255));
         jCPanel2.setUseMode(com.bolivia.panel.USEMODE.BICOLOR);
@@ -121,10 +138,10 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
         jCheckBoxConformidad.setText("Disconforme");
         jCheckBoxConformidad.setEnabled(false);
 
-        jButton1.setText("Editar Documento");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonEdicion_documentos.setText("Editar Documento");
+        jButtonEdicion_documentos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonEdicion_documentosActionPerformed(evt);
             }
         });
 
@@ -139,39 +156,40 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabelID_Documento, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabelNombreUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabelAsunto_documento, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabelID_Documento, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
-                                .addComponent(jCheckBoxConformidad))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabelNombreUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabelAsunto_documento, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(28, 28, 28)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabelFolio_requrido, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jSpinnerforlio_presentado, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addGap(69, 69, 69))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33))
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jCheckBoxConformidad))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(28, 28, 28)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabelFolio_requrido, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jSpinnerforlio_presentado, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addGap(69, 69, 69))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButtonEdicion_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -199,7 +217,7 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBoxConformidad)
                 .addGap(44, 44, 44)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonEdicion_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(47, 47, 47))
         );
 
@@ -235,10 +253,31 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
                 .addContainerGap())
         );
 
+        jDialogEnviar_Area.setMinimumSize(new java.awt.Dimension(680, 400));
+        jDialogEnviar_Area.setModal(true);
+        jDialogEnviar_Area.setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+        jDialogEnviar_Area.setModalityType(java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
+        jDialogEnviar_Area.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                jDialogEnviar_AreaWindowActivated(evt);
+            }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                jDialogEnviar_AreaWindowClosing(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                jDialogEnviar_AreaWindowOpened(evt);
+            }
+        });
+
+        jCPanel4.setFirstColor(new java.awt.Color(204, 204, 255));
+        jCPanel4.setSecondColor(new java.awt.Color(51, 51, 255));
+        jCPanel4.setUseMode(com.bolivia.panel.USEMODE.BICOLOR);
         jCPanel4.setVisibleLogo(false);
 
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("Enviar a Area");
+
+        jPanel2.setBackground(new java.awt.Color(204, 255, 102));
 
         jLabel10.setText("Asignar area:");
 
@@ -246,8 +285,23 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        jButton2.setText("Enviar area encargada");
+        jTextFieldPersona_Asignada.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextFieldPersona_AsignadaFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldPersona_AsignadaFocusLost(evt);
+            }
+        });
 
+        jButtonEnviar_Area.setText("Enviar area encargada");
+        jButtonEnviar_Area.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEnviar_AreaActionPerformed(evt);
+            }
+        });
+
+        jPanel3.setBackground(new java.awt.Color(204, 204, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos Del Usuario", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP));
 
         jLabel12.setText("Nombre:");
@@ -265,9 +319,8 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabelDni_Persona_Asignada, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
-                        .addGap(3, 3, 3))
+                        .addGap(21, 21, 21)
+                        .addComponent(jLabelDni_Persona_Asignada, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -291,8 +344,8 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
                     .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelDni_Persona_Asignada, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabelDni_Persona_Asignada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -304,45 +357,47 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(19, 19, 19)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextFieldArea_asignada, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel11)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextFieldPersona_Asignada, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(12, 12, 12))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextFieldArea_asignada, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))))
+                                .addComponent(jTextFieldPersona_Asignada, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(32, 32, 32))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton2)
+                        .addComponent(jButtonEnviar_Area)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldArea_asignada))
-                .addGap(28, 28, 28)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldPersona_Asignada))
-                .addGap(165, 165, 165)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldArea_asignada, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldPersona_Asignada))
+                        .addGap(42, 42, 42)
+                        .addComponent(jButtonEnviar_Area, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(161, 161, 161))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jCPanel4Layout = new javax.swing.GroupLayout(jCPanel4);
@@ -350,17 +405,21 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
         jCPanel4Layout.setHorizontalGroup(
             jCPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jCPanel4Layout.createSequentialGroup()
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jCPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jCPanel4Layout.createSequentialGroup()
+                        .addContainerGap(23, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jCPanel4Layout.setVerticalGroup(
             jCPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jCPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jDialogEnviar_AreaLayout = new javax.swing.GroupLayout(jDialogEnviar_Area.getContentPane());
@@ -368,12 +427,14 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
         jDialogEnviar_AreaLayout.setHorizontalGroup(
             jDialogEnviar_AreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDialogEnviar_AreaLayout.createSequentialGroup()
-                .addComponent(jCPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 607, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jCPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 624, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jDialogEnviar_AreaLayout.setVerticalGroup(
             jDialogEnviar_AreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jCPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
+            .addGroup(jDialogEnviar_AreaLayout.createSequentialGroup()
+                .addComponent(jCPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -524,7 +585,15 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
             this.id_documento = Integer.parseInt(jTableEdicion_docuementos.getValueAt(jTableEdicion_docuementos.getSelectedRow(), 0).toString());
             this.usuario_interno_service.get_flujograma_documento(this.id_documento, jPanel_flujograma_documentos);
             this.jButtonEditar_Documento.setEnabled(true);
-            
+            if (this.llenar_area.getItems().length != 0) {
+                this.llenar_area.removeAllItems();
+            }
+            if (this.jTableEdicion_docuementos.getValueAt(this.jTableEdicion_docuementos.getSelectedRow(), 4).toString().equalsIgnoreCase("conforme")) {
+                this.jButtonEditar_Documento.setText("Enviar Area");
+            } else {
+                this.jButtonEditar_Documento.setText("Editar Documento");
+            }
+
         } else {
             this.jButtonEditar_Documento.setEnabled(false);
             JOptionPane.showMessageDialog(this, "si desea ver el flujograma de tu documento del click al id ");
@@ -548,42 +617,59 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
 
     private void jButtonEditar_DocumentoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonEditar_DocumentoMouseClicked
 
+
     }//GEN-LAST:event_jButtonEditar_DocumentoMouseClicked
 
     private void jButtonEditar_DocumentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditar_DocumentoActionPerformed
-        if (!this.jDialogEdicion_documentos.isShowing()) {
-            this.documento_de_edicion = this.usuario_interno_service.get_document_find_by_id_document(id_documento);
-            this.jLabelNombreUsuario.setText(this.documento_de_edicion.getUsuario().getNombre());
-            this.jLabelID_Documento.setText(String.valueOf(this.documento_de_edicion.getId_documento()));
-            this.jLabelAsunto_documento.setText(this.documento_de_edicion.getAsunto());
-            
-            SpinnerNumberModel model = new SpinnerNumberModel(
-                    new Integer(this.documento_de_edicion.getNum_foleo()), // Dato visualizado al inicio en el spinner 
-                    new Integer(this.documento_de_edicion.getNum_foleo()), // Límite inferior 
-                    new Integer(this.usuario_interno_service.get_tupa_find_by_asunto(this.documento_de_edicion.getAsunto()).getProceso()), // Límite superior 
-                    new Integer(1) // incremento-decremento 
-            );
-            this.jSpinnerforlio_presentado.setModel(model);
-            this.jLabelFolio_requrido.setText(String.valueOf(this.usuario_interno_service.get_tupa_find_by_asunto(this.documento_de_edicion.getAsunto()).getProceso()));
-            this.jCheckBoxConformidad.setSelected(this.documento_de_edicion.getNum_foleo() < this.usuario_interno_service.get_tupa_find_by_asunto(this.documento_de_edicion.getAsunto()).getProceso());
-            this.jDialogEdicion_documentos.setVisible(true);
-            
+        if (this.jButtonEditar_Documento.getText().equals("Editar Documento")) {
+            if (!this.jDialogEdicion_documentos.isShowing()) {
+                this.documento_de_edicion = this.usuario_interno_service.get_document_find_by_id_document(id_documento);
+                this.jLabelNombreUsuario.setText(this.documento_de_edicion.getUsuario().getNombre());
+                this.jLabelID_Documento.setText(String.valueOf(this.documento_de_edicion.getId_documento()));
+                this.jLabelAsunto_documento.setText(this.documento_de_edicion.getAsunto());
+
+                SpinnerNumberModel model = new SpinnerNumberModel(
+                        new Integer(this.documento_de_edicion.getNum_foleo()), // Dato visualizado al inicio en el spinner 
+                        new Integer(this.documento_de_edicion.getNum_foleo()), // Límite inferior 
+                        new Integer(this.usuario_interno_service.get_tupa_find_by_asunto(this.documento_de_edicion.getAsunto()).getProceso()), // Límite superior 
+                        new Integer(1) // incremento-decremento 
+                );
+                this.jSpinnerforlio_presentado.setModel(model);
+                this.jLabelFolio_requrido.setText(String.valueOf(this.usuario_interno_service.get_tupa_find_by_asunto(this.documento_de_edicion.getAsunto()).getProceso()));
+                this.jCheckBoxConformidad.setSelected(this.documento_de_edicion.getNum_foleo() < this.usuario_interno_service.get_tupa_find_by_asunto(this.documento_de_edicion.getAsunto()).getProceso());
+                this.jDialogEdicion_documentos.setVisible(true);
+
+            }
+        } else if (this.jButtonEditar_Documento.getText().equals("Enviar Area")) {
+            if (!this.jDialogEnviar_Area.isShowing()) {
+                this.documento_de_edicion = this.usuario_interno_service.get_document_find_by_id_document(id_documento);
+                System.out.println("Asinto del documento " + this.documento_de_edicion.getAsunto());
+
+                this.usuario_interno_service.get_area_find_by_tupa(this.documento_de_edicion.getAsunto(), llenar_area);
+                this.jDialogEnviar_Area.setVisible(true);
+            }
         }
+
     }//GEN-LAST:event_jButtonEditar_DocumentoActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
+    private void jButtonEdicion_documentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEdicion_documentosActionPerformed
+
         if (this.documento_de_edicion.getNum_foleo() == Integer.parseInt(this.jSpinnerforlio_presentado.getValue().toString())) {
             JOptionPane.showMessageDialog(jDialogEdicion_documentos, " Modifica el numero de folios ");
+        } else if (!this.documento_de_edicion.isDisconforme()) {
+            JOptionPane.showMessageDialog(this.jDialogEdicion_documentos, "ya no se puede modificar el documento");
         } else {
             this.documento_de_edicion.setNum_foleo(Integer.parseInt(this.jSpinnerforlio_presentado.getValue().toString()));
             this.documento_de_edicion.setDisconforme(jCheckBoxConformidad.isSelected());
-            this.usuario_interno_service.Editar_documento(documento_de_edicion);
-            
-        }
-        
+            if (this.usuario_interno_service.Editar_documento(documento_de_edicion)) {
+                this.jButtonEdicion_documentos.setEnabled(false);
+                JOptionPane.showMessageDialog(this.jDialogEdicion_documentos, " se edito correctamente");
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+            }
+        }
+
+
+    }//GEN-LAST:event_jButtonEdicion_documentosActionPerformed
 
     private void jSpinnerforlio_presentadoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerforlio_presentadoStateChanged
         System.out.println("Se ejecuto el evento StateChanged");
@@ -595,27 +681,102 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
             return;
         } else {
             jCheckBoxConformidad.setSelected(false);
-            
+
         }
 
     }//GEN-LAST:event_jSpinnerforlio_presentadoStateChanged
+
+    private void jDialogEnviar_AreaWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogEnviar_AreaWindowClosing
+        // TODO add your handling code here:
+
+        if (this.llenar_area.getItems().length != 0) {
+            this.llenar_area.removeAllItems();
+        }
+    }//GEN-LAST:event_jDialogEnviar_AreaWindowClosing
+
+    private void jDialogEnviar_AreaWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogEnviar_AreaWindowOpened
+        this.jTextFieldArea_asignada.setText("");
+        this.jTextFieldPersona_Asignada.setText("");
+        this.jButtonEnviar_Area.setEnabled(true);
+
+    }//GEN-LAST:event_jDialogEnviar_AreaWindowOpened
+
+    private void jTextFieldPersona_AsignadaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldPersona_AsignadaFocusGained
+        if (!this.texto_area.equals(this.jTextFieldArea_asignada.getText()) && this.jTextFieldArea_asignada.getText() != null) {
+            //llenar el autocomplete de operadores
+            this.lista_usuarios_interno_enviar = this.usuario_interno_service.get_usuario_interno_find_by_nombre_area(this.jTextFieldArea_asignada.getText(), llenar_trabajadores);
+            this.lista_usuarios_interno_enviar.forEach(System.out::println);
+            this.texto_area = this.jTextFieldArea_asignada.getText();
+        } else if (this.jTextFieldArea_asignada.getText() == null) {
+            JOptionPane.showMessageDialog(jDialogEnviar_Area, "primero Asigne una area");
+
+        }
+    }//GEN-LAST:event_jTextFieldPersona_AsignadaFocusGained
+
+    private void jButtonEnviar_AreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEnviar_AreaActionPerformed
+        if (this.jTextFieldArea_asignada.getText() != null && this.jTextFieldPersona_Asignada.getText() != null) {
+            if (JOptionPane.showConfirmDialog(this.jDialogEnviar_Area, "Los datos son correctos?") == 1) {
+                if (this.usuario_interno_service.Enviar_area_documento(documento_de_edicion, this.usuario_interno_service.get_usuario_interno_by_Dni(this.user_seleccionado.getDni())) && this.usuario_interno_service.add_operacion_estado_documento_usuario_interno(documento_de_edicion, Estado_documento.Enviado)) {
+                    this.jButtonEnviar_Area.setEnabled(false);
+                    JOptionPane.showMessageDialog(jDialogEnviar_Area, "Se Envio correctamente", "Envio", 1);
+                }
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(this.jDialogEnviar_Area, "faltan datos para enviar al area");
+        }
+    }//GEN-LAST:event_jButtonEnviar_AreaActionPerformed
+
+    private void jTextFieldPersona_AsignadaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldPersona_AsignadaFocusLost
+        // TODO add your handling code here:
+        if (this.jTextFieldPersona_Asignada.getText() != null && this.jTextFieldArea_asignada.getText() != null) {
+
+            if (!this.lista_usuarios_interno_enviar.isEmpty()) {
+                this.user_seleccionado = this.lista_usuarios_interno_enviar.stream()
+                        .filter(user -> user.getNombre().equals(this.llenar_trabajadores.getItemSelected().toString()))
+                        .findFirst().get();
+            }
+            System.out.println(" usuario seleccionado " + user_seleccionado.getNombre() + " " + user_seleccionado.getApellido());
+            if (user_seleccionado != null) {
+                this.jLabelNombre_Persona_Asginada.setText(user_seleccionado.getNombre() + " " + user_seleccionado.getApellido());
+                this.jLabelCargo_Persona_Asignada.setText(user_seleccionado.getPerfil().getTipoPerfil().toString());
+                this.jLabelDni_Persona_Asignada.setText(String.valueOf(user_seleccionado.getDni()));
+            }
+        }
+    }//GEN-LAST:event_jTextFieldPersona_AsignadaFocusLost
+
+    private void jDialogEdicion_documentosWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogEdicion_documentosWindowActivated
+        // TODO add your handling code here:
+        System.out.println("entro al evento Activated de JdialogEdicion_Documento");
+        this.jButtonEdicion_documentos.setEnabled(true);
+    }//GEN-LAST:event_jDialogEdicion_documentosWindowActivated
+
+    private void jDialogEdicion_documentosWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogEdicion_documentosWindowOpened
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jDialogEdicion_documentosWindowOpened
+
+    private void jDialogEnviar_AreaWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogEnviar_AreaWindowActivated
+        // TODO add your handling code here:
+        this.jButtonEnviar_Area.setEnabled(true);
+    }//GEN-LAST:event_jDialogEnviar_AreaWindowActivated
     private void filtro() {
         int columna_Buscar = 0;
         if (this.jRadioButtonUsuario.isSelected()) {
             columna_Buscar = 2;
         } else if (this.jRadioButtonAsunto_documento.isSelected()) {
             columna_Buscar = 1;
-            
+
         }
         trsFiltro.setRowFilter(RowFilter.regexFilter(this.jTextFieldBusqueda_documento.getText(), columna_Buscar));
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupbutotn;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButtonEdicion_documentos;
     private javax.swing.JButton jButtonEditar_Documento;
+    private javax.swing.JButton jButtonEnviar_Area;
     private com.bolivia.panel.JCPanel jCPanel1;
     private com.bolivia.panel.JCPanel jCPanel2;
     private com.bolivia.panel.JCPanel jCPanel4;

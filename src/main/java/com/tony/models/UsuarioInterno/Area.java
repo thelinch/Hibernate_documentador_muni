@@ -14,7 +14,8 @@ import com.tony.models.Tupa;
 @NamedQueries(
         {
             @NamedQuery(name = "Area.all", query = "SELECT a from Area a"),
-            @NamedQuery(name = "Area.find_by_name", query = "SELECT a FROM Area a where a.tipoArea=:name")})
+            @NamedQuery(name = "Area.find_by_name", query = "SELECT a FROM Area a where a.tipoArea=:name"),
+            @NamedQuery(name = "Area.get_usuarioInterno_find_by_name_area", query = "SELECT a from Area a where a.tipoArea=:tipo_area")})
 public class Area implements Serializable {
 
     private static final long serialVersionUID = 1L;

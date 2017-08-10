@@ -50,10 +50,13 @@ public class DummyService {
             List<Estado_documentos> lista_estados = this.get_estados_documento(operacion_estado_documento.getDocumento().getId_documento(), sesion);
             auiditoria_documento.setEstadoActual(operacion_estado_documento.getEstados().getEstado().toString());
             if (!lista_estados.isEmpty() && lista_estados.size() >= 2) {
-                auiditoria_documento.setEstadoAnterior(lista_estados.get(lista_estados.size() - 1).getEstado().toString());
+                auiditoria_documento.setEstadoAnterior(lista_estados.get(lista_estados.size() - 2).getEstado().toString());
             } else {
                 auiditoria_documento.setEstadoAnterior(null);
             }
+            lista_estados.forEach((estados) -> {
+                System.out.println(" el estado viene de DummyService " + estados.getEstado() + " " + estados.getId_estadoDocumento());
+            });
             operacion_estado_documento.AddAuditoriaDocumento(auiditoria_documento);
 
             sesion.merge(operacion_estado_documento);

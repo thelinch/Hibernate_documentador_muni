@@ -5,9 +5,11 @@
  */
 package com.tony.ServiceImpl;
 
+import com.mxrck.autocompleter.TextAutoCompleter;
 import com.tony.Dao.IVerificacion;
 import com.tony.DaoImpl.UsuarioInternoImpl;
 import com.tony.Estados.Estado_documento;
+import com.tony.Estados.Tipo_Perfil_UsuarioInterno;
 import com.tony.Estados.Tipos_Area;
 import com.tony.ServiceDao.UsuarioInternoServiceDao;
 import com.tony.models.Documento.AuditoriaDocumento;
@@ -23,6 +25,7 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -51,8 +54,8 @@ public class UsuarioInternoServiceImpl extends Verificacion implements UsuarioIn
     }
 
     @Override
-    public boolean Enviar_area_documento(Documento documento) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean Enviar_area_documento(Documento documento, Usuario_interno user_interno) {
+        return this.usuariImpl.Enviar_area_documento(documento, user_interno);
     }
 
     @Override
@@ -234,6 +237,33 @@ public class UsuarioInternoServiceImpl extends Verificacion implements UsuarioIn
     @Override
     public Tupa get_tupa_find_by_asunto(String Asunto) {
         return this.usuariImpl.get_tupa_find_by_asunto(Asunto);
+    }
+
+    @Override
+    public void get_area_find_by_tupa(String nameTupa, TextAutoCompleter llenar_area) {
+        this.usuariImpl.get_area_find_by_tupa(nameTupa).stream().forEach((area) -> {
+            llenar_area.addItem(area.getTipoArea());
+        });
+        llenar_area.setCaseSensitive(true);
+        llenar_area.setMode(0);
+
+    }
+
+    @Override
+    public List<Usuario_interno> get_usuario_interno_find_by_nombre_area(String Area_Nombre, TextAutoCompleter llenar_trabajadores) {
+        llenar_trabajadores.removeAllItems();
+        List<Usuario_interno> usuario_interno = this.usuariImpl.get_usuario_interno_find_by_nombre_area(Area_Nombre).stream().filter((trabajadores) -> {
+            return trabajadores.getPerfil().getTipoPerfil().compareTo(Tipo_Perfil_UsuarioInterno.Administrador) == 0 ? true : false;
+        }).collect(Collectors.toList());
+        if (!usuario_interno.isEmpty()) {
+            usuario_interno.stream().map(Usuario_interno::getNombre).forEach((nombre_persona) -> {
+                llenar_trabajadores.addItem(nombre_persona);
+            });
+            llenar_trabajadores.setMode(0);
+            llenar_trabajadores.setCaseSensitive(true);
+        }
+
+        return usuario_interno;
     }
 
 }
