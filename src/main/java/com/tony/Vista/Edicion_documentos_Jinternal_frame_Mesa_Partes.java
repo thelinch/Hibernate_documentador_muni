@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.TableRowSorter;
@@ -285,12 +286,23 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
+        jTextFieldArea_asignada.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldArea_asignadaFocusLost(evt);
+            }
+        });
+
         jTextFieldPersona_Asignada.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextFieldPersona_AsignadaFocusGained(evt);
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextFieldPersona_AsignadaFocusLost(evt);
+            }
+        });
+        jTextFieldPersona_Asignada.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextFieldPersona_AsignadaKeyPressed(evt);
             }
         });
 
@@ -418,7 +430,7 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
                 .addContainerGap()
                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 247, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -687,17 +699,17 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
     }//GEN-LAST:event_jSpinnerforlio_presentadoStateChanged
 
     private void jDialogEnviar_AreaWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogEnviar_AreaWindowClosing
-        // TODO add your handling code here:
-
         if (this.llenar_area.getItems().length != 0) {
             this.llenar_area.removeAllItems();
         }
+        this.jTextFieldArea_asignada.setText("");
+        this.jTextFieldPersona_Asignada.setText("");
+        this.jLabelNombre_Persona_Asginada.setText("");
+        this.jLabelCargo_Persona_Asignada.setText("");
+        this.jLabelDni_Persona_Asignada.setText("");
     }//GEN-LAST:event_jDialogEnviar_AreaWindowClosing
 
     private void jDialogEnviar_AreaWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogEnviar_AreaWindowOpened
-        this.jTextFieldArea_asignada.setText("");
-        this.jTextFieldPersona_Asignada.setText("");
-        this.jButtonEnviar_Area.setEnabled(true);
 
     }//GEN-LAST:event_jDialogEnviar_AreaWindowOpened
 
@@ -715,7 +727,7 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
 
     private void jButtonEnviar_AreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEnviar_AreaActionPerformed
         if (this.jTextFieldArea_asignada.getText() != null && this.jTextFieldPersona_Asignada.getText() != null) {
-            if (JOptionPane.showConfirmDialog(this.jDialogEnviar_Area, "Los datos son correctos?") == 1) {
+            if (JOptionPane.showConfirmDialog(this.jDialogEnviar_Area, "Los datos son correctos?") == 0) {
                 if (this.usuario_interno_service.Enviar_area_documento(documento_de_edicion, this.usuario_interno_service.get_usuario_interno_by_Dni(this.user_seleccionado.getDni())) && this.usuario_interno_service.add_operacion_estado_documento_usuario_interno(documento_de_edicion, Estado_documento.Enviado)) {
                     this.jButtonEnviar_Area.setEnabled(false);
                     JOptionPane.showMessageDialog(jDialogEnviar_Area, "Se Envio correctamente", "Envio", 1);
@@ -729,20 +741,7 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
 
     private void jTextFieldPersona_AsignadaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldPersona_AsignadaFocusLost
         // TODO add your handling code here:
-        if (this.jTextFieldPersona_Asignada.getText() != null && this.jTextFieldArea_asignada.getText() != null) {
 
-            if (!this.lista_usuarios_interno_enviar.isEmpty()) {
-                this.user_seleccionado = this.lista_usuarios_interno_enviar.stream()
-                        .filter(user -> user.getNombre().equals(this.llenar_trabajadores.getItemSelected().toString()))
-                        .findFirst().get();
-            }
-            System.out.println(" usuario seleccionado " + user_seleccionado.getNombre() + " " + user_seleccionado.getApellido());
-            if (user_seleccionado != null) {
-                this.jLabelNombre_Persona_Asginada.setText(user_seleccionado.getNombre() + " " + user_seleccionado.getApellido());
-                this.jLabelCargo_Persona_Asignada.setText(user_seleccionado.getPerfil().getTipoPerfil().toString());
-                this.jLabelDni_Persona_Asignada.setText(String.valueOf(user_seleccionado.getDni()));
-            }
-        }
     }//GEN-LAST:event_jTextFieldPersona_AsignadaFocusLost
 
     private void jDialogEdicion_documentosWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogEdicion_documentosWindowActivated
@@ -759,7 +758,32 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
     private void jDialogEnviar_AreaWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogEnviar_AreaWindowActivated
         // TODO add your handling code here:
         this.jButtonEnviar_Area.setEnabled(true);
+        System.out.println("entro al evento activate");
     }//GEN-LAST:event_jDialogEnviar_AreaWindowActivated
+
+    private void jTextFieldArea_asignadaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldArea_asignadaFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldArea_asignadaFocusLost
+
+    private void jTextFieldPersona_AsignadaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldPersona_AsignadaKeyPressed
+        // TODO add your handling code here:
+        if (((JTextField) evt.getComponent()).getText().length() >= 3 && evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (this.jTextFieldPersona_Asignada.getText() != null && this.jTextFieldArea_asignada.getText() != null) {
+
+                if (!this.lista_usuarios_interno_enviar.isEmpty()) {
+                    this.user_seleccionado = (Usuario_interno) this.lista_usuarios_interno_enviar.stream()
+                            .filter(user -> user.getNombre().equals(this.llenar_trabajadores.getItemSelected().toString()))
+                            .findFirst().get();
+                }
+                System.out.println(" usuario seleccionado " + user_seleccionado.getNombre() + " " + user_seleccionado.getApellido());
+                if (user_seleccionado != null) {
+                    this.jLabelNombre_Persona_Asginada.setText(user_seleccionado.getNombre() + " " + user_seleccionado.getApellido());
+                    this.jLabelCargo_Persona_Asignada.setText(user_seleccionado.getPerfil().getTipoPerfil().toString());
+                    this.jLabelDni_Persona_Asignada.setText(String.valueOf(user_seleccionado.getDni()));
+                }
+            }
+        }
+    }//GEN-LAST:event_jTextFieldPersona_AsignadaKeyPressed
     private void filtro() {
         int columna_Buscar = 0;
         if (this.jRadioButtonUsuario.isSelected()) {
