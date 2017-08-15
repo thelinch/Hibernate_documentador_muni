@@ -24,6 +24,7 @@
       </Properties>
       <Events>
         <EventHandler event="windowActivated" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="jDialogEdicion_documentosWindowActivated"/>
+        <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="jDialogEdicion_documentosWindowClosing"/>
         <EventHandler event="windowOpened" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="jDialogEdicion_documentosWindowOpened"/>
       </Events>
 

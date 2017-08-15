@@ -36,7 +36,7 @@ public interface IUsuario_interno {
 
     List<Documento> get_documents_find_by_Is_Disconforme();
 
-    boolean add_operacion_documento_usuario_interno(Usuario_interno usuario_interno, Documento document);
+    boolean add_operacion_documento_usuario_interno(Usuario_interno usuario_interno, Documento document, String Accion);
 
     boolean add_operacion_estado_documento_usuario_interno(Documento documento, Enum Estado_documento);
 //    Estado_documentos get_ultimo_estado(int documento);

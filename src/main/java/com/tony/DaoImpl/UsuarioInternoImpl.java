@@ -13,11 +13,15 @@ import com.tony.models.Documento.Operacion_EstadosDocumentos;
 import com.tony.models.Tupa;
 import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import com.tony.models.UsuarioInterno.Area;
+import com.tony.models.UsuarioInterno.AuditoriaUsuario;
 import com.tony.models.UsuarioInterno.Usuario_interno;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 public class UsuarioInternoImpl implements IUsuario_interno {
@@ -69,7 +73,7 @@ public class UsuarioInternoImpl implements IUsuario_interno {
     public boolean Enviar_area_documento(Documento documento, Usuario_interno user_interno) {
         if (!documento.isDisconforme()) {
             try {
-                return this.add_operacion_documento_usuario_interno(user_interno, documento);
+                return this.add_operacion_documento_usuario_interno(user_interno, documento, "Enviar");
             } catch (Exception e) {
                 System.out.println("el mensaje viene de UsuarioInterniImpl:Enviar_area_documento " + e.getMessage());
             }
@@ -267,13 +271,19 @@ public class UsuarioInternoImpl implements IUsuario_interno {
 
 //Probado y validado
     @Override
-    public boolean add_operacion_documento_usuario_interno(Usuario_interno usuario_interno, Documento documento) {
+    public boolean add_operacion_documento_usuario_interno(Usuario_interno usuario_interno, Documento documento, String Accion) {
         Session sesion = this.hibernate_sesion.get_sessionFactor().openSession();
         try {
             sesion.beginTransaction();
+            AuditoriaUsuario auditoria_usuario = new AuditoriaUsuario();
+            auditoria_usuario.setAccion(Accion);
             OperacionDocumento operacion_documento = new OperacionDocumento(usuario_interno, documento);
+            operacion_documento.AddAuditoriaUsuario(auditoria_usuario);
             sesion.persist(operacion_documento);
             sesion.getTransaction().commit();
+            if (!Accion.equals("Registro")) {
+                this.actualizar_datos_operacion_interno(documento);
+            }
             return true;
         } catch (Exception e) {
             this.error.Manejador_errores(sesion, "Mensaje de Error de UsuarioInternoImpl:add_operacion_documento_usuario_interno " + e.getMessage());
@@ -281,6 +291,23 @@ public class UsuarioInternoImpl implements IUsuario_interno {
             sesion.close();
         }
         return false;
+    }
+
+    private void actualizar_datos_operacion_interno(Documento doc) {
+        Session sesion = this.hibernate_sesion.get_sessionFactor().openSession();
+        try {
+            sesion.beginTransaction();
+            OperacionDocumento oper = (OperacionDocumento) sesion
+                    .createCriteria(OperacionDocumento.class).createAlias("documento", "doc").add(Restrictions.eq("doc.id_documento", doc.getId_documento())).addOrder(Order.desc("id_OperacionDocumento")).add(Restrictions.lt("id_OperacionDocumento", Integer.parseInt(sesion.createCriteria(OperacionDocumento.class).setProjection(Projections.max("id_OperacionDocumento")).createAlias("documento", "doc")
+                    .add(Restrictions.eq("doc.id_documento", doc.getId_documento())).uniqueResult().toString()))).setMaxResults(1).uniqueResult();
+            oper.setIs_documento(false);
+            sesion.update(oper);
+            sesion.getTransaction().commit();
+        } catch (HibernateException | NumberFormatException e) {
+            this.error.Manejador_errores(sesion, "El error viene de UsuarioInternoImpl:actualizar_datos_operacion_interno" + e.getMessage());
+        } finally {
+            sesion.close();
+        }
     }
 
     @Override
@@ -307,16 +334,13 @@ public class UsuarioInternoImpl implements IUsuario_interno {
     @Override
     public List<AuditoriaDocumento> get_flujograma_documento(int id_documento) {
         List<AuditoriaDocumento> auditoria = null;
-        Session sesion = this.hibernate_sesion.get_sessionFactor().openSession();
-        try {
+        try (Session sesion = this.hibernate_sesion.get_sessionFactor().openSession()) {
             sesion.beginTransaction();
             auditoria = (List<AuditoriaDocumento>) sesion.createCriteria(AuditoriaDocumento.class).createAlias("Operacion_estadoDocumento", "operacion").createAlias("operacion.documento", "documento")
                     .add(Restrictions.eq("documento.id_documento", id_documento)).list();
             sesion.getTransaction().commit();
         } catch (Exception e) {
-            this.error.Manejador_errores(sesion, "error en DocumentoImpl: get_flujograma_documento " + e.getMessage());
-        } finally {
-            sesion.close();
+            this.error.Manejador_errores(null, "error en DocumentoImpl: get_flujograma_documento " + e.getMessage());
         }
         return auditoria;
     }

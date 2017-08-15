@@ -11,10 +11,10 @@ public class Operacion_Documento_Event_adapter extends HibernateEventAdapter {
 
     @Override
     public boolean onPreInsert(PreInsertEvent pie) {
-        if (pie.getEntity() instanceof OperacionDocumento) {
-            OperacionDocumento operacion_documento = (OperacionDocumento) pie.getEntity();
-            this.service.PrePersist_add_auditoria_usuario_by_operacion_documento(operacion_documento, "Registro");
-        }
+//        if (pie.getEntity() instanceof OperacionDocumento) {
+//            OperacionDocumento operacion_documento = (OperacionDocumento) pie.getEntity();
+//            this.service.PrePersist_add_auditoria_usuario_by_operacion_documento(operacion_documento, "Registro");
+//        }
         return false;
     }
 

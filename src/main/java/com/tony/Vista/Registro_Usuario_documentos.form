@@ -12,7 +12,7 @@
           <Value id="APPLICATION_EXCLUDE"/>
         </Property>
         <Property name="modalityType" type="java.awt.Dialog$ModalityType" editor="org.netbeans.modules.form.editors.EnumEditor">
-          <Value id="DOCUMENT_MODAL"/>
+          <Value id="TOOLKIT_MODAL"/>
         </Property>
       </Properties>
       <Events>

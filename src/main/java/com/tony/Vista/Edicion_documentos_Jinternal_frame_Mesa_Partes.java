@@ -112,6 +112,9 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 jDialogEdicion_documentosWindowActivated(evt);
             }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                jDialogEdicion_documentosWindowClosing(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 jDialogEdicion_documentosWindowOpened(evt);
             }
@@ -430,7 +433,7 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
                 .addContainerGap()
                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 247, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -707,6 +710,8 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
         this.jLabelNombre_Persona_Asginada.setText("");
         this.jLabelCargo_Persona_Asignada.setText("");
         this.jLabelDni_Persona_Asignada.setText("");
+        this.jTableEdicion_docuementos.setModel(this.usuario_interno_service.get_all_documento_find_by_usuario_and_state_document(Estado_documento.Recepcionado, usuario_interno.getArea().getTipoArea(), jTableEdicion_docuementos));
+
     }//GEN-LAST:event_jDialogEnviar_AreaWindowClosing
 
     private void jDialogEnviar_AreaWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogEnviar_AreaWindowOpened
@@ -784,6 +789,11 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
             }
         }
     }//GEN-LAST:event_jTextFieldPersona_AsignadaKeyPressed
+
+    private void jDialogEdicion_documentosWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogEdicion_documentosWindowClosing
+        this.jTableEdicion_docuementos.setModel(this.usuario_interno_service.get_all_documento_find_by_usuario_and_state_document(Estado_documento.Recepcionado, usuario_interno.getArea().getTipoArea(), jTableEdicion_docuementos));
+
+    }//GEN-LAST:event_jDialogEdicion_documentosWindowClosing
     private void filtro() {
         int columna_Buscar = 0;
         if (this.jRadioButtonUsuario.isSelected()) {

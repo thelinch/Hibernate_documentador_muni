@@ -28,7 +28,7 @@ public class Home_User_Internal_fram extends javax.swing.JInternalFrame {
     private Home_User_Internal_fram() {
         initComponents();
        
-        this.jTableDocumentos_Usuario_externo.setModel(this.usuario_exerno_service_imple.get_documentos_find_by_user_externo(2, jTableDocumentos_Usuario_externo));
+        this.jTableDocumentos_Usuario_externo.setModel(this.usuario_exerno_service_imple.get_documentos_find_by_user_externo(14, jTableDocumentos_Usuario_externo));
     }
 
     /**

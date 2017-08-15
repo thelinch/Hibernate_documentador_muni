@@ -49,8 +49,8 @@ public class UsuarioInternoServiceImpl extends Verificacion implements UsuarioIn
     }
 
     @Override
-    public boolean Registrar_operacion_documento_usuario_interno(Usuario_interno usuarioInterno, Documento documento) {
-        return this.usuariImpl.add_operacion_documento_usuario_interno(usuarioInterno, documento);
+    public boolean Registrar_operacion_documento_usuario_interno(Usuario_interno usuarioInterno, Documento documento, String accion) {
+        return this.usuariImpl.add_operacion_documento_usuario_interno(usuarioInterno, documento, accion);
     }
 
     @Override

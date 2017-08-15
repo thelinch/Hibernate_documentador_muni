@@ -54,9 +54,7 @@ public class DummyService {
             } else {
                 auiditoria_documento.setEstadoAnterior(null);
             }
-            lista_estados.forEach((estados) -> {
-                System.out.println(" el estado viene de DummyService " + estados.getEstado() + " " + estados.getId_estadoDocumento());
-            });
+
             operacion_estado_documento.AddAuditoriaDocumento(auiditoria_documento);
 
             sesion.merge(operacion_estado_documento);

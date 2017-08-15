@@ -6,7 +6,6 @@
 package com.tony.Vista;
 
 import com.tony.ServiceImpl.UsuarioInternoServiceImpl;
-import com.tony.models.Documento.Documento;
 import com.tony.models.UsuarioInterno.Usuario_interno;
 import java.awt.Component;
 import javax.swing.JLabel;
@@ -23,7 +22,6 @@ public class Principal_Mesa_partes extends javax.swing.JFrame {
     private final Funcionalidades_Ventanas funcionalidades_ventanas = new Funcionalidades_Ventanas();
     public static Usuario_interno usuario_interno;
     public static UsuarioInternoServiceImpl userInternoService = null;
-    private Documento documentoEdicio = null;
 
     public Principal_Mesa_partes() {
         initComponents();

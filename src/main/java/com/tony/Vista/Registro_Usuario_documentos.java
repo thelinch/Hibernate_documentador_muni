@@ -28,7 +28,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
-    
+
     private int contador = 0;
     private static Registro_Usuario_documentos registro_usuario = null;
     private final UsuarioInternoServiceImpl usuario_interno_service = Principal_Mesa_partes.userInternoService;
@@ -45,14 +45,14 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
     private List<Tupa> lista_tupac = null;
     private UsuarioExterno usuarioExterno_temporal;
     private String texto_anterio = "";
-    
+
     public static Registro_Usuario_documentos get_instancia_registro_usuario() {
         if (registro_usuario == null) {
             registro_usuario = new Registro_Usuario_documentos();
         }
         return registro_usuario;
     }
-    
+
     private Registro_Usuario_documentos() {
         initComponents();
         lista_tupac = new ArrayList<>();
@@ -63,7 +63,7 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
         this.jPanelPersonaJuridica.setVisible(false);
         this.texto_autocompletado_tipo_document = new TextAutoCompleter(jTextFieldTipo_documento);
         this.jLabelUsuarioConocido.setVisible(false);
-        
+
     }
 
     /**
@@ -138,7 +138,7 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
         jDialogDocumentos.setFocusTraversalPolicyProvider(true);
         jDialogDocumentos.setMinimumSize(new java.awt.Dimension(659, 644));
         jDialogDocumentos.setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
-        jDialogDocumentos.setModalityType(java.awt.Dialog.ModalityType.DOCUMENT_MODAL);
+        jDialogDocumentos.setModalityType(java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
         jDialogDocumentos.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 jDialogDocumentosWindowActivated(evt);
@@ -798,7 +798,7 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTextField_NombreActionPerformed
 
     private void jTextFieldDni_seach_registroKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldDni_seach_registroKeyPressed
-        
+
         char validar = evt.getKeyChar();
         if (!Character.isLetter(validar)) {
             if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -810,13 +810,13 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
                 } else {
                     JOptionPane.showMessageDialog(this, "ingrese los 8 numeros");
                 }
-                
+
             }
         } else {
             JOptionPane.showMessageDialog(rootPane, "Ingrese solo numero");
             getToolkit().beep();
             evt.consume();
-            
+
         }
     }//GEN-LAST:event_jTextFieldDni_seach_registroKeyPressed
 
@@ -830,7 +830,7 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jComboBoxTipoPersonaActionPerformed
 
     private void jButton_AceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AceptarActionPerformed
-        
+
         if (this.usuarioExterno_temporal == null) {
             if (this.usuario_interno_service.VerificacionJpanes(this.jPanelDatos_usuarios)) {
                 JOptionPane.showMessageDialog(this, "Faltan datos");
@@ -849,12 +849,12 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
                 }
                 //            this.userInternoService.CrearIdDocumento(jLabelCodigo_Documento);
                 jDialogDocumentos.setVisible(true);
-                
+
             }
         } else {
             jDialogDocumentos.setVisible(true);
         }
-        
+
 
     }//GEN-LAST:event_jButton_AceptarActionPerformed
 
@@ -940,7 +940,7 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
                 return;
             } else {
                 jCheckBox_Conformidad.setSelected(false);
-                
+
             }
         }
 
@@ -1003,7 +1003,7 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(jDialogDocumentos, "Faltan datos en el documento");
             return;
         } else if (JOptionPane.showConfirmDialog(jDialogDocumentos, "Los datos son correctos?") == 0) {
-            
+
             Documento documento = new Documento(jTextFieldAsunto.getText(), this.tipo_documento.get_tipo_documento_find_by_name(jTextFieldTipo_documento.getText()), jTextArea_Descripcion.getText(), jTextAreaObservaciones.getText(), Integer.parseInt(jTextFieldNumeroFolioPresentado.getText()), jCheckBox_Conformidad.isSelected(), jCheckBoxIsTupac.isSelected());
             if (this.usuarioExterno_temporal == null) {
                 if (this.usuarioExternoJuridico != null) {
@@ -1018,9 +1018,9 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
             //        Estaba antes descomentaod    DesktopNotify.showDesktopMessage("Un nuevo Documento fue agregado", "Asunto:" + documento.getAsunto() + " ", DesktopNotify.SUCCESS, 5000);
             //        Estaba antes descomentaod     this.userInternoService.CrearIdDocumento(jLabelCodigo_Documento);
             this.limpiar_datos_documento();
-            
+
         }
-        
+
 
     }//GEN-LAST:event_jButtonRegistrarActionPerformed
     private void limpiar_datos_documento() {
@@ -1062,27 +1062,27 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
                 this.usuarioExternoJuridico.setCodigo("antony");
                 this.usuario_interno_service.Registrar_usuarioExterno(this.usuarioExternoJuridico, usuario_interno);
                 this.usuarioExternoJuridico.getDocumentos().stream().forEach((documento) -> {
-                    this.usuario_interno_service.Registrar_operacion_documento_usuario_interno(this.usuario_interno, documento);
+                    this.usuario_interno_service.Registrar_operacion_documento_usuario_interno(this.usuario_interno, documento, "Registro");
                     this.usuario_interno_service.add_operacion_estado_documento_usuario_interno(documento, Estado_documento.Recepcionado);
                 });
             } else if (!this.UsuarioExternoNatural.getDocumentos().isEmpty()) {
                 this.UsuarioExternoNatural.setCodigo("ap");
                 this.usuario_interno_service.Registrar_usuarioExterno(this.UsuarioExternoNatural, this.usuario_interno);
-                
+
                 this.UsuarioExternoNatural.getDocumentos().stream().forEach((document) -> {
-                    this.usuario_interno_service.Registrar_operacion_documento_usuario_interno(this.usuario_interno, document);
+                    this.usuario_interno_service.Registrar_operacion_documento_usuario_interno(this.usuario_interno, document, "Registro");
                     this.usuario_interno_service.add_operacion_estado_documento_usuario_interno(document, Estado_documento.Recepcionado);
                 });
-                
+
             } else {
                 JOptionPane.showMessageDialog(jDialogDocumentos, "ingrese al menos un documento");
-                
+
             }
-            
+
         } else {
             if (usuarioExterno_temporal.getDocumentos().isEmpty()) {
                 JOptionPane.showConfirmDialog(jDialogDocumentos, "ingrese al menos un documentos");
-                
+
             }
             this.usuario_interno_service.add_documentoUsuarioExterno(usuario_interno, usuarioExterno_temporal);
 //            usuarioExterno_temporal.getDocumentos().stream().forEach((documentos) -> {
@@ -1090,7 +1090,7 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
 //                this.usuario_interno_service.add_operacion_estado_documento_usuario_interno(documentos, Estado_documento.Recepcionado);
 //            });
         }
-        
+
         this.usuarioExternoJuridico = null;
         this.UsuarioExternoNatural = null;
         this.usuarioExterno_temporal = null;
@@ -1111,7 +1111,7 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
                 this.jLabelUsuarioConocido.setVisible(true);
             } else {
                 this.jLabelUsuarioConocido.setVisible(false);
-                
+
             }
             Texto_anterior = this.jTextFieldDni.getText();
         }
@@ -1120,7 +1120,7 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
     private void jLabelUsuarioConocidoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelUsuarioConocidoMouseClicked
         // TODO add your handling code here:
         if (this.usuarioExterno_temporal != null) {
-            
+
             JOptionPane.showMessageDialog(this, "Nombre " + this.usuarioExterno_temporal.getNombre() + " Apellido " + this.usuarioExterno_temporal.getApellido() + " Dni " + this.usuarioExterno_temporal.getDni());
         }
     }//GEN-LAST:event_jLabelUsuarioConocidoMouseClicked
@@ -1133,7 +1133,7 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTextFieldAreaFocusGained
 
     private void jTextFieldAsuntoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldAsuntoKeyPressed
-        
+
 
     }//GEN-LAST:event_jTextFieldAsuntoKeyPressed
 
@@ -1142,7 +1142,7 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
         if (evt.getKeyCode() == KeyCode.ENTER.impl_getCode()) {
             if (!this.jTextFieldAsunto.getText().isEmpty() && this.lista_tupac != null) {
                 Tupa tupa = this.lista_tupac.stream().filter((tupac) -> tupac.getProcedimiento().equalsIgnoreCase(this.texto_autocompleter_tupac.getItemSelected().toString())).findFirst().get();
-                
+
                 if (tupa != null) {
                     this.jTextFieldNumeroFolioRequerido.setText(String.valueOf(tupa.getProceso()));
                     this.jTextFieldPlazo_resolucion_documento.setText(String.valueOf(tupa.getPlazo()));

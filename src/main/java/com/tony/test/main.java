@@ -20,15 +20,19 @@ import com.tony.ServiceImpl.UsuarioInternoServiceImpl;
 import com.tony.models.Documento.Concluido;
 import com.tony.models.Documento.Documento;
 import com.tony.models.Documento.Estado_documentos;
+import com.tony.models.Documento.OperacionDocumento;
 import com.tony.models.Documento.Tipo_Documento;
 import com.tony.models.UsuarioExterrno.UsuarioExternoNatural;
 import com.tony.models.UsuarioInterno.Area;
 import com.tony.models.UsuarioInterno.Perfil;
 import com.tony.models.UsuarioInterno.Usuario_interno;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 public class main {
-    
+
     public static void main(String[] args) {
 //        Tipo_documentoImpl tipo = new Tipo_documentoImpl();
 //        UsuarioInternoServiceImpl userInternoService = new UsuarioInternoServiceImpl();
@@ -42,8 +46,8 @@ public class main {
 //        userInternoService.Registrar_operacion_documento_usuario_interno(usuerio_interno, doc);
 //        userInternoService.add_operacion_estado_documento_usuario_interno(doc, Estado_documento.Recepcionado);
 
-        DocumentImpl docu = new DocumentImpl();
-        docu.get_all_documentos_find_by_state(Estado_documento.Recepcionado, Tipos_Area.Tramite_Documentario_y_Archivo_Central);
+        // DocumentImpl docu = new DocumentImpl();
+        //   docu.get_all_documentos_find_by_state(Estado_documento.Recepcionado, Tipos_Area.Tramite_Documentario_y_Archivo_Central);
 //        UsuarioExternoImpl usuarioExterno = new UsuarioExternoImpl();
 //        usuarioExterno.get_auditoria_find_by_id_documento(2).forEach(System.out::println);//main mai = new main()
         //        mai.sesionHibernate.AbrirSesion();
@@ -56,8 +60,23 @@ public class main {
         //mai.inicio();
 //        main main = new main();
 //        main.inicio();
+        Session sesion = hibernateSession.get_instancia_hibernateSession().get_sessionFactor().openSession();
+        try {
+            sesion.beginTransaction();
+            OperacionDocumento oper = (OperacionDocumento) sesion.createCriteria(OperacionDocumento.class).createAlias("documento", "doc").add(Restrictions.eq("doc.id_documento", 8)).addOrder(Order.desc("id_OperacionDocumento")).add(Restrictions.lt("id_OperacionDocumento", 183)).setMaxResults(1).uniqueResult();
+            oper.setIs_documento(false);
+            System.out.println();
+
+//sesion.update(oper);
+            sesion.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println("el error es " + e.getMessage());
+        } finally {
+            sesion.close();
+        }
+
     }
-    
+
     private void inicio() {
         Session sesion = hibernateSession.get_instancia_hibernateSession().get_sessionFactor().openSession();
         sesion.beginTransaction();
