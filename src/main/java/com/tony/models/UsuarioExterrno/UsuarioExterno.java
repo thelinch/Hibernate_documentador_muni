@@ -21,7 +21,7 @@ import com.tony.models.Documento.Documento;
 public class UsuarioExterno extends Persona implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @OneToMany(mappedBy = "usuario", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, orphanRemoval = true)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, orphanRemoval = true)
     private List<Documento> documentos = new ArrayList<>();
 
     public UsuarioExterno() {

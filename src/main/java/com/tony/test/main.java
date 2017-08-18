@@ -5,6 +5,7 @@
  */
 package com.tony.test;
 
+import com.mxrck.autocompleter.TextAutoCompleter;
 import com.tony.Dao.hibernateSession;
 import com.tony.DaoImpl.AreaImpl;
 import com.tony.DaoImpl.DocumentImpl;
@@ -16,16 +17,21 @@ import com.tony.Estados.Estado_documento;
 import com.tony.Estados.Tipos_Documento;
 import com.tony.Estados.Tipo_Perfil_UsuarioInterno;
 import com.tony.Estados.Tipos_Area;
+import com.tony.ServiceImpl.Tipo_documentoServiceImpl;
 import com.tony.ServiceImpl.UsuarioInternoServiceImpl;
 import com.tony.models.Documento.Concluido;
 import com.tony.models.Documento.Documento;
 import com.tony.models.Documento.Estado_documentos;
 import com.tony.models.Documento.OperacionDocumento;
 import com.tony.models.Documento.Tipo_Documento;
+import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import com.tony.models.UsuarioExterrno.UsuarioExternoNatural;
 import com.tony.models.UsuarioInterno.Area;
 import com.tony.models.UsuarioInterno.Perfil;
 import com.tony.models.UsuarioInterno.Usuario_interno;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+import javax.swing.JTextField;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -34,6 +40,11 @@ import org.hibernate.criterion.Restrictions;
 public class main {
 
     public static void main(String[] args) {
+        UsuarioInternoImpl user = new UsuarioInternoImpl();
+        Tipo_documentoServiceImpl tipo_documeno = new Tipo_documentoServiceImpl();
+      
+        
+        tipo_documeno.LLenar_autcompleter(new TextAutoCompleter(new JTextField()), new ArrayList<Documento>());
 //        Tipo_documentoImpl tipo = new Tipo_documentoImpl();
 //        UsuarioInternoServiceImpl userInternoService = new UsuarioInternoServiceImpl();
 //        Usuario_interno usuerio_interno = userInternoService.get_usuario_interno_by_Dni(71837677);
@@ -60,21 +71,20 @@ public class main {
         //mai.inicio();
 //        main main = new main();
 //        main.inicio();
-        Session sesion = hibernateSession.get_instancia_hibernateSession().get_sessionFactor().openSession();
-        try {
-            sesion.beginTransaction();
-            OperacionDocumento oper = (OperacionDocumento) sesion.createCriteria(OperacionDocumento.class).createAlias("documento", "doc").add(Restrictions.eq("doc.id_documento", 8)).addOrder(Order.desc("id_OperacionDocumento")).add(Restrictions.lt("id_OperacionDocumento", 183)).setMaxResults(1).uniqueResult();
-            oper.setIs_documento(false);
-            System.out.println();
-
-//sesion.update(oper);
-            sesion.getTransaction().commit();
-        } catch (Exception e) {
-            System.out.println("el error es " + e.getMessage());
-        } finally {
-            sesion.close();
-        }
-
+//        Session sesion = hibernateSession.get_instancia_hibernateSession().get_sessionFactor().openSession();
+//        try {
+//            sesion.beginTransaction();
+//            OperacionDocumento oper = (OperacionDocumento) sesion.createCriteria(OperacionDocumento.class).createAlias("documento", "doc").add(Restrictions.eq("doc.id_documento", 8)).addOrder(Order.desc("id_OperacionDocumento")).add(Restrictions.lt("id_OperacionDocumento", 183)).setMaxResults(1).uniqueResult();
+//            oper.setIs_documento(false);
+//            System.out.println();
+//
+////sesion.update(oper);
+//            sesion.getTransaction().commit();
+//        } catch (Exception e) {
+//            System.out.println("el error es " + e.getMessage());
+//        } finally {
+//            sesion.close();
+//        }
     }
 
     private void inicio() {

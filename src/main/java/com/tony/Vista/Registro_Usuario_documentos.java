@@ -11,7 +11,6 @@ import com.tony.ServiceImpl.AreaServiceImpl;
 import com.tony.ServiceImpl.Tipo_documentoServiceImpl;
 import com.tony.ServiceImpl.UsuarioInternoServiceImpl;
 import com.tony.models.Documento.Documento;
-import com.tony.models.Documento.Tipo_Documento;
 import com.tony.models.Tupa;
 import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import com.tony.models.UsuarioExterrno.UsuarioExternoJuridico;
@@ -35,8 +34,6 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
     private final Usuario_interno usuario_interno = Principal_Mesa_partes.usuario_interno;
     private UsuarioExternoNatural UsuarioExternoNatural = null;
     private UsuarioExternoJuridico usuarioExternoJuridico = null;
-    private final Tipo_documentoServiceImpl tipo_documento = new Tipo_documentoServiceImpl();
-    private final List<Tipo_Documento> Lista_tipos_documento = null;
     private final Tipo_documentoServiceImpl tipo_documento_service = new Tipo_documentoServiceImpl();
     private final AreaServiceImpl area_service;
     private TextAutoCompleter texto_autocompleter_tupac;
@@ -45,6 +42,7 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
     private List<Tupa> lista_tupac = null;
     private UsuarioExterno usuarioExterno_temporal;
     private String texto_anterio = "";
+    private Tipo_documentoServiceImpl tipo_documento = null;
 
     public static Registro_Usuario_documentos get_instancia_registro_usuario() {
         if (registro_usuario == null) {
@@ -63,6 +61,7 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
         this.jPanelPersonaJuridica.setVisible(false);
         this.texto_autocompletado_tipo_document = new TextAutoCompleter(jTextFieldTipo_documento);
         this.jLabelUsuarioConocido.setVisible(false);
+        this.tipo_documento = new Tipo_documentoServiceImpl();
 
     }
 
@@ -1052,7 +1051,13 @@ public class Registro_Usuario_documentos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jDialogDocumentosWindowActivated
 
     private void jDialogDocumentosWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogDocumentosWindowOpened
-        this.tipo_documento_service.LLenar_autcompleter(this.texto_autocompletado_tipo_document);
+        if (this.usuarioExterno_temporal != null) {
+            this.tipo_documento_service.LLenar_autcompleter(this.texto_autocompletado_tipo_document, this.usuarioExterno_temporal.getDocumentos());
+
+        } else {
+            this.tipo_documento_service.LLenar_autcompleter(this.texto_autocompletado_tipo_document, new ArrayList<>());
+
+        }
     }//GEN-LAST:event_jDialogDocumentosWindowOpened
 
     private void jDialogDocumentosWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogDocumentosWindowClosing

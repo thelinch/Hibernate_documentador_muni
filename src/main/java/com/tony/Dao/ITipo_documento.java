@@ -7,6 +7,7 @@ package com.tony.Dao;
 
 import com.tony.models.Documento.Documento;
 import com.tony.models.Documento.Tipo_Documento;
+import com.tony.models.UsuarioExterrno.UsuarioExterno;
 import java.util.List;
 
 /**
@@ -20,4 +21,6 @@ public interface ITipo_documento {
     Tipo_Documento get_tipo_documento_find_by_name(String name);
 
     List<Documento> all_documento_find_by_id_tipo_documento(int id_tipo_documento);
+
+    List<Tipo_Documento> get_all_tipo_documento_find_by_userExterno(UsuarioExterno user_externo);
 }

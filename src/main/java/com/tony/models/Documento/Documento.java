@@ -50,7 +50,7 @@ public class Documento implements Serializable {
     @Lob()
     @Basic(fetch = FetchType.LAZY)
     private byte[] copia;
-    @ManyToOne(cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_tipoDocumento", nullable = false)
     private Tipo_Documento tipoDocumento;
     @Column(name = "isTupac", nullable = false)

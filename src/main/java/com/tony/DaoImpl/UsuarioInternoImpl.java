@@ -183,9 +183,9 @@ public class UsuarioInternoImpl implements IUsuario_interno {
     public boolean add_documento_a_UsuarioExterno(Usuario_interno usuario_interno, UsuarioExterno usuario_externo) {
         Session sesionhi = this.hibernate_sesion.get_sessionFactor().openSession();
         try {
+            sesionhi.beginTransaction();
             usuario_externo.getDocumentos().forEach((documentos) -> {
-//                sesionhi.saveOrUpdate(documentos);
-                System.out.println(" asunto documentos " + documentos.getAsunto() + " Foleo " + documentos.getNum_foleo());
+            
             });
             //sesionhi.merge(usuario_externo);
             sesionhi.getTransaction().commit();
@@ -211,7 +211,8 @@ public class UsuarioInternoImpl implements IUsuario_interno {
         try {
             sesion.beginTransaction();
             usuario_externo = (UsuarioExterno) sesion.createNamedQuery("UsuarioExterno.find_by_dni").setParameter("dni", dni).uniqueResult();
-            sesion.detach(usuario_externo);
+            usuario_externo.getDocumentos().size();
+            //  sesion.detach(usuario_externo);
             //usuario_externo.getDocumentos().size();
             sesion.getTransaction().commit();
         } catch (Exception e) {

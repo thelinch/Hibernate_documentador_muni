@@ -9,9 +9,16 @@ import com.tony.Dao.ITipo_documento;
 import com.tony.Dao.hibernateSession;
 import com.tony.models.Documento.Documento;
 import com.tony.models.Documento.Tipo_Documento;
+import com.tony.models.UsuarioExterrno.UsuarioExterno;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.hibernate.Session;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.ResultTransformer;
+import org.hibernate.transform.Transformers;
 
 public class Tipo_documentoImpl implements ITipo_documento {
 
@@ -28,7 +35,7 @@ public class Tipo_documentoImpl implements ITipo_documento {
         List<Tipo_Documento> lista_all_tipo_documento = null;
         try {
             se.beginTransaction();
-            lista_all_tipo_documento = se.createNamedQuery("tipo_documento.all", Tipo_Documento.class).getResultList();
+            lista_all_tipo_documento = se.createNamedQuery("tipo_documento.all", Tipo_Documento.class).list();
             se.getTransaction().commit();
         } catch (Exception e) {
             this.error.Manejador_errores(se, "error en Tipo_documentoImpl:all_tipo_documento" + e.getMessage());
@@ -75,6 +82,30 @@ public class Tipo_documentoImpl implements ITipo_documento {
         }
 
         return documentos;
+    }
+
+    @Override
+    public List<Tipo_Documento> get_all_tipo_documento_find_by_userExterno(UsuarioExterno user_externo) {
+        List<Tipo_Documento> tipo_documentos = new ArrayList<>();
+        Session sesion = this.hibernateSesion.get_sessionFactor().openSession();
+        try {
+            sesion.beginTransaction();
+            if (user_externo != null) {
+                tipo_documentos = sesion.createCriteria(UsuarioExterno.class)
+                        .add(Restrictions.idEq(user_externo.getId_persona()))
+                        .createAlias("documentos", "doc")
+                        .setProjection(Projections.property("doc.tipoDocumento")).setResultTransformer(CriteriaSpecification.PROJECTION).list();
+            } else {
+                tipo_documentos = sesion.createCriteria(Tipo_Documento.class).list();
+            }
+
+            sesion.getTransaction().commit();
+        } catch (Exception e) {
+            this.error.Manejador_errores(sesion, "Ele error viene de Tipo_documento: get_all_tipo_documentos " + e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return tipo_documentos;
     }
 
 }

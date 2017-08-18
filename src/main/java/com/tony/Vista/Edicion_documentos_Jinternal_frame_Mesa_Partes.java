@@ -41,7 +41,7 @@ class Edicion_documentos_Jinternal_frame_Mesa_Partes extends javax.swing.JIntern
 
     private Edicion_documentos_Jinternal_frame_Mesa_Partes() {
         initComponents();
-        this.jTableEdicion_docuementos.setModel(this.usuario_interno_service.get_all_documento_find_by_usuario_and_state_document(Estado_documento.Recepcionado, usuario_interno.getArea().getTipoArea(), jTableEdicion_docuementos));
+        this.jTableEdicion_docuementos.setModel(this.usuario_interno_service.get_all_documento_find_by_usuario_and_state_document(Estado_documento.Enviado, usuario_interno.getArea().getTipoArea(), jTableEdicion_docuementos));
         this.llenar_area = new TextAutoCompleter(this.jTextFieldArea_asignada);
         this.llenar_trabajadores = new TextAutoCompleter(this.jTextFieldPersona_Asignada);
     }

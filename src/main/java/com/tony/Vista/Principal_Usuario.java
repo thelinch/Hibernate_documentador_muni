@@ -14,7 +14,7 @@ import javax.swing.JMenuItem;
  */
 public class Principal_Usuario extends javax.swing.JFrame {
 
-    Funcionalidades_Ventanas funcionalidades_ventanas = new Funcionalidades_Ventanas();
+    private Funcionalidades_Ventanas funcionalidades_ventanas = new Funcionalidades_Ventanas();
     //private final ArrayList<Pantalla> total_pantallas = new ArrayList<>();
     private Login_usuario login_usuarios = null;
     private Home_User_Internal_fram home_user = null;
@@ -30,7 +30,6 @@ public class Principal_Usuario extends javax.swing.JFrame {
                 }
             }
         }
-      
 
     }
 
